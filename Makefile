@@ -6,7 +6,7 @@
 #    By: eozben <eozben@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 21:06:22 by eozben            #+#    #+#              #
-#    Updated: 2022/03/12 19:14:56 by eozben           ###   ########.fr        #
+#    Updated: 2022/03/12 21:17:52 by eozben           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,13 +16,14 @@ INC = cub3d.h
 SRCS = main.c 
 OBJ_PATH = ./objs/
 OBJS = $(patsubst %.c,$(OBJ_PATH)%.o,$(SRCS))
-LIB = -Llibft -lft
+LIBS = -Llibft -lft -Lmlx -lmlx
 LIBFT = ./libft/libft.a
+LIBMLX = ./mlx/libmlx.a
 
 all:$(NAME)
 
-$(NAME): $(OBJ_PATH) $(OBJS) $(LIBFT)
-	@$(CC) $(FLAGS) $(OBJS) -o $(NAME) $(LIB)
+$(NAME): $(OBJ_PATH) $(OBJS) $(LIBFT) $(LIBMLX)
+	@$(CC) $(FLAGS) $(OBJS) -o $(NAME) $(LIBS) -framework OpenGL -framework AppKit
 	@echo "                                                         "
 	@echo " \033[1;32m  ___|   _ \    \  |   _ \ _ _|  |      ____|  __ \   | "
 	@echo "  |      |   |  |\/ |  |   |  |   |      __|    |   |  | "
@@ -33,16 +34,24 @@ $(NAME): $(OBJ_PATH) $(OBJS) $(LIBFT)
 $(OBJ_PATH)%.o: %.c $(INC)
 	@$(CC) $(FLAGS) -c $< -o $@
 
+$(LIBMLX):
+	@echo ""
+	@echo "mlx:"
+	@echo "\033[1;32m0%\033[0m   [                      ]"
+	@echo "\033[1;32m33%\033[0m  [\033[1;32m ██████\033[0m               ]"
+	@make -sC ./mlx
+	@echo "\033[1;32m50%\033[0m  [\033[1;32m ██████████\033[0m           ]"
+	@echo "\033[1;32m83%\033[0m  [\033[1;32m ████████████████\033[0m     ]"
+	@echo "\033[1;32m100%\033[0m [\033[1;32m ████████████████████ \033[0m]"
+
 $(LIBFT):
 	@echo ""
 	@echo "libft:"
 	@echo "\033[1;32m0%\033[0m   [                      ]"
 	@echo "\033[1;32m33%\033[0m  [\033[1;32m ██████\033[0m               ]"
 	@echo "\033[1;32m50%\033[0m  [\033[1;32m ██████████\033[0m           ]"
-	@sleep 0.2
-	@make -silent -C ./libft
+	@make -sC ./libft
 	@echo "\033[1;32m83%\033[0m  [\033[1;32m ████████████████\033[0m     ]"
-	@make clean -C ./libft
 	@echo "\033[1;32m100%\033[0m [\033[1;32m ████████████████████ \033[0m]"
 
 $(OBJ_PATH):
@@ -56,6 +65,7 @@ clean:
 fclean:
 	@rm -rf $(NAME)
 	@rm -rf $(OBJ_PATH)
+	@make clean -C ./mlx
 	@make fclean -C ./libft
 	@echo "\033[1;32mbinary files removed!\033[0m"
 
