@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:58 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/14 21:46:07 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/03/14 22:57:43 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	read_path(t_map *map, char indentifier, char *str, int i)
 void	check_texture_path(t_map *map, char *str)
 {
 	int	i;
-
+	
 	i = 0;
 	i = skip_whitespaces(&str[i]);
 	if (!ft_strncmp("NO", &str[i], 2))
@@ -101,18 +101,24 @@ void	check_texture_path(t_map *map, char *str)
 	map_error(map, str, "no valid type identifier");
 }
 
-int	handle_textures(t_map *map, int fd)
+int	read_wall_texture(t_map *map)
 {
 	char	*str;
+	static int ident_count;
 
 	while (1)
 	{
-		str = get_next_line(fd);
+		str = get_next_line(map->map_fd);
 		if (!str)
 			break ;
 		if (!ft_is_empty_line(str))
+		{
 			check_texture_path(map, str);
+			ident_count++;
+		}
 		free(str);
+		if (ident_count == 4)
+			break ;
 	}
 	return (0);
 }
@@ -128,10 +134,77 @@ void	free_map(t_map *map)
 
 void	map_error(t_map *map, char *str, char *error_msg)
 {
-	free_map(map);
-	free(str);
+	if (map->map_fd)
+		close(map->map_fd);
+	if (map)
+		free_map(map);
+	if (str)
+		free(str);
 	printf("Error\n%s\n", error_msg);
 	exit(EXIT_FAILURE);
+}
+
+void	read_path(t_map *map, char indentifier, char *str, int i)
+{
+	char	**colour_array;
+	char	colour[4];
+
+	i += (1 + skip_whitespaces(&str[i]));
+	if (indentifier == 'F')
+	{
+		colour_array = ft_split(&str[i], ',');
+		if (!colour_array)
+			map_error(map, str, "allocating floor colour");
+		ft_atoi(); // useful atoi schreiben udn dann auf char konvertieren;
+	}
+}
+
+void	check_floor_ceiling_colour(t_map *map, char *str)
+{
+	int	i;
+	
+	i = 0;
+	i = skip_whitespaces(&str[i]);
+	if (!ft_strncmp("F", &str[i], 1))
+		return (read_colour(map, 'F', str, i));
+	else if (!ft_strncmp("C", &str[i], 1))
+		return (read_colour(map, 'S', str, i));
+	map_error(map, str, "no valid type identifier");
+}
+
+int	read_floor_ceiling_colour(t_map *map)
+{
+	char	*str;
+	static int ident_count;
+
+	while (1)
+	{
+		str = get_next_line(map->map_fd);
+		if (!str)
+			break ;
+		if (!ft_is_empty_line(str))
+		{
+			check_floor_ceiling_colours(map, str);
+			ident_count++;
+		}
+		free(str);
+		if (ident_count == 2)
+			break ;
+	}
+	return (0);
+}
+
+
+void	read_cub_file(t_map *map, char **argv)
+{	
+	map->map_fd = open(argv[1], O_RDWR);
+	if (map->map_fd == ERROR)
+	{
+		printf("Error \nBad .cub file\n");
+		exit(EXIT_FAILURE);
+	}
+	read_wall_texture(map);
+	read_floor_ceiling_colour(map);
 }
 
 int main(int argc, char *argv[])
@@ -139,5 +212,11 @@ int main(int argc, char *argv[])
 	t_map	map;
 	(void)argc;
 	(void)argv;
-	handle_textures(&map, open("./map.cub", O_RDWR));
+	if (argc != 2)
+		return (printf("Error \nInvalid amount of arguments\n"));
+	read_cub_file(&map, argv);
+	printf("no texture: %s\n", map.no_path);
+	printf("so texture: %s\n", map.so_path);
+	printf("we texture: %s\n", map.we_path);
+	printf("ea texture: %s\n", map.ea_path);
 }

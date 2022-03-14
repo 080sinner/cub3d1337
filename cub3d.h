@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/13 17:17:46 by eozben           ###   ########.fr       */
+/*   Updated: 2022/03/14 22:31:22 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,11 @@
 # include <stdio.h>
 # include <fcntl.h>
 
+#define	ERROR -1
+
 typedef struct s_map
 {
+	int		map_fd;
 	char	*no_path;
 	char	*so_path;
 	char	*we_path;
