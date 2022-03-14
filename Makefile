@@ -6,7 +6,7 @@
 #    By: eozben <eozben@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 21:06:22 by eozben            #+#    #+#              #
-#    Updated: 2022/03/12 21:17:52 by eozben           ###   ########.fr        #
+#    Updated: 2022/03/14 19:50:52 by eozben           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,8 @@ OBJS = $(patsubst %.c,$(OBJ_PATH)%.o,$(SRCS))
 LIBS = -Llibft -lft -Lmlx -lmlx
 LIBFT = ./libft/libft.a
 LIBMLX = ./mlx/libmlx.a
+UP = "\033[A"
+CUT = "\033[K"
 
 all:$(NAME)
 
@@ -38,20 +40,34 @@ $(LIBMLX):
 	@echo ""
 	@echo "mlx:"
 	@echo "\033[1;32m0%\033[0m   [                      ]"
+	@sleep 0.1
+	@printf $(UP)$(CUT)
 	@echo "\033[1;32m33%\033[0m  [\033[1;32m ██████\033[0m               ]"
-	@make -sC ./mlx
+	@sleep 0.1
+	@printf $(UP)$(CUT)
 	@echo "\033[1;32m50%\033[0m  [\033[1;32m ██████████\033[0m           ]"
+	@make -silent -C ./mlx
+	@printf $(UP)$(CUT)
 	@echo "\033[1;32m83%\033[0m  [\033[1;32m ████████████████\033[0m     ]"
+	@sleep 0.1
+	@printf $(UP)$(CUT)
 	@echo "\033[1;32m100%\033[0m [\033[1;32m ████████████████████ \033[0m]"
 
 $(LIBFT):
 	@echo ""
 	@echo "libft:"
 	@echo "\033[1;32m0%\033[0m   [                      ]"
+	@sleep 0.1
+	@printf $(UP)$(CUT)
 	@echo "\033[1;32m33%\033[0m  [\033[1;32m ██████\033[0m               ]"
+	@sleep 0.1
+	@printf $(UP)$(CUT)
 	@echo "\033[1;32m50%\033[0m  [\033[1;32m ██████████\033[0m           ]"
-	@make -sC ./libft
+	@make -silent -C ./libft
+	@printf $(UP)$(CUT)
 	@echo "\033[1;32m83%\033[0m  [\033[1;32m ████████████████\033[0m     ]"
+	@sleep 0.1
+	@printf $(UP)$(CUT)
 	@echo "\033[1;32m100%\033[0m [\033[1;32m ████████████████████ \033[0m]"
 
 $(OBJ_PATH):
