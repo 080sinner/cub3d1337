@@ -1,0 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/12 19:00:58 by eozben            #+#    #+#             */
+/*   Updated: 2022/03/15 23:27:32 by eozben           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+void	init_map(t_map *map)
+{
+	map->map_fd = 0;
+	map->f_color = 0;
+	map->c_color = 0;
+	map->ea_path = NULL;
+	map->no_path = NULL;
+	map->so_path = NULL;
+	map->we_path = NULL;
+	map->map = NULL;
+}
+
+int	main(int argc, char *argv[])
+{
+	t_map	map;
+
+	if (argc != 2)
+		return (printf("Error \nInvalid amount of arguments\n"));
+	init_map(&map);
+	read_cub_file(&map, argv);
+	printf("no texture: %s\n", map.no_path);
+	printf("so texture: %s\n", map.so_path);
+	printf("we texture: %s\n", map.we_path);
+	printf("ea texture: %s\n", map.ea_path);
+	printf("f_colour: %d\n", map.f_color);
+	printf("c_colour: %d\n", map.c_color);
+}

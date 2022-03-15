@@ -6,14 +6,14 @@
 #    By: eozben <eozben@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 21:06:22 by eozben            #+#    #+#              #
-#    Updated: 2022/03/14 19:50:52 by eozben           ###   ########.fr        #
+#    Updated: 2022/03/15 23:23:07 by eozben           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
 FLAGS = -Wall -Wextra -Werror
-INC = cub3d.h
-SRCS = main.c 
+INC = ./srcs/cub3d.h
+SRCS = main.c colour.c map.c parser.c texture.c utils.c
 OBJ_PATH = ./objs/
 OBJS = $(patsubst %.c,$(OBJ_PATH)%.o,$(SRCS))
 LIBS = -Llibft -lft -Lmlx -lmlx
@@ -33,7 +33,7 @@ $(NAME): $(OBJ_PATH) $(OBJS) $(LIBFT) $(LIBMLX)
 	@echo " \____| \___/  _|  _| _|    ___| _____| _____| ____/  _) \033[0m"
 	@echo "                                                         "
 
-$(OBJ_PATH)%.o: %.c $(INC)
+$(OBJ_PATH)%.o: srcs/%.c $(INC)
 	@$(CC) $(FLAGS) -c $< -o $@
 
 $(LIBMLX):
