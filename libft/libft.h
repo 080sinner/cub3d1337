@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 13:30:54 by eozben            #+#    #+#             */
-/*   Updated: 2022/01/15 22:54:05 by eozben           ###   ########.fr       */
+/*   Updated: 2022/03/15 20:47:52 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+#include "limits.h"
 
 # define BUFFER_SIZE 1
 
@@ -38,7 +39,7 @@ typedef struct s_buf
 	int		end;
 }			t_buf;
 
-int			ft_atoi(const char *str);
+int			ft_atoi(char *str, int *integer);
 void		ft_bzero(void *str, size_t n);
 void		*ft_calloc(size_t nitems, size_t size);
 int			ft_isalnum(int c);

@@ -3,32 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/15 16:32:22 by eozben            #+#    #+#             */
-/*   Updated: 2021/10/14 20:32:38 by eozben           ###   ########.fr       */
+/*   Updated: 2022/03/15 20:50:05 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_atoi(const char *str)
+#include "libft.h"
+
+int	ft_atoi(char *str, int *integer)
 {
-	int		i;
 	int		sign;
-	int		result;
+	long	value;
 
 	sign = 1;
-	result = 0;
-	i = 0;
-	if (str[i] == '+' || str[i] == '-')
+	value = 0;
+	if (!str)
+		return (0);
+	if (*str == '+' | *str == '-')
 	{
-		if (str[i] == '-')
-			sign *= -1;
-		i++;
+		if (*str == '-')
+			sign = -1;
+		str++;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	while (*str)
 	{
-		result = result * 10 + str[i] - '0';
-		i++;
+		if (*str > '9' || *str < '0')
+			return (0);
+		value = value * 10 + *str - '0';
+		if ((sign > 0 && value > INT_MAX) || (sign < 0 && value > 2147483648))
+			return (0);
+		str++;
 	}
-	return (result * sign);
+	*integer = value * sign;
+	return (1);
 }
