@@ -1,10 +1,17 @@
 NO ./textures/north
-SO ./textures/south
-WE ./textures/west
+C 225,30,0
 EA ./textures/east
 
+
+
 F 220,100,0
-C 225,30,0
+
+
+
+
+
+SO ./textures/south
+WE ./textures/west
 
 		 	 1111111111111111111
 		 	100000000001000000001111

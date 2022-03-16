@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map.c                                              :+:      :+:    :+:   */
+/*   colour.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:46:44 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/15 22:48:07 by eozben           ###   ########.fr       */
+/*   Updated: 2022/03/16 17:46:10 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	create_trgb(int r, int g, int b)
 	return (r << 16 | g << 8 | b);
 }
 
-static int	read_colour(t_map *map, char *str, int i)
+int	read_colour(t_map *map, char *str, int i)
 {
 	char	**colour_array;
 	int		colour[3];
@@ -43,40 +43,4 @@ static int	read_colour(t_map *map, char *str, int i)
 	}
 	ft_free_strarray(colour_array);
 	return (create_trgb(colour[0], colour[1], colour[2]));
-}
-
-static void	check_floor_ceiling_colours(t_map *map, char *str)
-{
-	int	i;
-
-	i = 0;
-	str[ft_strlen(str) - 1] = '\0';
-	i = skip_whitespaces(&str[i]);
-	if (!ft_strncmp("F", &str[i], 1))
-		map->f_color = read_colour(map, str, i);
-	else if (!ft_strncmp("C", &str[i], 1))
-		map->c_color = read_colour(map, str, i);
-	else
-		map_error(map, str, "no valid type identifier");
-}
-
-int	read_floor_ceiling_colour(t_map *map)
-{
-	char	*str;
-	int		line_count;
-
-	line_count = 0;
-	while (line_count < 2)
-	{
-		str = get_next_line(map->map_fd);
-		if (!str)
-			break ;
-		if (!ft_is_empty_line(str))
-		{
-			check_floor_ceiling_colours(map, str);
-			line_count++;
-		}
-		free(str);
-	}
-	return (0);
 }

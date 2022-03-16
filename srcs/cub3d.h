@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/16 21:00:26 by eozben           ###   ########.fr       */
+/*   Updated: 2022/03/16 22:54:10 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,11 @@ int		ft_is_empty_line(char *s);
 void	map_error(t_map *map, char *str, char *error_msg);
 int		skip_whitespaces(char *str);
 void	free_map(t_map *map);
-int		read_floor_ceiling_colour(t_map *map);
 void	read_cub_file(t_map *map, char **argv);
-int		read_wall_texture(t_map *map);
-void	ft_mlx_pixel_put(t_img *data, int x, int y, int color);
-int		close_win(t_win *win);
-int		mlx_hooks(t_win *win);
+int		read_colour(t_map *map, char *str, int i);
+int		read_textures(t_map *map);
 int		init_window(t_win *win, t_img *img, t_map *map);
+int		mlx_hooks(t_win *win);
+int		read_map(t_map *map);
 
 #endif
