@@ -6,7 +6,7 @@
 /*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:41:17 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/15 22:43:33 by eozben           ###   ########.fr       */
+/*   Updated: 2022/03/16 20:53:10 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int	skip_whitespaces(char *str)
 
 void	free_map(t_map *map)
 {
+	if (map->map_fd)
+		close(map->map_fd);
 	free(map->ea_path);
 	free(map->no_path);
 	free(map->so_path);
@@ -53,8 +55,6 @@ void	free_map(t_map *map)
 
 void	map_error(t_map *map, char *str, char *error_msg)
 {
-	if (map->map_fd)
-		close(map->map_fd);
 	if (map)
 		free_map(map);
 	if (str)

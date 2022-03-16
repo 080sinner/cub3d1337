@@ -6,7 +6,7 @@
 /*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/16 17:20:24 by eozben           ###   ########.fr       */
+/*   Updated: 2022/03/16 21:00:26 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,15 @@
 # define ERROR -1
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 600
+# define ESC_KEY 53
+# define UP_KEY 126
+# define DOWN_KEY 125
+# define LEFT_KEY 123
+# define RIGHT_KEY 124
+# define W_KEY 13
+# define A_KEY 0
+# define S_KEY 1
+# define D_KEY 2
 
 typedef struct s_map
 {
@@ -46,7 +55,9 @@ typedef struct s_img
 typedef struct s_win
 {
 	void	*mlx;
+	t_map	*map;
 	void	*mlx_win;
+	t_img	img;
 }			t_win;
 
 int		ft_iswhitespace(char c);
@@ -57,5 +68,9 @@ void	free_map(t_map *map);
 int		read_floor_ceiling_colour(t_map *map);
 void	read_cub_file(t_map *map, char **argv);
 int		read_wall_texture(t_map *map);
+void	ft_mlx_pixel_put(t_img *data, int x, int y, int color);
+int		close_win(t_win *win);
+int		mlx_hooks(t_win *win);
+int		init_window(t_win *win, t_img *img, t_map *map);
 
 #endif
