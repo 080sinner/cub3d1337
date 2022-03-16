@@ -6,7 +6,7 @@
 /*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/15 23:15:46 by eozben           ###   ########.fr       */
+/*   Updated: 2022/03/16 17:20:24 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <fcntl.h>
 
 # define ERROR -1
+# define WIN_WIDTH 800
+# define WIN_HEIGHT 600
 
 typedef struct s_map
 {
