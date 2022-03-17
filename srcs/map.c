@@ -6,11 +6,17 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:17:46 by fbindere          #+#    #+#             */
-/*   Updated: 2022/03/16 22:58:54 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/03/17 16:49:07 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+
+void	create_map_array()
+{
+	
+}
 
 int	read_map(t_map *map)
 {
@@ -36,9 +42,11 @@ int	read_map(t_map *map)
 		}
 		free(line);
 	}
-	map->map = ft_split(map_line, '\n');
-	if (!map->map)
-		map_error(map, map_line, "Allocating map");
-	free(map_line);
-	return (0);
+	map->map = create_map_array(map_line);
+	
+	// map->map = ft_split(map_line, '\n');
+	// if (!map->map)
+	// 	map_error(map, map_line, "Allocating map");
+	// free(map_line);
+	// return (0);
 }
