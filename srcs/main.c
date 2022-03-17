@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:58 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/16 21:00:13 by eozben           ###   ########.fr       */
+/*   Updated: 2022/03/17 22:13:51 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	init_map(t_map *map)
 {
 	map->map_fd = 0;
 	map->f_color = 0;
+	map->map_height = 0;
+	map->map_length = 0;
 	map->c_color = 0;
 	map->ea_path = NULL;
 	map->no_path = NULL;

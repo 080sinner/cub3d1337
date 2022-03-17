@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/17 20:21:50 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/03/17 22:14:16 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 typedef struct s_map
 {
 	int		map_fd;
+	int		map_height;
+	int		map_length;
 	char	*no_path;
 	char	*so_path;
 	char	*we_path;
@@ -71,5 +73,7 @@ int		read_textures(t_map *map);
 int		init_window(t_win *win, t_img *img, t_map *map);
 int		mlx_hooks(t_win *win);
 void	read_map(t_map *map);
+int		ft_is_whitespace(char c);
+void	check_map_validity(t_map *map);
 
 #endif

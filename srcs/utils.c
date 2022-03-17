@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:41:17 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/16 20:53:10 by eozben           ###   ########.fr       */
+/*   Updated: 2022/03/17 22:07:13 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	ft_iswhitespace(char c)
+int	ft_is_whitespace(char c)
 {
 	if (c == ' ' || c == '\t' || c == '\r')
 		return (1);
@@ -25,7 +25,7 @@ int	ft_is_empty_line(char *s)
 	int	i;
 
 	i = 0;
-	while (ft_iswhitespace(s[i]))
+	while (ft_is_whitespace(s[i]))
 		i++;
 	if (s[i] == '\n')
 		return (1);
@@ -37,7 +37,7 @@ int	skip_whitespaces(char *str)
 	int	i;
 
 	i = 0;
-	while (ft_iswhitespace(str[i]))
+	while (ft_is_whitespace(str[i]))
 		i++;
 	return (i);
 }

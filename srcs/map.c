@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:17:46 by fbindere          #+#    #+#             */
-/*   Updated: 2022/03/17 21:13:29 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/03/17 22:37:25 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,11 @@ int	get_line_length(char *line)
 
 void	create_map_array(t_map *map, char *map_line)
 {
-	int longest_line;
-	int	line_count;
 	int i;
 	int j;
 	
-	get_map_size(map_line, &longest_line, &line_count);
-	map->map = ft_calloc(line_count + 1, longest_line);
+	get_map_size(map_line, &map->map_length, &map->map_height);
+	map->map = ft_calloc(map->map_height + 1, map->map_length);
 	if (!map->map)
 		map_error(map, map_line, "Allocating map");
 	i = 0;
@@ -141,4 +139,70 @@ void read_map(t_map *map)
 		free(line);
 	}	
 	create_map_array(map, map_line);
+}
+
+
+int	check_valid(t_map *map, int x, int y)
+{
+	if (map->map[y][x + 1] == ' ' || map->map[y][x + 1] == '\0')
+		return (0);
+	if (x && (map->map[y][x - 1] == ' ' || map->map[y][x - 1] == '\0'))
+		return (0);
+	if (map->map[y + 1][x] == ' ' || map->map[y + 1][x] == '\0')
+		return (0);
+	if (y && (map->map[y - 1][x] == ' ' || map->map[y - 1][x] == '\0'))
+		return (0);
+	if (map->map[y + 1][x] == ' ' || map->map[y][x + 1] == '\0')
+		return (0);
+	if (y && (map->map[y - 1][x] == ' ' || map->map[y - 1][x] == '\0'))
+		return (0);
+	if ((y && map->map[y - 1][x] == ' ') || map->map[y][x + 1] == '\0')
+		return (0);
+	if ((y != map->map_height && map->map[y + 1][x] == ' ') || (x && map->map[y][x - 1] == '\0'))
+		return (0);
+	return (1);
+}
+
+int	is_player(char tile)
+{
+	if (tile == 'N')
+		return (1);
+	if (tile == 'E')
+		return (1);
+	if (tile == 'S')
+		return (1);
+	if (tile == 'W')
+		return (1);
+	return (0);
+}
+
+
+void	check_map_validity(t_map *map)
+{
+	int x;
+	int y;
+	int playercount;
+
+	y = 0;
+	playercount = 0;
+	while (map->map[y])
+	{
+		x = 0;
+		while(map->map[y][x])
+		{
+			if (map->map[y][x] == '0' || is_player(map->map[y][x]))
+			{
+				if (!check_valid(map, x, y))
+					map_error(map, NULL, "Invalid map configuration");
+				if (is_player(map->map[y][x]))
+					playercount++;
+			}
+			else if (map->map[y][x] != '1' && !ft_is_whitespace(map->map[y][x]))
+				map_error(map, NULL, "Invalid character in map");
+			x++;
+		}
+	y++;
+	}
+	if (playercount != 1)
+		map_error(map, NULL, "Invalid player count");
 }

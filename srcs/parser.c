@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:47:18 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/16 22:54:00 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/03/17 21:16:54 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,5 @@ void	read_cub_file(t_map *map, char **argv)
 	}
 	read_textures(map);
 	read_map(map);
-
+	check_map_validity(map);
 }
