@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/16 22:54:10 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/03/17 20:21:50 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,6 @@ int		read_colour(t_map *map, char *str, int i);
 int		read_textures(t_map *map);
 int		init_window(t_win *win, t_img *img, t_map *map);
 int		mlx_hooks(t_win *win);
-int		read_map(t_map *map);
+void	read_map(t_map *map);
 
 #endif
