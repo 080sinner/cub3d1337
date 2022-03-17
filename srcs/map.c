@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:17:46 by fbindere          #+#    #+#             */
-/*   Updated: 2022/03/17 20:49:31 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/03/17 21:13:29 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,13 +87,26 @@ char *get_next_written_line(int fd)
 			return (NULL);
 		if (!ft_is_empty_line(line))
 			return (line);
+		free(line);
 	}	
+}
+
+int	is_eof(int fd)
+{
+	char *line;
+
+	line = get_next_written_line(fd);
+	if (line)
+	{
+		free(line);
+		return (0);
+	}
+	return (1);
 }
 
 char *append_mapline(t_map *map, char *map_line, char *line)
 {
 	char *tmp;
-	char *ret_str;
 
 	tmp = map_line;
 	map_line = ft_strjoin(map_line, line);
@@ -103,16 +116,16 @@ char *append_mapline(t_map *map, char *map_line, char *line)
 	return (map_line);
 }
 
-void	read_map(t_map *map)
+void read_map(t_map *map)
 {
-	char	*line;
-	char	*map_line;
+	
+	char *line;
+	char *map_line;
 
 	map_line = get_next_written_line(map->map_fd);
 	if (!map_line)
-		map_error(map, NULL, "no map specified");
-
-	while (1)
+		map_error(map, NULL, "No map specified");
+	while(1)
 	{
 		line = get_next_line(map->map_fd);
 		if (!line)
@@ -120,16 +133,12 @@ void	read_map(t_map *map)
 		if (ft_is_empty_line(line))
 		{
 			free(line);
-			line = get_next_written_line(map->map_fd);
-			if (line)
-			{
-				free(line);
-				map_error(map, map_line, "empty line in map");
-			}
-			break;
+			if (is_eof(map->map_fd))
+				break ;
+			map_error(map, map_line, "Empty line in map");			
 		}
-		append_mapline(map, map_line, line);
+		map_line = append_mapline(map, map_line, line);
 		free(line);
-	}
+	}	
 	create_map_array(map, map_line);
 }
