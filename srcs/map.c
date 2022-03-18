@@ -6,23 +6,22 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:17:46 by fbindere          #+#    #+#             */
-/*   Updated: 2022/03/18 21:57:09 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/03/18 22:02:03 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-
 void	get_map_size(char *map_line, int *longest_line, int *line_count)
 {	
-	int i;
-	int current_line;
-	
+	int	i;
+	int	current_line;
+
 	current_line = 0;
 	*longest_line = 0;
 	*line_count = 0;
 	i = 0;
-	while(map_line[i])
+	while (map_line[i])
 	{
 		if (map_line[i] == '\n')
 		{
@@ -39,46 +38,46 @@ void	get_map_size(char *map_line, int *longest_line, int *line_count)
 
 int	get_line_length(char *line)
 {	
-	int i;
+	int	i;
 
 	i = 0;
-	while(line[i])
+	while (line[i])
 	{
 		if (line[i] == '\n')
 			return (i);
 		i++;
 	}
-	return (i - 1);	
+	return (i - 1);
 }
 
 void	create_map_array(t_map *map, char *map_line)
 {
-	int i;
-	int j;
-	
+	int	i;
+	int	j;
+
 	get_map_size(map_line, &map->map_length, &map->map_height);
 	map->map = ft_calloc(map->map_height + 1, map->map_length);
 	if (!map->map)
 		map_error(map, map_line, "Allocating map");
 	i = 0;
 	j = 0;
-	while(map_line[i])
+	while (map_line[i])
 	{
 		map->map[j] = ft_substr(map_line, i, get_line_length(&map_line[i]));
 		i += get_line_length(&map_line[i]) + 1;
 		j++;
 	}
 	j = 0;
-	while(map->map[j])
+	while (map->map[j])
 		printf("first line %s\n", map->map[j++]);
 
 }
 
-char *get_next_written_line(int fd)
+char	*get_next_written_line(int fd)
 {
-	char *line;
+	char	*line;
 
-	while(1)
+	while (1)
 	{
 		line = get_next_line(fd);
 		if (!line)
@@ -91,7 +90,7 @@ char *get_next_written_line(int fd)
 
 int	is_eof(int fd)
 {
-	char *line;
+	char	*line;
 
 	line = get_next_written_line(fd);
 	if (line)
@@ -104,7 +103,7 @@ int	is_eof(int fd)
 
 char *append_mapline(t_map *map, char *map_line, char *line)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = map_line;
 	map_line = ft_strjoin(map_line, line);
@@ -116,24 +115,23 @@ char *append_mapline(t_map *map, char *map_line, char *line)
 
 void read_map(t_map *map)
 {
-	
-	char *line;
-	char *map_line;
+	char	*line;
+	char	*map_line;
 
 	map_line = get_next_written_line(map->map_fd);
 	if (!map_line)
 		map_error(map, NULL, "No map specified");
-	while(1)
+	while (1)
 	{
 		line = get_next_line(map->map_fd);
 		if (!line)
-			break;
+			break ;
 		if (ft_is_empty_line(line))
 		{
 			free(line);
 			if (is_eof(map->map_fd))
 				break ;
-			map_error(map, map_line, "Empty line in map");			
+			map_error(map, map_line, "Empty line in map");
 		}
 		map_line = append_mapline(map, map_line, line);
 		free(line);
@@ -186,7 +184,9 @@ int	is_player(char tile)
 
 int	check_border(t_map *map)
 {
-	int y;
+	int	x;
+	int	y;
+	int	playercount;
 
 	if (ft_strchr(map->map[0], '0'))
 		return (0);
@@ -195,26 +195,8 @@ int	check_border(t_map *map)
 	y = 0;
 	while(y < map->map_height)
 	{
-		if (map->map[y][0] == '0')
-			return (0);
-		y++;
-	}
-	return (1);
-}
-
-
-void check_map_validity(t_map *map)
-{
-	int y;
-	int x;
-	
-	if (!check_border(map))
-		map_error(map, NULL, "invalid map configuration");
-	y = 1;
-	while(y < map->map_height - 1)
-	{
-		x = 1;
-		while(map->map[y][x])
+		x = 0;
+		while (map->map[y][x])
 		{
 			if (map->map[y][x] == '0' && !check_valid_tile(map, x, y))
 				map_error(map, NULL, "invalid map configuration");
@@ -227,36 +209,6 @@ void check_map_validity(t_map *map)
 		}
 	y++;
 	}
+	if (playercount != 1)
+		map_error(map, NULL, "Invalid player count");
 }
-
-// void	check_map_validity(t_map *map)
-// {
-// 	int x;
-// 	int y;
-// 	int playercount;
-
-// 	y = 0;
-// 	playercount = 0;
-// 	while (map->map[y])
-// 	{
-// 		x = 0;
-// 		while(map->map[y][x])
-// 		{
-// 			if (map->map[y][x] == '0' || is_player(map->map[y][x]))
-// 			{
-// 				if (map->map[y][x] == '0' && (x == 0 || y == 0 || y == map->map_height - 1))
-// 					map_error(map, NULL, "Invalid map configuration");
-// 				else if (!check_valid_tile(map, x, y))
-// 					map_error(map, NULL, "Invalid map configuration");
-// 				if (is_player(map->map[y][x]))
-// 					playercount++;
-// 			}
-// 			else if (map->map[y][x] != '1' && !ft_is_whitespace(map->map[y][x]))
-// 				map_error(map, NULL, "Invalid character in map");
-// 			x++;
-// 		}
-// 	y++;
-// 	}
-// 	if (playercount != 1)
-// 		map_error(map, NULL, "Invalid player count");
-// }
