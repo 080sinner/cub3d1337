@@ -6,7 +6,7 @@
 /*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:17:46 by fbindere          #+#    #+#             */
-/*   Updated: 2022/03/19 18:21:27 by eozben           ###   ########.fr       */
+/*   Updated: 2022/03/19 23:31:15 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	is_eof(int fd)
 	return (1);
 }
 
-char *append_mapline(t_map *map, char *map_line, char *line)
+char	*append_mapline(t_map *map, char *map_line, char *line)
 {
 	char	*tmp;
 
@@ -114,7 +114,7 @@ char *append_mapline(t_map *map, char *map_line, char *line)
 	return (map_line);
 }
 
-void read_map(t_map *map)
+void	read_map(t_map *map)
 {
 	char	*line;
 	char	*map_line;
@@ -149,11 +149,11 @@ int	is_empty_tile(char tile)
 
 void	check_valid_zero(t_map *map, int x, int y)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = -1;
-	while (i < 2)	
+	while (i < 2)
 	{
 		j = -1;
 		while (j < 2)
@@ -179,19 +179,36 @@ int	is_player(char tile)
 	return (0);
 }
 
+int	check_x_border(char *s, int i)
+{
+	while (s[i])
+	{
+		if (ft_is_whitespace(s[i]))
+		{
+			i++;
+			continue ;
+		}
+		if (s[i] != '1')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	check_border(t_map *map)
 {
 	int	y;
 
-	if (ft_strchr(map->map[0], '0'))
-		return (0);
-	if (ft_strchr(map->map[map->map_height - 1], '0'))
-		return (0);
+	if (!check_x_border(map->map[0], skip_whitespaces(map->map[0])))
+		map_error(map, NULL, "Invalid vertical border");
+	if (!check_x_border(map->map[map->map_height - 1],
+			skip_whitespaces(map->map[map->map_height - 1])))
+		map_error(map, NULL, "Invalid vertical border");
 	y = 1;
 	while (y < map->map_height - 1)
 	{
-		if (map->map[y][0] == '0')
-			return (0);
+		if (map->map[y][skip_whitespaces(map->map[y])] != '1')
+			map_error(map, NULL, "Invalid border");
 		y++;
 	}
 	return (1);
@@ -199,14 +216,14 @@ int	check_border(t_map *map)
 
 void	check_map_validity(t_map *map)
 {
-	int y;
-	int x;
-	int playercount;
+	int	y;
+	int	x;
+	int	playercount;
 
 	check_border(map);
 	playercount = 0;
 	y = 1;
-	while(y < map->map_height - 1)
+	while (y < map->map_height - 1)
 	{
 		x = 1;
 		while (map->map[y][x])
