@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:17:46 by fbindere          #+#    #+#             */
-/*   Updated: 2022/03/19 00:06:24 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/03/19 18:21:27 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void	get_map_size(char *map_line, int *longest_line, int *line_count)
 		i++;
 		current_line++;
 	}
-	*line_count += 1;
+	if (map_line[i - 1] != '\n' && !map_line[i])
+		*line_count += 1;
 }
 
 int	get_line_length(char *line)
@@ -67,10 +68,10 @@ void	create_map_array(t_map *map, char *map_line)
 		i += get_line_length(&map_line[i]) + 1;
 		j++;
 	}
+	printf("map height : %d\n", map->map_height);
 	j = 0;
 	while (map->map[j])
 		printf("map: %s\n", map->map[j++]);
-
 }
 
 char	*get_next_written_line(int fd)
@@ -214,7 +215,7 @@ void	check_map_validity(t_map *map)
 				check_valid_zero(map, x, y);
 			else if (is_player(map->map[y][x]))
 				playercount++;
-			else if (map->map[y][x] != '1' && map->map[y][x] != ' ')
+			else if (map->map[y][x] != '1' && !ft_is_whitespace(map->map[y][x]))
 				map_error(map, NULL, "invalid map character");
 			x++;
 		}
