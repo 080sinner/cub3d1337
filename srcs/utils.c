@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:41:17 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/17 22:07:13 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/03/30 21:31:54 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ int	skip_whitespaces(char *str)
 
 void	free_map(t_map *map)
 {
-	if (map->map_fd)
-		close(map->map_fd);
+	if (map->fd)
+		close(map->fd);
 	free(map->ea_path);
 	free(map->no_path);
 	free(map->so_path);

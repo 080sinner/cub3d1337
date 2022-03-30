@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:48:51 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/16 19:46:46 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/03/30 21:35:12 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	read_textures(t_map *map)
 	line_count = 0;
 	while (line_count < 6)
 	{
-		str = get_next_line(map->map_fd);
+		str = get_next_line(map->fd);
 		if (!str)
 			break ;
 		if (!ft_is_empty_line(str))

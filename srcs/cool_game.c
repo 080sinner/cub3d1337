@@ -1,24 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   cool_game.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/15 22:47:18 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/30 21:34:18 by fbindere         ###   ########.fr       */
+/*   Created: 2022/03/30 22:20:27 by fbindere          #+#    #+#             */
+/*   Updated: 2022/03/30 22:20:28 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
-
-void	parse_cub_file(t_cub *cub, char **argv)
-{	
-	cub->map.fd = open(argv[1], O_RDWR);
-	if (cub->map.fd == ERROR)
-		map_error(&cub->map, NULL, "Bad .cub file");
-	read_textures(&cub->map);
-	read_map(&cub->map);
-	check_map_validity(&cub->map, &cub->player);
-	close(cub->map.fd);
-}

@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/17 22:14:16 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/03/30 22:32:41 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,25 @@
 # define S_KEY 1
 # define D_KEY 2
 
+typedef struct s_camera
+{
+	double	plane_x;
+	double	plane_y;
+	double	time;
+	double	time_old;
+}				t_camera;
+
+typedef struct s_player
+{
+	double	pos_x;
+	double	pos_y;
+	double	dir_x;
+	double	dir_y;
+}				t_player;
+
 typedef struct s_map
 {
-	int		map_fd;
+	int		fd;
 	int		map_height;
 	int		map_length;
 	char	*no_path;
@@ -57,23 +73,29 @@ typedef struct s_img
 typedef struct s_win
 {
 	void	*mlx;
-	t_map	*map;
 	void	*mlx_win;
-	t_img	img;
 }			t_win;
 
-int		ft_iswhitespace(char c);
+typedef struct s_cub
+{
+	t_camera	camera;
+	t_map		map;
+	t_player	player;
+	t_img		img;
+	t_win		win;
+}				t_cub;
+
 int		ft_is_empty_line(char *s);
 void	map_error(t_map *map, char *str, char *error_msg);
 int		skip_whitespaces(char *str);
 void	free_map(t_map *map);
-void	read_cub_file(t_map *map, char **argv);
+void	parse_cub_file(t_cub *cub, char **argv);
 int		read_colour(t_map *map, char *str, int i);
 int		read_textures(t_map *map);
-int		init_window(t_win *win, t_img *img, t_map *map);
-int		mlx_hooks(t_win *win);
+int		init_win_img(t_win *win, t_img *img);
+int		mlx_hooks(t_cub *cub);
 void	read_map(t_map *map);
 int		ft_is_whitespace(char c);
-void	check_map_validity(t_map *map);
+void	check_map_validity(t_map *map, t_player *player);
 
 #endif

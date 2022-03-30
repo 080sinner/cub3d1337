@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:17:46 by fbindere          #+#    #+#             */
-/*   Updated: 2022/03/19 23:31:15 by eozben           ###   ########.fr       */
+/*   Updated: 2022/03/30 21:30:59 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,18 +119,18 @@ void	read_map(t_map *map)
 	char	*line;
 	char	*map_line;
 
-	map_line = get_next_written_line(map->map_fd);
+	map_line = get_next_written_line(map->fd);
 	if (!map_line)
 		map_error(map, NULL, "No map specified");
 	while (1)
 	{
-		line = get_next_line(map->map_fd);
+		line = get_next_line(map->fd);
 		if (!line)
 			break ;
 		if (ft_is_empty_line(line))
 		{
 			free(line);
-			if (is_eof(map->map_fd))
+			if (is_eof(map->fd))
 				break ;
 			map_error(map, map_line, "Empty line in map");
 		}
@@ -214,14 +214,32 @@ int	check_border(t_map *map)
 	return (1);
 }
 
-void	check_map_validity(t_map *map)
+int	player_values(t_map *map, t_player *player, int x, int y)
+{
+	static int playercount;
+	
+	if (x == 0 || y == 0)
+		return (playercount);
+	player->pos_x = (double)x;
+	player->pos_y = (double)y;
+	if (map->map[y][x] == 'N')
+		player->dir_y = 1;
+	else if (map->map[y][x] == 'E')
+		player->dir_x = 1;
+	else if (map->map[y][x] == 'S')
+		player->dir_y = -1;
+	else if (map->map[y][x] == 'W')
+		player->dir_x = -1;
+	playercount++;
+	return(playercount);
+}
+
+void	check_map_validity(t_map *map, t_player *player)
 {
 	int	y;
 	int	x;
-	int	playercount;
 
 	check_border(map);
-	playercount = 0;
 	y = 1;
 	while (y < map->map_height - 1)
 	{
@@ -231,13 +249,13 @@ void	check_map_validity(t_map *map)
 			if (map->map[y][x] == '0')
 				check_valid_zero(map, x, y);
 			else if (is_player(map->map[y][x]))
-				playercount++;
+				player_values(map, player, x, y);
 			else if (map->map[y][x] != '1' && !ft_is_whitespace(map->map[y][x]))
 				map_error(map, NULL, "invalid map character");
 			x++;
 		}
 	y++;
 	}
-	if (playercount != 1)
+	if (player_values(map, player, 0, 0) != 1)
 		map_error(map, NULL, "Invalid amount of players");
 }
