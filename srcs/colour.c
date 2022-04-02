@@ -6,13 +6,13 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:46:44 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/16 17:46:10 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/02 20:06:21 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int	create_trgb(int r, int g, int b)
+int	create_trgb(int r, int g, int b)
 {
 	return (r << 16 | g << 8 | b);
 }

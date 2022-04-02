@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/30 22:32:41 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/02 20:07:56 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "../mlx/mlx.h"
 # include <stdio.h>
 # include <fcntl.h>
+# include <math.h>
 
 # define ERROR -1
 # define WIN_WIDTH 800
@@ -97,5 +98,9 @@ int		mlx_hooks(t_cub *cub);
 void	read_map(t_map *map);
 int		ft_is_whitespace(char c);
 void	check_map_validity(t_map *map, t_player *player);
+int		create_trgb(int r, int g, int b);
+void	ft_mlx_pixel_put(t_img *data, int x, int y, int color);
+int		calculate_frame(t_cub *cub);
+
 
 #endif

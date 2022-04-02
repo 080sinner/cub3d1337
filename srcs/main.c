@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:58 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/30 22:25:51 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/02 20:07:39 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	main(int argc, char *argv[])
 	init_win_img(&cub.win, &cub.img);
 	parse_cub_file(&cub, argv);
 	print_cub_file(&cub);
+	calculate_frame(&cub);
 	mlx_hooks(&cub);
 	mlx_loop(cub.win.mlx);
 }
