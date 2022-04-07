@@ -1,22 +1,21 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   map.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/16 17:17:46 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/07 16:24:09 by fbindere         ###   ########.fr       */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   map.c											  :+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: fbindere <fbindere@student.42.fr>		  +#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2022/03/16 17:17:46 by fbindere		  #+#	#+#			 */
+/*   Updated: 2022/04/07 20:52:50 by fbindere		 ###   ########.fr	   */
+/*																			*/
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 void	get_map_size(char *map_line, int *longest_line, int *line_count)
-{	
-	int	i;
-	int	current_line;
-
+{   
+	int i;
+	int current_line;
 	current_line = 0;
 	*longest_line = 0;
 	*line_count = 0;
@@ -37,10 +36,9 @@ void	get_map_size(char *map_line, int *longest_line, int *line_count)
 		*line_count += 1;
 }
 
-int	get_line_length(char *line)
-{	
-	int	i;
-
+int get_line_length(char *line)
+{   
+	int i;
 	i = 0;
 	while (line[i])
 	{
@@ -53,30 +51,32 @@ int	get_line_length(char *line)
 
 void	create_map_array(t_map *map, char *map_line)
 {
-	int	i;
-	int	j;
-
-	get_map_size(map_line, &map->map_height, &map->map_length);
-	map->map = ft_calloc(map->map_length + 1, map->map_height);
+	int i;
+	int j;
+	get_map_size(map_line, &map->map_length, &map->map_height);
+	map->map = ft_calloc(map->map_height + 1, map->map_length);
 	if (!map->map)
 		map_error(map, map_line, "Allocating map");
 	i = 0;
 	j = 0;
 	while (map_line[i])
 	{
-		map->map[j] = ft_substr(map_line, i, get_line_length(&map_line[i]));
+		map->map[j] = ft_substr(map_line, i, get_line_length(&map_line[i]) + 1);
+		if (map->map[j][ft_strlen(map->map[j]) - 1] == '\n')
+			map->map[j][ft_strlen(map->map[j]) - 1] = '\0';
 		i += get_line_length(&map_line[i]) + 1;
 		j++;
 	}
+	printf("map height : %d\n", map->map_height);
 	j = 0;
 	while (map->map[j])
 		printf("map: %s\n", map->map[j++]);
+	free(map_line);
 }
 
 char	*get_next_written_line(int fd)
 {
 	char	*line;
-
 	while (1)
 	{
 		line = get_next_line(fd);
@@ -85,13 +85,12 @@ char	*get_next_written_line(int fd)
 		if (!ft_is_empty_line(line))
 			return (line);
 		free(line);
-	}	
+	}   
 }
 
-int	is_eof(int fd)
+int is_eof(int fd)
 {
 	char	*line;
-
 	line = get_next_written_line(fd);
 	if (line)
 	{
@@ -104,7 +103,6 @@ int	is_eof(int fd)
 char	*append_mapline(t_map *map, char *map_line, char *line)
 {
 	char	*tmp;
-
 	tmp = map_line;
 	map_line = ft_strjoin(map_line, line);
 	free(tmp);
@@ -117,7 +115,6 @@ void	read_map(t_map *map)
 {
 	char	*line;
 	char	*map_line;
-
 	map_line = get_next_written_line(map->fd);
 	if (!map_line)
 		map_error(map, NULL, "No map specified");
@@ -135,11 +132,11 @@ void	read_map(t_map *map)
 		}
 		map_line = append_mapline(map, map_line, line);
 		free(line);
-	}	
+	}   
 	create_map_array(map, map_line);
 }
 
-int	is_empty_tile(char tile)
+int is_empty_tile(char tile)
 {
 	if (tile == ' ' || tile == '\0')
 		return (1);
@@ -148,9 +145,8 @@ int	is_empty_tile(char tile)
 
 void	check_valid_zero(t_map *map, int x, int y)
 {
-	int	i;
-	int	j;
-
+	int i;
+	int j;
 	i = -1;
 	while (i < 2)
 	{
@@ -165,8 +161,8 @@ void	check_valid_zero(t_map *map, int x, int y)
 	}
 }
 
-int	is_player(char tile)
-{	
+int is_player(char tile)
+{   
 	if (tile == 'N')
 		return (1);
 	if (tile == 'E')
@@ -178,7 +174,7 @@ int	is_player(char tile)
 	return (0);
 }
 
-int	check_x_border(char *s, int i)
+int check_x_border(char *s, int i)
 {
 	while (s[i])
 	{
@@ -194,17 +190,16 @@ int	check_x_border(char *s, int i)
 	return (1);
 }
 
-int	check_border(t_map *map)
+int check_border(t_map *map)
 {
-	int	y;
-
+	int y;
 	if (!check_x_border(map->map[0], skip_whitespaces(map->map[0])))
-		map_error(map, NULL, "Invalid horizontal border");
-	if (!check_x_border(map->map[map->map_length - 1],
-			skip_whitespaces(map->map[map->map_length - 1])))
-		map_error(map, NULL, "Invalid horizontal border");
+		map_error(map, NULL, "Invalid vertical border");
+	if (!check_x_border(map->map[map->map_height - 1],
+			skip_whitespaces(map->map[map->map_height - 1])))
+		map_error(map, NULL, "Invalid vertical border");
 	y = 1;
-	while (y < map->map_length - 1)
+	while (y < map->map_height - 1)
 	{
 		if (map->map[y][skip_whitespaces(map->map[y])] != '1')
 			map_error(map, NULL, "Invalid border");
@@ -237,12 +232,11 @@ int	player_values(t_map *map, t_player *player, int x, int y)
 
 void	check_map_validity(t_map *map, t_player *player)
 {
-	int	y;
-	int	x;
-
+	int y;
+	int x;
 	check_border(map);
 	y = 1;
-	while (y < map->map_length - 1)
+	while (y < map->map_height - 1)
 	{
 		x = 1;
 		while (map->map[y][x])

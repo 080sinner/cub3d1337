@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/07 19:38:21 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/07 22:14:52 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@
 # define A_KEY 0
 # define S_KEY 1
 # define D_KEY 2
+# define FRAMETIME 0.016
+# define MOVESPEED 0.08
+# define ROTSPEED 0.048
 
 typedef enum s_side
 {
@@ -60,8 +63,6 @@ typedef struct s_ray
 typedef struct s_camera
 {
 	t_vector	plane;
-	double	time;
-	double	time_old;
 }				t_camera;
 
 typedef struct s_player
@@ -115,13 +116,18 @@ void	free_map(t_map *map);
 void	parse_cub_file(t_cub *cub, char **argv);
 int		read_colour(t_map *map, char *str, int i);
 int		read_textures(t_map *map);
-int	init_win_img(t_cub *cub);
+int		init_win_img(t_cub *cub);
 int		mlx_hooks(t_cub *cub);
 void	read_map(t_map *map);
 int		ft_is_whitespace(char c);
 void	check_map_validity(t_map *map, t_player *player);
 void	ft_mlx_pixel_put(t_img *data, int x, int y, int color);
 int		create_trgb(int r, int g, int b);
-int		calculate_frame2(t_cub *cub);
+void	calculate_frame(t_cub *cub);
+void	move_forward(t_cub *cub);
+void	move_backward(t_cub *cub);
+void	turn_right(t_cub *cub);
+void	turn_left(t_cub *cub);
+void	cub3d(t_cub *cub);
 
 #endif
