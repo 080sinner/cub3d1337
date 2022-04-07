@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:17:46 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/06 19:37:40 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/07 16:24:09 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,18 +219,18 @@ int	player_values(t_map *map, t_player *player, int x, int y)
 	
 	if (x == 0 || y == 0)
 		return (playercount);
-	player->pos_x = x;
-	player->pos_y = y;
-	player->dir_y = 0;
-	player->dir_x = 0;
+	player->pos.x = x;
+	player->pos.y = y;
+	player->dir.x = 0;
+	player->dir.y = 0;
 	if (map->map[y][x] == 'N')
-		player->dir_y = -1;
+		player->dir.y = -1;
 	else if (map->map[y][x] == 'E')
-		player->dir_x = 1;
+		player->dir.x = 1;
 	else if (map->map[y][x] == 'S')
-		player->dir_y = 1;
+		player->dir.y = 1;
 	else if (map->map[y][x] == 'W')
-		player->dir_x = -1;
+		player->dir.x = -1;
 	playercount++;
 	return(playercount);
 }

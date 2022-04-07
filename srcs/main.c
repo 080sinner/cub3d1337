@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:58 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/06 17:09:37 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/07 16:34:04 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ void	print_cub_file(t_cub *cub)
 	printf("ea texture: %s\n", cub->map.ea_path);
 	printf("f_colour: %d\n", cub->map.f_color);
 	printf("c_colour: %d\n", cub->map.c_color);
-	printf("player_x: %f\n", cub->player.pos_x);
-	printf("player_y: %f\n", cub->player.pos_y);
-	printf("dir_x: %f\n", cub->player.dir_x);
-	printf("dir_y: %f\n", cub->player.dir_y);
+	printf("player_x: %f\n", cub->player.pos.x);
+	printf("player_y: %f\n", cub->player.pos.y);
+	printf("dir_x: %f\n", cub->player.dir.x);
+	printf("dir_y: %f\n", cub->player.dir.y);
 }
 
 int	main(int argc, char *argv[])

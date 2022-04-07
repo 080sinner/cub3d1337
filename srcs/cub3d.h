@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/06 17:09:13 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/07 19:38:21 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,43 @@
 # define A_KEY 0
 # define S_KEY 1
 # define D_KEY 2
-# define xSide 0
-# define ySide 1
+
+typedef enum s_side
+{
+	XSide,
+	ySide,
+}			t_side;
+
+typedef struct s_vector
+{
+	double		x;
+	double		y;
+}				t_vector;
+
+typedef struct s_ray
+{
+	t_vector	dir;
+	t_vector	sideDist;
+	t_vector	deltaDist;
+	t_side		hit;
+	int			mapX;
+	int			mapY;
+	int			stepX;
+	int			stepY;
+	double		perpWallDist;
+}				t_ray;
 
 typedef struct s_camera
 {
-	double	plane_x;
-	double	plane_y;
-	double	camera_x;
-	double	camera_y;
-	double 	r_dir_x;
-	double	r_dir_y;
+	t_vector	plane;
 	double	time;
 	double	time_old;
 }				t_camera;
 
 typedef struct s_player
 {
-	double	pos_x;
-	double	pos_y;
-	double	dir_x;
-	double	dir_y;
+	t_vector	pos;
+	t_vector	dir;
 }				t_player;
 
 typedef struct s_map
