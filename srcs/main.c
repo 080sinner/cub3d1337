@@ -6,12 +6,13 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:58 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/30 22:25:51 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/06 17:09:37 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+void	cub3d(t_cub *cub);
 
 void	print_cub_file(t_cub *cub)
 {
@@ -31,12 +32,15 @@ int	main(int argc, char *argv[])
 {
 	t_cub	cub;
 
+	(void)argv;
 	if (argc != 2)
 		return (printf("Error \nInvalid amount of arguments\n"));
-	ft_memset((void*)&cub, '0', sizeof(t_cub));
-	init_win_img(&cub.win, &cub.img);
+	ft_memset((void*)&cub, 0, sizeof(t_cub));
+	init_win_img(&cub);
 	parse_cub_file(&cub, argv);
 	print_cub_file(&cub);
+	calculate_frame2(&cub);
+	//calculate_frame(&cub);
 	mlx_hooks(&cub);
 	mlx_loop(cub.win.mlx);
 }

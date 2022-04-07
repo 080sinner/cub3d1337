@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:17:46 by fbindere          #+#    #+#             */
-/*   Updated: 2022/03/30 21:30:59 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/06 19:37:40 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ void	create_map_array(t_map *map, char *map_line)
 	int	i;
 	int	j;
 
-	get_map_size(map_line, &map->map_length, &map->map_height);
-	map->map = ft_calloc(map->map_height + 1, map->map_length);
+	get_map_size(map_line, &map->map_height, &map->map_length);
+	map->map = ft_calloc(map->map_length + 1, map->map_height);
 	if (!map->map)
 		map_error(map, map_line, "Allocating map");
 	i = 0;
@@ -68,7 +68,6 @@ void	create_map_array(t_map *map, char *map_line)
 		i += get_line_length(&map_line[i]) + 1;
 		j++;
 	}
-	printf("map height : %d\n", map->map_height);
 	j = 0;
 	while (map->map[j])
 		printf("map: %s\n", map->map[j++]);
@@ -200,12 +199,12 @@ int	check_border(t_map *map)
 	int	y;
 
 	if (!check_x_border(map->map[0], skip_whitespaces(map->map[0])))
-		map_error(map, NULL, "Invalid vertical border");
-	if (!check_x_border(map->map[map->map_height - 1],
-			skip_whitespaces(map->map[map->map_height - 1])))
-		map_error(map, NULL, "Invalid vertical border");
+		map_error(map, NULL, "Invalid horizontal border");
+	if (!check_x_border(map->map[map->map_length - 1],
+			skip_whitespaces(map->map[map->map_length - 1])))
+		map_error(map, NULL, "Invalid horizontal border");
 	y = 1;
-	while (y < map->map_height - 1)
+	while (y < map->map_length - 1)
 	{
 		if (map->map[y][skip_whitespaces(map->map[y])] != '1')
 			map_error(map, NULL, "Invalid border");
@@ -220,14 +219,16 @@ int	player_values(t_map *map, t_player *player, int x, int y)
 	
 	if (x == 0 || y == 0)
 		return (playercount);
-	player->pos_x = (double)x;
-	player->pos_y = (double)y;
+	player->pos_x = x;
+	player->pos_y = y;
+	player->dir_y = 0;
+	player->dir_x = 0;
 	if (map->map[y][x] == 'N')
-		player->dir_y = 1;
+		player->dir_y = -1;
 	else if (map->map[y][x] == 'E')
 		player->dir_x = 1;
 	else if (map->map[y][x] == 'S')
-		player->dir_y = -1;
+		player->dir_y = 1;
 	else if (map->map[y][x] == 'W')
 		player->dir_x = -1;
 	playercount++;
@@ -241,7 +242,7 @@ void	check_map_validity(t_map *map, t_player *player)
 
 	check_border(map);
 	y = 1;
-	while (y < map->map_height - 1)
+	while (y < map->map_length - 1)
 	{
 		x = 1;
 		while (map->map[y][x])

@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 20:58:25 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/30 22:16:58 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/02 15:36:29 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ int	mlx_hooks(t_cub *cub)
 	return (0);
 }
 
-int	init_win_img(t_win *win, t_img *img)
+int	init_win_img(t_cub *cub)
 {
-	win->mlx = mlx_init();
-	win->mlx_win = mlx_new_window(win->mlx, WIN_WIDTH, WIN_HEIGHT, "cub3d1337");
-	img->img = mlx_new_image(win->mlx, WIN_WIDTH, WIN_HEIGHT);
-	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel,
-			&img->line_length, &img->endian);
+	cub->win.mlx = mlx_init();
+	cub->win.mlx_win = mlx_new_window(cub->win.mlx, WIN_WIDTH, WIN_HEIGHT, "cub3d1337");
+	cub->img.img = mlx_new_image(cub->win.mlx, WIN_WIDTH, WIN_HEIGHT);
+	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel,
+			&cub->img.line_length, &cub->img.endian);
 	return (0);
 }

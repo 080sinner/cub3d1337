@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/30 22:32:41 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/06 17:09:13 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "../mlx/mlx.h"
 # include <stdio.h>
 # include <fcntl.h>
+# include <math.h>
 
 # define ERROR -1
 # define WIN_WIDTH 800
@@ -30,11 +31,17 @@
 # define A_KEY 0
 # define S_KEY 1
 # define D_KEY 2
+# define xSide 0
+# define ySide 1
 
 typedef struct s_camera
 {
 	double	plane_x;
 	double	plane_y;
+	double	camera_x;
+	double	camera_y;
+	double 	r_dir_x;
+	double	r_dir_y;
 	double	time;
 	double	time_old;
 }				t_camera;
@@ -92,10 +99,13 @@ void	free_map(t_map *map);
 void	parse_cub_file(t_cub *cub, char **argv);
 int		read_colour(t_map *map, char *str, int i);
 int		read_textures(t_map *map);
-int		init_win_img(t_win *win, t_img *img);
+int	init_win_img(t_cub *cub);
 int		mlx_hooks(t_cub *cub);
 void	read_map(t_map *map);
 int		ft_is_whitespace(char c);
 void	check_map_validity(t_map *map, t_player *player);
+void	ft_mlx_pixel_put(t_img *data, int x, int y, int color);
+int		create_trgb(int r, int g, int b);
+int		calculate_frame2(t_cub *cub);
 
 #endif
