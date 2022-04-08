@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:58 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/07 22:32:31 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/08 22:33:51 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ void	set_camera_vector(t_camera *camera)
 
 void	print_cub_file(t_cub *cub)
 {
-	printf("no texture: %s\n", cub->map.no_path);
-	printf("so texture: %s\n", cub->map.so_path);
-	printf("we texture: %s\n", cub->map.we_path);
-	printf("ea texture: %s\n", cub->map.ea_path);
+	printf("no texture: %s\n", cub->map.paths[NORTH]);
+	printf("so texture: %s\n", cub->map.paths[EAST]);
+	printf("we texture: %s\n", cub->map.paths[SOUTH]);
+	printf("ea texture: %s\n", cub->map.paths[WEST]);
 	printf("f_colour: %d\n", cub->map.f_color);
 	printf("c_colour: %d\n", cub->map.c_color);
 	printf("player_x: %f\n", cub->player.pos.x);

@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:41:17 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/07 20:39:44 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/08 22:01:55 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,12 @@ void    free_map(t_map *map)
 	int i;
 	if (map->fd)
 		close(map->fd);
-	free(map->ea_path);
-	free(map->no_path);
-	free(map->so_path);
-	free(map->we_path);
+	i = 0;
+	while (i < 4)
+		free(map->paths[i++]);
+	//brauchen hier win.mlx pointer also cub.
+	// while (i < 4)
+	// 	mlx_destroy_image(map->texture->img)
 	i = 0;
 	while (map->map && map->map[i])
 		free(map->map[i++]);

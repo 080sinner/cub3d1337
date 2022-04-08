@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/07 22:58:30 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/08 22:48:36 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,11 @@ void	perform_DDA(t_ray *ray, t_cub *cub)
 }
 
 
-void	draw_line(t_ray *ray, t_cub *cub, int x, int color)
+void	draw_line2(t_ray *ray, t_cub *cub, int x)
 {
 	int lineheight;
 	int drawStart;
 	int drawEnd;
-	int	y;
 
 	lineheight = (int)(WIN_HEIGHT / ray->perpWallDist);
 	drawStart = -lineheight / 2 + WIN_HEIGHT / 2;
@@ -100,16 +99,48 @@ void	draw_line(t_ray *ray, t_cub *cub, int x, int color)
 	drawEnd = lineheight / 2 + WIN_HEIGHT / 2;
 	if (drawEnd >= WIN_HEIGHT)
 		drawEnd = WIN_HEIGHT -1;
+	int texNUM;;
+	double wallX;
+
+	texNUM = 1;
+	if (ray->hit == XSide)
+		wallX = cub->player.pos.y + ray->perpWallDist * ray->dir.y;
+	else
+		wallX = cub->player.pos.x + ray->perpWallDist * ray->dir.x;
+	wallX -= floor(wallX);
+
+	int texX;
+	texX = (int)(wallX * (double)cub->map.texture[texNUM].width);
 	
-	y = 0;
-	while(y < WIN_HEIGHT)
+	if (ray->hit == XSide && ray->dir.x > 0)
+		texX = cub->map.texture[texNUM].width - texX - 1; 
+	if (ray->hit == ySide && ray->dir.y < 0)
+		texX = cub->map.texture[texNUM].width - texX - 1; 
+	double step;
+	
+	step = 1 * cub->map.texture[texNUM].height / lineheight;
+	double texpos;
+	texpos = (drawStart - WIN_HEIGHT / 2 + lineheight) * step;
+	for (int y = drawStart; y < drawEnd; y++)
 	{
-		if (y >= drawStart && y < drawEnd)
-			ft_mlx_pixel_put(&cub->img, x, y, color);
-		else
-			ft_mlx_pixel_put(&cub->img, x, y, 0);
-		y++;
+		int texY;
+		texY = (int) texpos & (cub->map.texture[texNUM].height - 1);
+		texpos +=  step;
+		int color;
+		color = (cub->map.texture[texNUM].img[cub->map.texture[texNUM].height * texY + texX]);
+		// if (ray->hit == ySide)
+		// 	color = (color >> 1) & 8355711;
+		ft_mlx_pixel_put(&cub->img, x, y, color);
 	}
+	// y = 0;
+	// while(y < WIN_HEIGHT)
+	// {
+	// 	if (y >= drawStart && y < drawEnd)
+	// 		ft_mlx_pixel_put(&cub->img, x, y, color);
+	// 	else
+	// 		ft_mlx_pixel_put(&cub->img, x, y, 0);
+	// 	y++;
+	// }
 	//real calc.
 	// y = drawStart;
 	// while(y < drawEnd)
@@ -133,16 +164,11 @@ void 	calculate_frame(t_cub *cub)
 		set_deltaDist(&ray);
 		set_sideDist(&ray, &cub->player);
 		perform_DDA(&ray, cub);
-		int color;
-		color = create_trgb(255, 0, 0);
-		if (ray.hit == ySide)
-			color = color / 2;
-		draw_line(&ray, cub, x, color);
 		x++;
 	}
 }
 
-void	turn_right(t_cub *cub)
+void	turn_left(t_cub *cub)
 {
 	double	oldDirX;
 	double	oldPlaneX;
@@ -159,7 +185,7 @@ void	turn_right(t_cub *cub)
 		+ cub->camera.plane.y * cos(-ROTSPEED);
 }
 
-void	turn_left(t_cub *cub)
+void	turn_right(t_cub *cub)
 {
 	double	oldDirX;
 	double	oldPlaneX;
@@ -201,6 +227,7 @@ void move_backward(t_cub *cub)
 	if (cub->map.map[newPosY][(int)cub->player.pos.x] == '0')
 		cub->player.pos.y -= cub->player.dir.y * MOVESPEED;
 }
+
 
 void	cub3d(t_cub *cub)
 {
