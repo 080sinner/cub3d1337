@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/18 00:09:58 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/18 00:35:33 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,13 +111,13 @@ void	get_line_values(t_dline *line, t_ray *ray)
 		line->start = 0;
 	line->end = line->height / 2 + WIN_HEIGHT / 2;
 	if (line->end >= WIN_HEIGHT)
-		line->end = WIN_HEIGHT -1;
+		line->end = WIN_HEIGHT - 1;
 }
 
 void	get_text_values(t_cub *cub, t_dline *line, t_text *text)
 {
 	text->step = 1.0 * cub->map.texture[texNUM].height / line->height;
-	text->pos = (line->start - WIN_HEIGHT / 2 + line->end / 2) * text->step;
+	text->pos = (line->start - WIN_HEIGHT / 2 + line->height / 2) * text->step;
 }
 
 void	draw_line(t_ray *ray, t_cub *cub, int x)
