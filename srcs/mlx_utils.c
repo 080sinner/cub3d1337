@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 20:58:25 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/08 23:02:17 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/18 00:11:09 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ void	ft_mlx_pixel_put(t_img *data, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-unsigned int ft_mlx_pixel_read(t_img *data, int width, int height)
+unsigned int mlx_pixel_read(t_img *data, int x, int y)
 {
 	char	*dst;
 
-	dst = data->addr + (height * data->line_length + width * (data->bits_per_pixel / 8));
+	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	return (*(unsigned int *)dst);
 }
 

@@ -6,11 +6,13 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/08 22:48:36 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/18 00:09:58 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+int texNUM = 0;
 
 void 	set_ray_dir_vector(t_cub *cub, t_ray *ray, int x)
 {
@@ -85,76 +87,64 @@ void	perform_DDA(t_ray *ray, t_cub *cub)
 		ray->perpWallDist = ray->sideDist.y - ray->deltaDist.y;
 }
 
-
-void	draw_line2(t_ray *ray, t_cub *cub, int x)
+void	get_texture_x(t_cub *cub, t_ray *ray, t_text *text)
 {
-	int lineheight;
-	int drawStart;
-	int drawEnd;
+	double	wallX;
 
-	lineheight = (int)(WIN_HEIGHT / ray->perpWallDist);
-	drawStart = -lineheight / 2 + WIN_HEIGHT / 2;
-	if (drawStart < 0)
-		drawStart = 0;
-	drawEnd = lineheight / 2 + WIN_HEIGHT / 2;
-	if (drawEnd >= WIN_HEIGHT)
-		drawEnd = WIN_HEIGHT -1;
-	int texNUM;;
-	double wallX;
-
-	texNUM = 1;
 	if (ray->hit == XSide)
 		wallX = cub->player.pos.y + ray->perpWallDist * ray->dir.y;
 	else
 		wallX = cub->player.pos.x + ray->perpWallDist * ray->dir.x;
 	wallX -= floor(wallX);
+	text->x = (int)(wallX * (double)cub->map.texture[texNUM].width);
+	if (ray->hit ==  XSide && ray->dir.x > 0)
+		text->x = cub->map.texture[texNUM].width - text->x - 1;
+	if (ray->hit ==  ySide && ray->dir.y < 0)
+		text->x = cub->map.texture[texNUM].width - text->x - 1;
+}
 
-	int texX;
-	texX = (int)(wallX * (double)cub->map.texture[texNUM].width);
-	
-	if (ray->hit == XSide && ray->dir.x > 0)
-		texX = cub->map.texture[texNUM].width - texX - 1; 
-	if (ray->hit == ySide && ray->dir.y < 0)
-		texX = cub->map.texture[texNUM].width - texX - 1; 
-	double step;
-	
-	step = 1 * cub->map.texture[texNUM].height / lineheight;
-	double texpos;
-	texpos = (drawStart - WIN_HEIGHT / 2 + lineheight) * step;
-	for (int y = drawStart; y < drawEnd; y++)
+void	get_line_values(t_dline *line, t_ray *ray)
+{
+	line->height = (int)(WIN_HEIGHT / ray->perpWallDist);
+	line->start = -line->height / 2 + WIN_HEIGHT / 2;
+	if (line->start < 0)
+		line->start = 0;
+	line->end = line->height / 2 + WIN_HEIGHT / 2;
+	if (line->end >= WIN_HEIGHT)
+		line->end = WIN_HEIGHT -1;
+}
+
+void	get_text_values(t_cub *cub, t_dline *line, t_text *text)
+{
+	text->step = 1.0 * cub->map.texture[texNUM].height / line->height;
+	text->pos = (line->start - WIN_HEIGHT / 2 + line->end / 2) * text->step;
+}
+
+void	draw_line(t_ray *ray, t_cub *cub, int x)
+{
+	t_dline	line;
+	t_text	text;
+
+	get_line_values(&line, ray);
+	get_text_values(cub, &line, &text);
+	get_texture_x(cub, ray, &text);
+	unsigned int color;
+	for (int y = line.start; y < line.end; y++)
 	{
-		int texY;
-		texY = (int) texpos & (cub->map.texture[texNUM].height - 1);
-		texpos +=  step;
-		int color;
-		color = (cub->map.texture[texNUM].img[cub->map.texture[texNUM].height * texY + texX]);
-		// if (ray->hit == ySide)
-		// 	color = (color >> 1) & 8355711;
+		text.y = (int)text.pos & (cub->map.texture[texNUM].height - 1);
+		text.pos += text.step;
+		color = mlx_pixel_read(&cub->map.texture[texNUM], text.x, text.y);
+		if (ray->hit == ySide)
+			color = (color >> 1) & 8355711;
 		ft_mlx_pixel_put(&cub->img, x, y, color);
 	}
-	// y = 0;
-	// while(y < WIN_HEIGHT)
-	// {
-	// 	if (y >= drawStart && y < drawEnd)
-	// 		ft_mlx_pixel_put(&cub->img, x, y, color);
-	// 	else
-	// 		ft_mlx_pixel_put(&cub->img, x, y, 0);
-	// 	y++;
-	// }
-	//real calc.
-	// y = drawStart;
-	// while(y < drawEnd)
-	// {
-	// 	ft_mlx_pixel_put(&cub->img, x, y, color);
-	// 	y++;
-	// }
 }
 
 void 	calculate_frame(t_cub *cub)
 {
 	t_ray	ray;
 	int		x;
-	
+
 	x = 0;
 	while(x < WIN_WIDTH)
 	{
@@ -164,6 +154,7 @@ void 	calculate_frame(t_cub *cub)
 		set_deltaDist(&ray);
 		set_sideDist(&ray, &cub->player);
 		perform_DDA(&ray, cub);
+		draw_line(&ray, cub, x);
 		x++;
 	}
 }

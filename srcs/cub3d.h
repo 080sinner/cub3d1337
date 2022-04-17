@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/08 22:30:40 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/18 00:13:32 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,22 @@ typedef struct s_cub
 	t_win		win;
 }				t_cub;
 
+typedef struct	s_dline
+{
+	int			height;
+	int			start;
+	int			end;
+}				t_dline;
+
+typedef struct	s_text
+{
+	int			type; //sollte enum sein
+	int			x;
+	int			y;
+	double		pos;
+	double		step;
+}				t_text;
+
 int		ft_is_empty_line(char *s);
 void	map_error(t_map *map, char *str, char *error_msg);
 int		skip_whitespaces(char *str);
@@ -133,6 +149,7 @@ void	move_backward(t_cub *cub);
 void	turn_right(t_cub *cub);
 void	turn_left(t_cub *cub);
 void	cub3d(t_cub *cub);
+unsigned int mlx_pixel_read(t_img *data, int x, int y);
 void	open_texture_files(t_cub *cub);
 
 #endif

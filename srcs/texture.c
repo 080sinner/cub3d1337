@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:48:51 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/08 22:32:28 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/18 00:14:40 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ static char	*read_path(t_map *map, char *str, int i)
 {
 	char	*path;
 
-	i += (2 + skip_whitespaces(&str[i]));
+	i += 2;
+	i += skip_whitespaces(&str[i]);
 	path = ft_strdup(&str[i]);
 	if (!path)
 		map_error(map, str, "allocating texture path");
@@ -57,7 +58,7 @@ void	open_texture_files(t_cub *cub)
 		tex = &cub->map.texture[i];
 		tex->img = mlx_xpm_file_to_image(
 			cub->win.mlx, cub->map.paths[i], &tex->width, &tex->height);
-		mlx_get_data_addr(
+		tex->addr = mlx_get_data_addr(
 			tex->img, &tex->bits_per_pixel, &tex->line_length, &tex->endian);
 		i++; 
 	}
