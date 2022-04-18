@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:41:17 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/08 22:01:55 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/18 23:20:39 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,27 +42,26 @@ int	skip_whitespaces(char *str)
 	return (i);
 }
 
-void    free_map(t_map *map)
+void    free_map(t_cub *cub)
 {
 	int i;
-	if (map->fd)
-		close(map->fd);
+	if (cub->map.fd)
+		close(cub->map.fd);
 	i = 0;
 	while (i < 4)
-		free(map->paths[i++]);
-	//brauchen hier win.mlx pointer also cub.
-	// while (i < 4)
-	// 	mlx_destroy_image(map->texture->img)
+		free(cub->map.paths[i++]);
 	i = 0;
-	while (map->map && map->map[i])
-		free(map->map[i++]);
-	free(map->map);
+	while(i < 4 && cub->map.texture[i].img)
+		mlx_destroy_image(cub->win.mlx, cub->map.texture[i++].img);
+	i = 0;
+	while (cub->map.map && cub->map.map[i])
+		free(cub->map.map[i++]);
+	free(cub->map.map);
 }
 
-void	map_error(t_map *map, char *str, char *error_msg)
+void	map_error(t_cub *cub, char *str, char *error_msg)
 {
-	if (map)
-		free_map(map);
+	free_map(cub);
 	if (str)
 		free(str);
 	printf("Error\n%s\n", error_msg);

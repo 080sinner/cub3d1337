@@ -6,16 +6,19 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:58 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/08 22:33:51 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/19 00:20:38 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	set_camera_vector(t_camera *camera)
+void	set_camera_vector(t_cub *cub)
 {
-	camera->plane.y = 0; // muss noch angepasst werden
-	camera->plane.x = .66; //muss noch angepasst werden
+	cub->camera.plane.x = cub->player.dir.y;
+	cub->camera.plane.y = cub->player.dir.x;
+	cub->camera.plane.y *= -1;
+	// camera->plane.y = 0; // muss noch angepasst werden
+	// camera->plane.x = .66; //muss noch angepasst werden
 }
 
 void	print_cub_file(t_cub *cub)
@@ -43,7 +46,7 @@ int	main(int argc, char *argv[])
 	init_win_img(&cub);
 	parse_cub_file(&cub, argv);
 	print_cub_file(&cub);
-	set_camera_vector(&cub.camera);
+	set_camera_vector(&cub);
 	cub3d(&cub);
 	mlx_hooks(&cub);
 	mlx_loop(cub.win.mlx);

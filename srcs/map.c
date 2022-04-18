@@ -49,28 +49,28 @@ int get_line_length(char *line)
 	return (i - 1);
 }
 
-void	create_map_array(t_map *map, char *map_line)
+void	create_map_array(t_cub *cub, char *map_line)
 {
 	int i;
 	int j;
-	get_map_size(map_line, &map->map_length, &map->map_height);
-	map->map = ft_calloc(map->map_height + 1, map->map_length);
-	if (!map->map)
-		map_error(map, map_line, "Allocating map");
+	get_map_size(map_line, &cub->map.map_length, &cub->map.map_height);
+	cub->map.map = ft_calloc(cub->map.map_height + 1, cub->map.map_length);
+	if (!cub->map.map)
+		map_error(cub, map_line, "Allocating map");
 	i = 0;
 	j = 0;
 	while (map_line[i])
 	{
-		map->map[j] = ft_substr(map_line, i, get_line_length(&map_line[i]) + 1);
-		if (map->map[j][ft_strlen(map->map[j]) - 1] == '\n')
-			map->map[j][ft_strlen(map->map[j]) - 1] = '\0';
+		cub->map.map[j] = ft_substr(map_line, i, get_line_length(&map_line[i]) + 1);
+		if (cub->map.map[j][ft_strlen(cub->map.map[j]) - 1] == '\n')
+			cub->map.map[j][ft_strlen(cub->map.map[j]) - 1] = '\0';
 		i += get_line_length(&map_line[i]) + 1;
 		j++;
 	}
-	printf("map height : %d\n", map->map_height);
+	printf("map height : %d\n", cub->map.map_height);
 	j = 0;
-	while (map->map[j])
-		printf("map: %s\n", map->map[j++]);
+	while (cub->map.map[j])
+		printf("map: %s\n", cub->map.map[j++]);
 	free(map_line);
 }
 
@@ -100,40 +100,40 @@ int is_eof(int fd)
 	return (1);
 }
 
-char	*append_mapline(t_map *map, char *map_line, char *line)
+char	*append_mapline(t_cub *cub, char *map_line, char *line)
 {
 	char	*tmp;
 	tmp = map_line;
 	map_line = ft_strjoin(map_line, line);
 	free(tmp);
 	if (!map_line)
-		map_error(map, line, "Allocating map");
+		map_error(cub, line, "Allocating map");
 	return (map_line);
 }
 
-void	read_map(t_map *map)
+void	read_map(t_cub *cub)
 {
 	char	*line;
 	char	*map_line;
-	map_line = get_next_written_line(map->fd);
+	map_line = get_next_written_line(cub->map.fd);
 	if (!map_line)
-		map_error(map, NULL, "No map specified");
+		map_error(cub, NULL, "No map specified");
 	while (1)
 	{
-		line = get_next_line(map->fd);
+		line = get_next_line(cub->map.fd);
 		if (!line)
 			break ;
 		if (ft_is_empty_line(line))
 		{
 			free(line);
-			if (is_eof(map->fd))
+			if (is_eof(cub->map.fd))
 				break ;
-			map_error(map, map_line, "Empty line in map");
+			map_error(cub, map_line, "Empty line in map");
 		}
-		map_line = append_mapline(map, map_line, line);
+		map_line = append_mapline(cub, map_line, line);
 		free(line);
 	}   
-	create_map_array(map, map_line);
+	create_map_array(cub, map_line);
 }
 
 int is_empty_tile(char tile)
@@ -143,7 +143,7 @@ int is_empty_tile(char tile)
 	return (0);
 }
 
-void	check_valid_zero(t_map *map, int x, int y)
+void	check_valid_zero(t_cub *cub, int x, int y)
 {
 	int i;
 	int j;
@@ -153,8 +153,8 @@ void	check_valid_zero(t_map *map, int x, int y)
 		j = -1;
 		while (j < 2)
 		{
-			if (is_empty_tile(map->map[y + i][x + j]))
-				map_error(map, NULL, "Invalid map configuration");
+			if (is_empty_tile(cub->map.map[y + i][x + j]))
+				map_error(cub, NULL, "Invalid map configuration");
 			j++;
 		}
 		i++;
@@ -190,19 +190,19 @@ int check_x_border(char *s, int i)
 	return (1);
 }
 
-int check_border(t_map *map)
+int check_border(t_cub *cub)
 {
 	int y;
-	if (!check_x_border(map->map[0], skip_whitespaces(map->map[0])))
-		map_error(map, NULL, "Invalid vertical border");
-	if (!check_x_border(map->map[map->map_height - 1],
-			skip_whitespaces(map->map[map->map_height - 1])))
-		map_error(map, NULL, "Invalid vertical border");
+	if (!check_x_border(cub->map.map[0], skip_whitespaces(cub->map.map[0])))
+		map_error(cub, NULL, "Invalid vertical border");
+	if (!check_x_border(cub->map.map[cub->map.map_height - 1],
+			skip_whitespaces(cub->map.map[cub->map.map_height - 1])))
+		map_error(cub, NULL, "Invalid vertical border");
 	y = 1;
-	while (y < map->map_height - 1)
+	while (y < cub->map.map_height - 1)
 	{
-		if (map->map[y][skip_whitespaces(map->map[y])] != '1')
-			map_error(map, NULL, "Invalid border");
+		if (cub->map.map[y][skip_whitespaces(cub->map.map[y])] != '1')
+			map_error(cub, NULL, "Invalid border");
 		y++;
 	}
 	return (1);
@@ -219,38 +219,39 @@ int	player_values(t_map *map, t_player *player, int x, int y)
 	player->dir.x = 0;
 	player->dir.y = 0;
 	if (map->map[y][x] == 'N')
-		player->dir.y = -1;
+		player->dir.y = 1;
 	else if (map->map[y][x] == 'E')
 		player->dir.x = 1;
 	else if (map->map[y][x] == 'S')
-		player->dir.y = 1;
+		player->dir.y = -1;
 	else if (map->map[y][x] == 'W')
 		player->dir.x = -1;
 	playercount++;
 	return(playercount);
 }
 
-void	check_map_validity(t_map *map, t_player *player)
+void	check_map_validity(t_cub *cub, t_player *player)
 {
 	int y;
 	int x;
-	check_border(map);
+	check_border(cub);
 	y = 1;
-	while (y < map->map_height - 1)
+	while (y < cub->map.map_height - 1)
 	{
 		x = 1;
-		while (map->map[y][x])
+		while (cub->map.map[y][x])
 		{
-			if (map->map[y][x] == '0')
-				check_valid_zero(map, x, y);
-			else if (is_player(map->map[y][x]))
-				player_values(map, player, x, y);
-			else if (map->map[y][x] != '1' && !ft_is_whitespace(map->map[y][x]))
-				map_error(map, NULL, "invalid map character");
+			if (cub->map.map[y][x] == '0')
+				check_valid_zero(cub, x, y);
+			else if (is_player(cub->map.map[y][x]))
+				player_values(&cub->map, player, x, y);
+			else if (cub->map.map[y][x] != '1' 
+				&& !ft_is_whitespace(cub->map.map[y][x]))
+				map_error(cub, NULL, "invalid map character");
 			x++;
 		}
 	y++;
 	}
-	if (player_values(map, player, 0, 0) != 1)
-		map_error(map, NULL, "Invalid amount of players");
+	if (player_values(&cub->map, player, 0, 0) != 1)
+		map_error(cub, NULL, "Invalid amount of players");
 }

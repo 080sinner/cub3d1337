@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/18 00:13:32 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/18 23:15:46 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 
 typedef enum s_side
 {
-	XSide,
+	xSide,
 	ySide,
 }			t_side;
 
@@ -130,17 +130,17 @@ typedef struct	s_text
 }				t_text;
 
 int		ft_is_empty_line(char *s);
-void	map_error(t_map *map, char *str, char *error_msg);
+void	map_error(t_cub *cub, char *str, char *error_msg);
 int		skip_whitespaces(char *str);
-void	free_map(t_map *map);
+void    free_map(t_cub *cub);
 void	parse_cub_file(t_cub *cub, char **argv);
-int		read_colour(t_map *map, char *str, int i);
-int		read_textures(t_map *map);
+int		read_colour(t_cub *cub, char *str, int i);
+int		read_textures(t_cub *cub);
 int		init_win_img(t_cub *cub);
 int		mlx_hooks(t_cub *cub);
-void	read_map(t_map *map);
+void	read_map(t_cub *cub);
 int		ft_is_whitespace(char c);
-void	check_map_validity(t_map *map, t_player *player);
+void	check_map_validity(t_cub *cub, t_player *player);
 void	ft_mlx_pixel_put(t_img *data, int x, int y, int color);
 int		create_trgb(int r, int g, int b);
 void	calculate_frame(t_cub *cub);
@@ -151,5 +151,6 @@ void	turn_left(t_cub *cub);
 void	cub3d(t_cub *cub);
 unsigned int mlx_pixel_read(t_img *data, int x, int y);
 void	open_texture_files(t_cub *cub);
+void	set_camera_vector(t_cub *cub);
 
 #endif

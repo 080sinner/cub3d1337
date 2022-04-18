@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/18 00:35:33 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/19 00:10:10 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int texNUM = 0;
 void 	set_ray_dir_vector(t_cub *cub, t_ray *ray, int x)
 {
 	double cameraX;
-	
+
 	cameraX = 2 * x / (double)WIN_WIDTH - 1;
 	ray->dir.x = cub->player.dir.x + cub->camera.plane.x * cameraX;
 	ray->dir.y = cub->player.dir.y + cub->camera.plane.y * cameraX;
@@ -70,7 +70,7 @@ void	perform_DDA(t_ray *ray, t_cub *cub)
 		{
 			ray->sideDist.x += ray->deltaDist.x;
 			ray->mapX += ray->stepX;
-			ray->hit = XSide;
+			ray->hit = xSide;
 		}
 		else
 		{
@@ -81,7 +81,7 @@ void	perform_DDA(t_ray *ray, t_cub *cub)
 		if (cub->map.map[ray->mapY][ray->mapX] > '0')
 			hit = 1;
 	}
-	if (ray->hit == XSide)
+	if (ray->hit == xSide)
 		ray->perpWallDist =  ray->sideDist.x - ray->deltaDist.x;
 	else
 		ray->perpWallDist = ray->sideDist.y - ray->deltaDist.y;
@@ -91,13 +91,13 @@ void	get_texture_x(t_cub *cub, t_ray *ray, t_text *text)
 {
 	double	wallX;
 
-	if (ray->hit == XSide)
+	if (ray->hit == xSide)
 		wallX = cub->player.pos.y + ray->perpWallDist * ray->dir.y;
 	else
 		wallX = cub->player.pos.x + ray->perpWallDist * ray->dir.x;
 	wallX -= floor(wallX);
 	text->x = (int)(wallX * (double)cub->map.texture[texNUM].width);
-	if (ray->hit ==  XSide && ray->dir.x > 0)
+	if (ray->hit ==  xSide && ray->dir.x > 0)
 		text->x = cub->map.texture[texNUM].width - text->x - 1;
 	if (ray->hit ==  ySide && ray->dir.y < 0)
 		text->x = cub->map.texture[texNUM].width - text->x - 1;
@@ -120,6 +120,11 @@ void	get_text_values(t_cub *cub, t_dline *line, t_text *text)
 	text->pos = (line->start - WIN_HEIGHT / 2 + line->height / 2) * text->step;
 }
 
+// void	get_text_type(t_ray *ray)
+// {
+// 	if (ray->deltaDi)
+// }
+
 void	draw_line(t_ray *ray, t_cub *cub, int x)
 {
 	t_dline	line;
@@ -140,7 +145,7 @@ void	draw_line(t_ray *ray, t_cub *cub, int x)
 	}
 }
 
-void 	calculate_frame(t_cub *cub)
+void 	cast_walls(t_cub *cub)
 {
 	t_ray	ray;
 	int		x;
@@ -170,10 +175,11 @@ void	turn_left(t_cub *cub)
 		- cub->player.dir.y * sin(-ROTSPEED);
 	cub->player.dir.y = oldDirX * sin(-ROTSPEED) 
 		+ cub->player.dir.y *cos(-ROTSPEED);
-	cub->camera.plane.x = cub->camera.plane.x * cos(-ROTSPEED) 
-		- cub->camera.plane.y * sin(-ROTSPEED);
-	cub->camera.plane.y = oldPlaneX * sin(-ROTSPEED)
-		+ cub->camera.plane.y * cos(-ROTSPEED);
+	set_camera_vector(cub);
+	// cub->camera.plane.x = cub->camera.plane.x * cos(-ROTSPEED) 
+	// 	- cub->camera.plane.y * sin(-ROTSPEED);
+	// cub->camera.plane.y = oldPlaneX * sin(-ROTSPEED)
+	// 	+ cub->camera.plane.y * cos(-ROTSPEED);
 }
 
 void	turn_right(t_cub *cub)
@@ -187,10 +193,11 @@ void	turn_right(t_cub *cub)
 		- cub->player.dir.y * sin(ROTSPEED);
 	cub->player.dir.y = oldDirX * sin(ROTSPEED) 
 		+ cub->player.dir.y *cos(ROTSPEED);
-	cub->camera.plane.x = cub->camera.plane.x * cos(ROTSPEED) 
-		- cub->camera.plane.y * sin(ROTSPEED);
-	cub->camera.plane.y = oldPlaneX * sin(ROTSPEED)
-		+ cub->camera.plane.y * cos(ROTSPEED);
+	set_camera_vector(cub);
+	// cub->camera.plane.x = cub->camera.plane.x * cos(ROTSPEED) 
+	// 	- cub->camera.plane.y * sin(ROTSPEED);
+	// cub->camera.plane.y = oldPlaneX * sin(ROTSPEED)
+	// 	+ cub->camera.plane.y * cos(ROTSPEED);
 }
 
 void	move_forward(t_cub *cub)
@@ -219,9 +226,28 @@ void move_backward(t_cub *cub)
 		cub->player.pos.y -= cub->player.dir.y * MOVESPEED;
 }
 
+void	cast_floor_ceiling(t_cub *cub)
+{
+	unsigned int	color;
+
+	for(int y = 0; y < WIN_HEIGHT; y++)
+	{		
+		for (int x = 0; x < WIN_WIDTH; x++)
+		{
+			color = cub->map.f_color;
+			color = (color >> 1) & 8355711;
+			ft_mlx_pixel_put(&cub->img, x, y, color);	
+			color = cub->map.c_color;
+			color = (color >> 1) & 8355711;
+			ft_mlx_pixel_put(&cub->img, x, WIN_HEIGHT - y - 1, color);	
+		}
+	}
+}
 
 void	cub3d(t_cub *cub)
 {
-	calculate_frame(cub);
+	cast_floor_ceiling(cub);
+	cast_walls(cub);
+	printf("posX:%f dirX:%f posY:%f dirY:%f planeX:%f planeY:%f\n", cub->player.pos.x, cub->player.dir.x, cub->player.pos.y, cub->player.dir.y, cub->camera.plane.x, cub->camera.plane.y);
 	mlx_put_image_to_window(cub->win.mlx, cub->win.mlx_win, cub->img.img, 0, 0);
 }
