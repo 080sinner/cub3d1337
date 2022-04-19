@@ -6,19 +6,36 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:58 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/19 18:56:54 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/19 22:29:07 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	set_camera_vector(t_cub *cub)
+void	set_starting_vectors(t_cub *cub)
 {
-	cub->camera.plane.x = cub->player.dir.y;
-	cub->camera.plane.y = cub->player.dir.x;
-	cub->camera.plane.y *= -1;
-	// cub->camera.plane.y = 0; // muss noch angepasst werden
-	// cub->camera.plane.x = .66; //muss noch angepasst werden
+	cub->player.dir.x = 0;
+	cub->player.dir.y = 0;
+	if (cub->map.p_dir == NORTH)
+	{
+		cub->player.dir.y = 1;
+		cub->camera.plane.x = 0.66;
+	}
+	else if (cub->map.p_dir == EAST)
+	{
+		cub->player.dir.x = 1;
+		cub->camera.plane.y = -0.66;
+	}
+	else if (cub->map.p_dir == SOUTH)
+	{
+		cub->player.dir.y = -1;
+		cub->camera.plane.x = -0.66;
+	}
+	else if (cub->map.p_dir == WEST)
+	{
+		cub->player.dir.x = -1;
+		cub->camera.plane.y = 0.66;
+	}
 }
 
 void	print_cub_file(t_cub *cub)
@@ -46,7 +63,7 @@ int	main(int argc, char *argv[])
 	init_win_img(&cub);
 	parse_cub_file(&cub, argv);
 	print_cub_file(&cub);
-	set_camera_vector(&cub);
+	set_starting_vectors(&cub);
 	cub3d(&cub);
 	mlx_hooks(&cub);
 	mlx_loop(cub.win.mlx);

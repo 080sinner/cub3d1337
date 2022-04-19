@@ -216,16 +216,14 @@ int	player_values(t_map *map, t_player *player, int x, int y)
 		return (playercount);
 	player->pos.x = x;
 	player->pos.y = y;
-	player->dir.x = 0;
-	player->dir.y = 0;
 	if (map->map[y][x] == 'N')
-		player->dir.y = 1;
+		map->p_dir = NORTH;
 	else if (map->map[y][x] == 'E')
-		player->dir.x = 1;
+		map->p_dir = EAST;
 	else if (map->map[y][x] == 'S')
-		player->dir.y = -1;
+		map->p_dir = SOUTH;
 	else if (map->map[y][x] == 'W')
-		player->dir.x = -1;
+		map->p_dir = WEST;
 	playercount++;
 	return(playercount);
 }

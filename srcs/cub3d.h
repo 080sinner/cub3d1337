@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/19 19:05:07 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/19 22:13:33 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 # define ERROR -1
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 600
-# define NORTH 0
-# define EAST 1
-# define SOUTH 2
-# define WEST 3
+// # define NORTH 0
+// # define EAST 1
+// # define SOUTH 2
+// # define WEST 3
 # define ESC_KEY 53
 # define UP_KEY 126
 # define DOWN_KEY 125
@@ -38,6 +38,14 @@
 # define FRAMETIME 0.016
 # define MOVESPEED 0.08
 # define ROTSPEED 0.048
+
+typedef enum s_dir
+{
+	NORTH,
+	EAST,
+	SOUTH,
+	WEST,
+}			t_dir;
 
 typedef enum s_side
 {
@@ -95,6 +103,7 @@ typedef struct s_map
 	t_img	texture[4];
 	int		f_color;
 	int		c_color;
+	t_dir	p_dir;
 	char	**map;
 }			t_map;
 
@@ -122,7 +131,7 @@ typedef struct	s_dline
 
 typedef struct	s_text
 {
-	int			type; //sollte enum sein
+	t_dir		dir;
 	int			x;
 	int			y;
 	double		pos;

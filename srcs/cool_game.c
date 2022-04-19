@@ -6,13 +6,18 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/19 19:20:53 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/19 22:32:28 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int texNUM = 0;
+void	set_camera_vector(t_cub *cub)
+{
+	cub->camera.plane.x = cub->player.dir.y;
+	cub->camera.plane.y = cub->player.dir.x;
+	cub->camera.plane.y *= -1;
+}
 
 void 	set_ray_dir_vector(t_cub *cub, t_ray *ray, int x)
 {
@@ -97,11 +102,11 @@ void	get_texture_x(t_cub *cub, t_ray *ray, t_text *text)
 	else
 		wallX = cub->player.pos.x + ray->perpWallDist * ray->dir.x;
 	wallX -= floor(wallX);
-	text->x = (int)(wallX * (double)cub->map.texture[texNUM].width);
+	text->x = (int)(wallX * (double)cub->map.texture[text->dir].width);
 	if (ray->hit ==  xSide && ray->dir.x > 0)
-		text->x = cub->map.texture[texNUM].width - text->x - 1;
+		text->x = cub->map.texture[text->dir].width - text->x - 1;
 	if (ray->hit ==  ySide && ray->dir.y < 0)
-		text->x = cub->map.texture[texNUM].width - text->x - 1;
+		text->x = cub->map.texture[text->dir].width - text->x - 1;
 }
 
 void	get_line_values(t_dline *line, t_ray *ray)
@@ -117,38 +122,43 @@ void	get_line_values(t_dline *line, t_ray *ray)
 
 void	get_text_values(t_cub *cub, t_dline *line, t_text *text)
 {
-	text->step = 1.0 * cub->map.texture[texNUM].height / line->height;
+	text->step = 1.0 * cub->map.texture[text->dir].height / line->height;
 	text->pos = (line->start - WIN_HEIGHT / 2 + line->height / 2) * text->step;
 }
 
 
+void	get_text_type(t_ray *ray, t_text *text)
+{
+	if (ray->dir.y >= (1 / sqrt(2)))
+		text->dir =  NORTH;
+	else if (ray->dir.y <= (-1 / sqrt(2)))
+		text->dir = SOUTH;
+	else if (ray->dir.x >= (1 / sqrt(2)))
+		text->dir = EAST;
+	else
+		text->dir = WEST;
+}
+
 void	draw_line(t_ray *ray, t_cub *cub, int x)
 {
-	t_dline	line;
-	t_text	text;
+	t_dline			line;
+	t_text			text;	
+	unsigned int	color;
 
 	get_line_values(&line, ray);
+	get_text_type(ray, &text);
 	get_text_values(cub, &line, &text);
 	get_texture_x(cub, ray, &text);
-	unsigned int color;
 	for (int y = line.start; y < line.end; y++)
 	{
-		text.y = (int)text.pos & (cub->map.texture[texNUM].height - 1);
+		text.y = (int)text.pos & (cub->map.texture[text.dir].height - 1);
 		text.pos += text.step;
-		color = mlx_pixel_read(&cub->map.texture[texNUM], text.x, text.y);
+		color = mlx_pixel_read(&cub->map.texture[text.dir], text.x, text.y);
 		if (ray->hit == ySide)
 			color = (color >> 1) & 8355711;
 		ft_mlx_pixel_put(&cub->img, x, y, color);
 	}
 }
-
-// get_text_type(t_ray *ray)
-// {
-// 	if (ray->hit == ySide)
-// 	{
-		
-// 	}
-// }
 
 void 	cast_walls(t_cub *cub)
 {
@@ -164,7 +174,6 @@ void 	cast_walls(t_cub *cub)
 		set_deltaDist(&ray);
 		set_sideDist(&ray, &cub->player);
 		perform_DDA(&ray, cub);
-		//get_text_type();
 		draw_line(&ray, cub, x);
 		x++;
 	}
