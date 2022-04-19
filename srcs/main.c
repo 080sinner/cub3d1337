@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:58 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/19 00:20:38 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/19 18:56:54 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ void	set_camera_vector(t_cub *cub)
 	cub->camera.plane.x = cub->player.dir.y;
 	cub->camera.plane.y = cub->player.dir.x;
 	cub->camera.plane.y *= -1;
-	// camera->plane.y = 0; // muss noch angepasst werden
-	// camera->plane.x = .66; //muss noch angepasst werden
+	// cub->camera.plane.y = 0; // muss noch angepasst werden
+	// cub->camera.plane.x = .66; //muss noch angepasst werden
 }
 
 void	print_cub_file(t_cub *cub)

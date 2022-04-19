@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/18 23:15:46 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/19 19:05:07 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,5 +152,6 @@ void	cub3d(t_cub *cub);
 unsigned int mlx_pixel_read(t_img *data, int x, int y);
 void	open_texture_files(t_cub *cub);
 void	set_camera_vector(t_cub *cub);
+int		is_player(char tile);
 
 #endif

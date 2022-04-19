@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/19 00:10:10 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/19 19:20:53 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	set_sideDist(t_ray *ray, t_player *player)
 		ray->sideDist.x = (ray->mapX + 1 - player->pos.x) * ray->deltaDist.x;
 		ray->stepX = 1;
 	}
-	if (ray->dir.y)
+	if (ray->dir.y < 0)
 	{
 		ray->sideDist.y = (player->pos.y - ray->mapY) * ray->deltaDist.y;
 		ray->stepY = -1;
@@ -78,7 +78,8 @@ void	perform_DDA(t_ray *ray, t_cub *cub)
 			ray->mapY += ray->stepY;
 			ray->hit = ySide;
 		}
-		if (cub->map.map[ray->mapY][ray->mapX] > '0')
+		if (cub->map.map[ray->mapY][ray->mapX] > '0' && 
+			!is_player(cub->map.map[ray->mapY][ray->mapX]))
 			hit = 1;
 	}
 	if (ray->hit == xSide)
@@ -120,10 +121,6 @@ void	get_text_values(t_cub *cub, t_dline *line, t_text *text)
 	text->pos = (line->start - WIN_HEIGHT / 2 + line->height / 2) * text->step;
 }
 
-// void	get_text_type(t_ray *ray)
-// {
-// 	if (ray->deltaDi)
-// }
 
 void	draw_line(t_ray *ray, t_cub *cub, int x)
 {
@@ -145,6 +142,14 @@ void	draw_line(t_ray *ray, t_cub *cub, int x)
 	}
 }
 
+// get_text_type(t_ray *ray)
+// {
+// 	if (ray->hit == ySide)
+// 	{
+		
+// 	}
+// }
+
 void 	cast_walls(t_cub *cub)
 {
 	t_ray	ray;
@@ -159,6 +164,7 @@ void 	cast_walls(t_cub *cub)
 		set_deltaDist(&ray);
 		set_sideDist(&ray, &cub->player);
 		perform_DDA(&ray, cub);
+		//get_text_type();
 		draw_line(&ray, cub, x);
 		x++;
 	}
