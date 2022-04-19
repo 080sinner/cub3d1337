@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/19 22:32:28 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/19 22:43:19 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,14 +129,20 @@ void	get_text_values(t_cub *cub, t_dline *line, t_text *text)
 
 void	get_text_type(t_ray *ray, t_text *text)
 {
-	if (ray->dir.y >= (1 / sqrt(2)))
-		text->dir =  NORTH;
-	else if (ray->dir.y <= (-1 / sqrt(2)))
-		text->dir = SOUTH;
-	else if (ray->dir.x >= (1 / sqrt(2)))
-		text->dir = EAST;
-	else
-		text->dir = WEST;
+	if (ray->hit == ySide)
+	{
+		if (ray->dir.y >= 0)
+			text->dir = NORTH;
+		else
+			text->dir = SOUTH;
+	}
+	if (ray->hit == xSide)
+	{
+		if (ray->dir.x >= 0)
+			text->dir = EAST;
+		else
+			text->dir = WEST;
+	}
 }
 
 void	draw_line(t_ray *ray, t_cub *cub, int x)
