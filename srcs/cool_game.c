@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/20 17:02:25 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/20 19:29:22 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,14 @@ void 	cast_walls(t_cub *cub, t_ray *ray)
 	}
 }
 
+int	is_walkable(char tile)
+{
+	if (tile == '0' || is_player(tile))
+		return (true);
+	else
+		return(false);
+}
+
 void	turn_left(t_cub *cub)
 {
 	double	oldDirX;
@@ -219,10 +227,36 @@ void	move_forward(t_cub *cub)
 
 	newPosX = (int)(cub->player.pos.x + cub->player.dir.x * MOVESPEED);
 	newPosY = (int)(cub->player.pos.y + cub->player.dir.y * MOVESPEED);
-	if (cub->map.map[(int)cub->player.pos.y][newPosX] == '0')
+	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newPosX]))
 		cub->player.pos.x += cub->player.dir.x * MOVESPEED;
-	if (cub->map.map[newPosY][(int)cub->player.pos.x] == '0')
+	if (is_walkable(cub->map.map[newPosY][(int)cub->player.pos.x]))
 		cub->player.pos.y += cub->player.dir.y * MOVESPEED;
+}
+
+void	move_right(t_cub *cub)
+{
+	int	newPosX;
+	int newPosY;
+
+	newPosX = (int)(cub->player.pos.x + cub->camera.plane.x * MOVESPEED);
+	newPosY = (int)(cub->player.pos.y + cub->camera.plane.y * MOVESPEED);
+	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newPosX]))
+		cub->player.pos.x += cub->camera.plane.x * MOVESPEED;
+	if (is_walkable(cub->map.map[newPosY][(int)cub->player.pos.x]))
+		cub->player.pos.y += cub->camera.plane.y * MOVESPEED;
+}
+
+void	move_left(t_cub *cub)
+{
+	int	newPosX;
+	int newPosY;
+
+	newPosX = (int)(cub->player.pos.x - cub->camera.plane.x * MOVESPEED);
+	newPosY = (int)(cub->player.pos.y - cub->camera.plane.y * MOVESPEED);
+	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newPosX]))
+		cub->player.pos.x -= cub->camera.plane.x * MOVESPEED;
+	if (is_walkable(cub->map.map[newPosY][(int)cub->player.pos.x]))
+		cub->player.pos.y -= cub->camera.plane.y * MOVESPEED;
 }
 
 void move_backward(t_cub *cub)
@@ -232,9 +266,9 @@ void move_backward(t_cub *cub)
 
 	newPosX = (int)(cub->player.pos.x - cub->player.dir.x * MOVESPEED);
 	newPosY = (int)(cub->player.pos.y - cub->player.dir.y * MOVESPEED);
-	if (cub->map.map[(int)cub->player.pos.y][newPosX] == '0')
+	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newPosX]))
 		cub->player.pos.x -= cub->player.dir.x * MOVESPEED;
-	if (cub->map.map[newPosY][(int)cub->player.pos.x] == '0')
+	if (is_walkable(cub->map.map[newPosY][(int)cub->player.pos.x]))
 		cub->player.pos.y -= cub->player.dir.y * MOVESPEED;
 }
 

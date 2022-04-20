@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/19 23:34:37 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/20 17:33:34 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include <math.h>
+# include <stdbool.h>
 
 # define ERROR -1
 # define WIN_WIDTH 800
@@ -162,5 +163,7 @@ unsigned int mlx_pixel_read(t_img *data, int x, int y);
 void	open_texture_files(t_cub *cub);
 void	set_camera_vector(t_cub *cub);
 int		is_player(char tile);
+void	move_right(t_cub *cub);
+void	move_left(t_cub *cub);
 
 #endif

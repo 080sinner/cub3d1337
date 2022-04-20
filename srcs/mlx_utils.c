@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 20:58:25 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/18 00:11:09 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/20 17:28:38 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,13 @@ static int	key_hooks(int keycode, t_cub *cub)
 	else if (keycode == S_KEY)
 		move_backward(cub);
 	else if (keycode == D_KEY)
-		turn_right(cub);
+		move_right(cub);
 	else if (keycode == A_KEY)
+		move_left(cub);
+	else if (keycode == LEFT_KEY)
 		turn_left(cub);
+	else if (keycode == RIGHT_KEY)
+		turn_right(cub);
 	cub3d(cub);
 	return (0);
 }
