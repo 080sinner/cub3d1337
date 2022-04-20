@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/19 22:43:19 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/20 17:02:25 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	set_sideDist(t_ray *ray, t_player *player)
 	}
 }
 
-void	perform_DDA(t_ray *ray, t_cub *cub)
+void	perform_DDA(t_ray *ray, t_cub *cub, int x)
 {
 	int hit;
 
@@ -88,19 +88,19 @@ void	perform_DDA(t_ray *ray, t_cub *cub)
 			hit = 1;
 	}
 	if (ray->hit == xSide)
-		ray->perpWallDist =  ray->sideDist.x - ray->deltaDist.x;
+		ray->perpWallDist[x] =  ray->sideDist.x - ray->deltaDist.x;
 	else
-		ray->perpWallDist = ray->sideDist.y - ray->deltaDist.y;
+		ray->perpWallDist[x] = ray->sideDist.y - ray->deltaDist.y;
 }
 
-void	get_texture_x(t_cub *cub, t_ray *ray, t_text *text)
+void	get_texture_x(t_cub *cub, t_ray *ray, t_text *text, int x)
 {
 	double	wallX;
 
 	if (ray->hit == xSide)
-		wallX = cub->player.pos.y + ray->perpWallDist * ray->dir.y;
+		wallX = cub->player.pos.y + ray->perpWallDist[x] * ray->dir.y;
 	else
-		wallX = cub->player.pos.x + ray->perpWallDist * ray->dir.x;
+		wallX = cub->player.pos.x + ray->perpWallDist[x] * ray->dir.x;
 	wallX -= floor(wallX);
 	text->x = (int)(wallX * (double)cub->map.texture[text->dir].width);
 	if (ray->hit ==  xSide && ray->dir.x > 0)
@@ -109,9 +109,9 @@ void	get_texture_x(t_cub *cub, t_ray *ray, t_text *text)
 		text->x = cub->map.texture[text->dir].width - text->x - 1;
 }
 
-void	get_line_values(t_dline *line, t_ray *ray)
+void	get_line_values(t_dline *line, t_ray *ray, int x)
 {
-	line->height = (int)(WIN_HEIGHT / ray->perpWallDist);
+	line->height = (int)(WIN_HEIGHT / ray->perpWallDist[x]);
 	line->start = -line->height / 2 + WIN_HEIGHT / 2;
 	if (line->start < 0)
 		line->start = 0;
@@ -151,10 +151,10 @@ void	draw_line(t_ray *ray, t_cub *cub, int x)
 	t_text			text;	
 	unsigned int	color;
 
-	get_line_values(&line, ray);
+	get_line_values(&line, ray, x);
 	get_text_type(ray, &text);
 	get_text_values(cub, &line, &text);
-	get_texture_x(cub, ray, &text);
+	get_texture_x(cub, ray, &text, x);
 	for (int y = line.start; y < line.end; y++)
 	{
 		text.y = (int)text.pos & (cub->map.texture[text.dir].height - 1);
@@ -166,21 +166,20 @@ void	draw_line(t_ray *ray, t_cub *cub, int x)
 	}
 }
 
-void 	cast_walls(t_cub *cub)
+void 	cast_walls(t_cub *cub, t_ray *ray)
 {
-	t_ray	ray;
 	int		x;
 
 	x = 0;
 	while(x < WIN_WIDTH)
 	{
-		set_ray_dir_vector(cub, &ray, x);
-		ray.mapX = (int)cub->player.pos.x;
-		ray.mapY = (int)cub->player.pos.y;
-		set_deltaDist(&ray);
-		set_sideDist(&ray, &cub->player);
-		perform_DDA(&ray, cub);
-		draw_line(&ray, cub, x);
+		set_ray_dir_vector(cub, ray, x);
+		ray->mapX = (int)cub->player.pos.x;
+		ray->mapY = (int)cub->player.pos.y;
+		set_deltaDist(ray);
+		set_sideDist(ray, &cub->player);
+		perform_DDA(ray, cub, x);
+		draw_line(ray, cub, x);
 		x++;
 	}
 }
@@ -197,10 +196,6 @@ void	turn_left(t_cub *cub)
 	cub->player.dir.y = oldDirX * sin(-ROTSPEED) 
 		+ cub->player.dir.y *cos(-ROTSPEED);
 	set_camera_vector(cub);
-	// cub->camera.plane.x = cub->camera.plane.x * cos(-ROTSPEED) 
-	// 	- cub->camera.plane.y * sin(-ROTSPEED);
-	// cub->camera.plane.y = oldPlaneX * sin(-ROTSPEED)
-	// 	+ cub->camera.plane.y * cos(-ROTSPEED);
 }
 
 void	turn_right(t_cub *cub)
@@ -215,10 +210,6 @@ void	turn_right(t_cub *cub)
 	cub->player.dir.y = oldDirX * sin(ROTSPEED) 
 		+ cub->player.dir.y *cos(ROTSPEED);
 	set_camera_vector(cub);
-	// cub->camera.plane.x = cub->camera.plane.x * cos(ROTSPEED) 
-	// 	- cub->camera.plane.y * sin(ROTSPEED);
-	// cub->camera.plane.y = oldPlaneX * sin(ROTSPEED)
-	// 	+ cub->camera.plane.y * cos(ROTSPEED);
 }
 
 void	move_forward(t_cub *cub)
@@ -265,10 +256,18 @@ void	cast_floor_ceiling(t_cub *cub)
 	}
 }
 
+// cast_sprites()
+// {
+	
+// }
+
 void	cub3d(t_cub *cub)
 {
+	t_ray	ray;
+
 	cast_floor_ceiling(cub);
-	cast_walls(cub);
+	cast_walls(cub, &ray);
+	//cast_sprites(cub, &ray);
 	printf("posX:%f dirX:%f posY:%f dirY:%f planeX:%f planeY:%f\n", cub->player.pos.x, cub->player.dir.x, cub->player.pos.y, cub->player.dir.y, cub->camera.plane.x, cub->camera.plane.y);
 	mlx_put_image_to_window(cub->win.mlx, cub->win.mlx_win, cub->img.img, 0, 0);
 }

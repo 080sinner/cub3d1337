@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/19 22:13:33 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/19 23:34:37 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ typedef struct s_ray
 	int			mapY;
 	int			stepX;
 	int			stepY;
-	double		perpWallDist;
+	double		perpWallDist[WIN_WIDTH];
 }				t_ray;
 
 typedef struct s_camera
