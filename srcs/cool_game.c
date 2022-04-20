@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/20 19:29:22 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/20 23:16:39 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,10 +290,76 @@ void	cast_floor_ceiling(t_cub *cub)
 	}
 }
 
-// cast_sprites()
-// {
+void	cast_sprites(t_cub *cub, t_ray *ray)
+{
+	t_spr sprite;
+	double spriteDist;
+
+	sprite.coord.x = 10.0;
+	sprite.coord.y = 2.0;
+	sprite.type = 0;
+	spriteDist = ((cub->player.pos.x - sprite.coord.x) * (cub->player.pos.x - sprite.coord.x)
+	+ (cub->player.pos.y - sprite.coord.y) * (cub->player.pos.y - sprite.coord.y));
 	
-// }
+	double spriteX;
+	double spriteY;
+	spriteX = sprite.coord.x - cub->player.pos.x;
+	spriteY = sprite.coord.y - cub->player.pos.y;
+	
+	double invDet;
+	invDet = 1 / (cub->camera.plane.x * cub->player.dir.y - cub->player.dir.x * cub->camera.plane.y);
+	
+	double transformX;
+	double transformY;
+	
+	transformX = invDet * (cub->player.dir.y * spriteX - cub->player.dir.x * spriteY);
+	transformY = invDet * (-cub->camera.plane.y * spriteX + cub->camera.plane.x * spriteY);
+	
+	int spriteScreenX;
+	spriteScreenX = (int)(WIN_WIDTH / 2) * (1 + transformX / transformY);
+
+	int spriteHeight;
+	spriteHeight = abs((int) (WIN_HEIGHT / transformY));
+	
+	int drawStartY;
+	int drawEndY;
+	
+	drawStartY = -spriteHeight / 2 + WIN_HEIGHT / 2;
+	if (drawStartY < 0)
+		drawStartY = 0;
+	drawEndY = spriteHeight / 2 + WIN_HEIGHT / 2;
+	if (drawEndY >= WIN_HEIGHT)
+		drawEndY = WIN_HEIGHT - 1;
+	int spriteWidth ;
+	spriteWidth = abs((int) (WIN_HEIGHT / transformY));
+	int drawStartX;
+	int drawEndX;
+	drawStartX = -spriteWidth / 2 + spriteScreenX;
+	if (drawStartX < 0)
+		drawStartX = 0;
+	drawEndX = spriteWidth / 2 +spriteScreenX;
+	if (drawEndX >= WIN_WIDTH)
+		drawEndY = WIN_WIDTH - 1;
+	for(int stripe = drawStartX; stripe <  drawEndX; stripe++)
+	{
+		int texX;
+		texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * cub->map.sprites[0].width / spriteWidth) / 256;
+		if (transformY > 0 && stripe > 0 && stripe < WIN_WIDTH && transformY < ray->perpWallDist[stripe])
+		{
+			for (int y = drawStartY; y < drawEndY; y++)
+			{
+				int d;
+				d = y * 256 - WIN_HEIGHT * 128 + spriteHeight * 128;
+				int texY;
+				texY = ((d * cub->map.sprites[0].height) / spriteHeight) / 256;
+				unsigned int color;
+				color = mlx_pixel_read(&cub->map.sprites[0], texX, texY);
+				if((color & 0x00FFFFFF) != 0)
+					ft_mlx_pixel_put(&cub->img, stripe, y, color);
+			}
+		}
+	}
+}
 
 void	cub3d(t_cub *cub)
 {
@@ -301,7 +367,7 @@ void	cub3d(t_cub *cub)
 
 	cast_floor_ceiling(cub);
 	cast_walls(cub, &ray);
-	//cast_sprites(cub, &ray);
-	printf("posX:%f dirX:%f posY:%f dirY:%f planeX:%f planeY:%f\n", cub->player.pos.x, cub->player.dir.x, cub->player.pos.y, cub->player.dir.y, cub->camera.plane.x, cub->camera.plane.y);
+	cast_sprites(cub, &ray);
+	//printf("posX:%f dirX:%f posY:%f dirY:%f planeX:%f planeY:%f\n", cub->player.pos.x, cub->player.dir.x, cub->player.pos.y, cub->player.dir.y, cub->camera.plane.x, cub->camera.plane.y);
 	mlx_put_image_to_window(cub->win.mlx, cub->win.mlx_win, cub->img.img, 0, 0);
 }

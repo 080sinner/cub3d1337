@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 20:58:25 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/20 17:28:38 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/20 23:07:58 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int	key_hooks(int keycode, t_cub *cub)
 int	mlx_hooks(t_cub *cub)
 {
 	mlx_hook(cub->win.mlx_win, 17, 0, close_win, cub);
-	mlx_key_hook(cub->win.mlx_win, key_hooks, cub);
+	mlx_hook(cub->win.mlx_win, ON_KEYDOWN, 1L<<0, key_hooks, cub);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/20 17:33:34 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/20 20:22:13 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@
 # define ERROR -1
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 600
-// # define NORTH 0
-// # define EAST 1
-// # define SOUTH 2
-// # define WEST 3
 # define ESC_KEY 53
 # define UP_KEY 126
 # define DOWN_KEY 125
@@ -39,6 +35,7 @@
 # define FRAMETIME 0.016
 # define MOVESPEED 0.08
 # define ROTSPEED 0.048
+# define ON_KEYDOWN 2
 
 typedef enum s_dir
 {
@@ -54,17 +51,17 @@ typedef enum s_side
 	ySide,
 }			t_side;
 
-typedef struct s_vector
+typedef struct s_point
 {
 	double		x;
 	double		y;
-}				t_vector;
+}				t_point;
 
 typedef struct s_ray
 {
-	t_vector	dir;
-	t_vector	sideDist;
-	t_vector	deltaDist;
+	t_point		dir;
+	t_point		sideDist;
+	t_point		deltaDist;
 	t_side		hit;
 	int			mapX;
 	int			mapY;
@@ -75,13 +72,13 @@ typedef struct s_ray
 
 typedef struct s_camera
 {
-	t_vector	plane;
+	t_point	plane;
 }				t_camera;
 
 typedef struct s_player
 {
-	t_vector	pos;
-	t_vector	dir;
+	t_point	pos;
+	t_point	dir;
 }				t_player;
 
 typedef struct s_img
@@ -95,6 +92,12 @@ typedef struct s_img
 	int		width;
 }			t_img;
 
+typedef struct s_sprite
+{
+	t_point	coord;
+	int		type;
+}			t_spr;
+
 typedef struct s_map
 {
 	int		fd;
@@ -102,6 +105,7 @@ typedef struct s_map
 	int		map_length;
 	char	*paths[4];
 	t_img	texture[4];
+	t_img	sprites[3];
 	int		f_color;
 	int		c_color;
 	t_dir	p_dir;
