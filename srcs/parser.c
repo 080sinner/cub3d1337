@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:47:18 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/20 23:05:03 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/21 18:24:04 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	open_texture_sprites(t_cub *cub)
 	sprite = cub->map.sprites;
 	sprite[0].img = mlx_xpm_file_to_image(
 		cub->win.mlx, "textures/barrel.xpm", &sprite[0].width, &sprite[0].height);
-	printf("adress %p \n", sprite[0].img);
 	// if (sprite[0].img)
 	// 	map_error(cub, NULL, "invalid texture path");
 	sprite[0].addr = mlx_get_data_addr(

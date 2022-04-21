@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/20 23:16:39 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/21 18:15:48 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,6 +290,12 @@ void	cast_floor_ceiling(t_cub *cub)
 	}
 }
 
+
+cast_sprites2(t_cub *cub, t_ray *ray)
+{
+	
+}
+
 void	cast_sprites(t_cub *cub, t_ray *ray)
 {
 	t_spr sprite;
@@ -361,6 +367,16 @@ void	cast_sprites(t_cub *cub, t_ray *ray)
 	}
 }
 
+void	example_sprites(t_cub *cub)
+{
+	cub->map.map_spr[0].coord.x = 20;
+	cub->map.map_spr[0].coord.y = 18;
+	cub->map.map_spr[2].coord.x = 22;
+	cub->map.map_spr[2].coord.y = 18;
+	cub->map.map_spr[1].coord.x = 24;
+	cub->map.map_spr[1].coord.y = 18;
+}
+
 void	cub3d(t_cub *cub)
 {
 	t_ray	ray;
@@ -368,6 +384,8 @@ void	cub3d(t_cub *cub)
 	cast_floor_ceiling(cub);
 	cast_walls(cub, &ray);
 	cast_sprites(cub, &ray);
+	example_sprites(cub);
+	cast_sprites2(cub, &ray);
 	//printf("posX:%f dirX:%f posY:%f dirY:%f planeX:%f planeY:%f\n", cub->player.pos.x, cub->player.dir.x, cub->player.pos.y, cub->player.dir.y, cub->camera.plane.x, cub->camera.plane.y);
 	mlx_put_image_to_window(cub->win.mlx, cub->win.mlx_win, cub->img.img, 0, 0);
 }

@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/20 20:22:13 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/21 17:01:26 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define DOWN_KEY 125
 # define LEFT_KEY 123
 # define RIGHT_KEY 124
+# define ON_KEYDOWN 2
 # define W_KEY 13
 # define A_KEY 0
 # define S_KEY 1
@@ -35,9 +36,8 @@
 # define FRAMETIME 0.016
 # define MOVESPEED 0.08
 # define ROTSPEED 0.048
-# define ON_KEYDOWN 2
 
-typedef enum s_dir
+typedef enum e_dir
 {
 	NORTH,
 	EAST,
@@ -45,7 +45,7 @@ typedef enum s_dir
 	WEST,
 }			t_dir;
 
-typedef enum s_side
+typedef enum e_side
 {
 	xSide,
 	ySide,
@@ -106,6 +106,8 @@ typedef struct s_map
 	char	*paths[4];
 	t_img	texture[4];
 	t_img	sprites[3];
+	t_spr	map_spr[10];
+	t_point	doors[3];
 	int		f_color;
 	int		c_color;
 	t_dir	p_dir;
