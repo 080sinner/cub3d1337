@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/21 17:01:26 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/21 23:42:48 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,20 @@ typedef struct s_img
 	int		width;
 }			t_img;
 
-typedef struct s_sprite
+typedef struct s_spr
 {
 	t_point	coord;
+	t_point transf;
 	int		type;
+	double	distance;
+	int		scrX;
+	int		scrY;
+	int		height;
+	int		width;
+	int		startX;
+	int		endX;
+	int		startY;
+	int		endY;
 }			t_spr;
 
 typedef struct s_map
@@ -171,5 +181,6 @@ void	set_camera_vector(t_cub *cub);
 int		is_player(char tile);
 void	move_right(t_cub *cub);
 void	move_left(t_cub *cub);
+void	cast_sprites(t_cub *cub, t_ray *ray);
 
 #endif
