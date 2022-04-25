@@ -228,6 +228,37 @@ int	player_values(t_map *map, t_player *player, int x, int y)
 	return(playercount);
 }
 
+int	is_sprite(char c)
+{
+	if (c == 'D' || c == 'L' || c == 'B' || c == 'P')
+		return (1);
+	return (0);
+}
+
+void	parse_sprite(char c, t_cub *cub, int x, int y)
+{
+	static int door_count;
+	static int spr_count;
+
+	if (c == 'D')
+	{
+		if (door_count > 3)
+			map_error(cub, NULL, "More than 3 doors");
+		cub->map.doors[door_count].x = x;
+		cub->map.doors[door_count].y = y;
+		door_count++;
+	}
+	else if (c == 'L' || c == 'B' || c == 'P')
+	{
+		if (spr_count > 10)
+			map_error(cub, NULL, "More than 10 doors");
+		cub->map.map_spr[spr_count].type = c;
+		cub->map.map_spr[spr_count].coord.x = x;
+		cub->map.map_spr[spr_count].coord.y = y;
+		spr_count++;
+	}
+}
+
 void	check_map_validity(t_cub *cub, t_player *player)
 {
 	int y;
@@ -243,6 +274,8 @@ void	check_map_validity(t_cub *cub, t_player *player)
 				check_valid_zero(cub, x, y);
 			else if (is_player(cub->map.map[y][x]))
 				player_values(&cub->map, player, x, y);
+			else if (is_sprite(cub->map.map[y][x]))
+				parse_sprite(cub->map.map[y][x], cub, x, y);
 			else if (cub->map.map[y][x] != '1' 
 				&& !ft_is_whitespace(cub->map.map[y][x]))
 				map_error(cub, NULL, "invalid map character");

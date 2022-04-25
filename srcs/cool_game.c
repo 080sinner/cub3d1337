@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/25 17:38:14 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/25 17:42:28 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,6 @@ void	turn_left(t_cub *cub)
 		- cub->camera.plane.y * sin(ROTSPEED);
 	cub->camera.plane.y = oldPlaneX * sin(ROTSPEED) 
 		+ cub->camera.plane.y * cos(ROTSPEED);
-	//set_camera_vector(cub);
 }
 
 void	turn_right(t_cub *cub)
@@ -223,9 +222,8 @@ void	turn_right(t_cub *cub)
 		+ cub->player.dir.y *cos(-ROTSPEED);
 	cub->camera.plane.x = cub->camera.plane.x * cos(-ROTSPEED) 
 		- cub->camera.plane.y * sin(-ROTSPEED);
-	cub->camera.plane.y = oldPlaneX * sin(-ROTSPEED)
+	cub->camera.plane.y = oldPlaneX * sin(-ROTSPEED) 
 		+ cub->camera.plane.y * cos(-ROTSPEED);
-	//set_camera_vector(cub);
 }
 
 void	move_forward(t_cub *cub)

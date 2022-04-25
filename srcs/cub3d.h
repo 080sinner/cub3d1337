@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/21 23:42:48 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/23 17:32:36 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@
 # define S_KEY 1
 # define D_KEY 2
 # define FRAMETIME 0.016
-# define MOVESPEED 0.08
-# define ROTSPEED 0.048
+# define MOVESPEED 0.2
+# define ROTSPEED 0.06
 
 typedef enum e_dir
 {
@@ -73,6 +73,7 @@ typedef struct s_ray
 typedef struct s_camera
 {
 	t_point	plane;
+	int		pressed_mb;
 }				t_camera;
 
 typedef struct s_player

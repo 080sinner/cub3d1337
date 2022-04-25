@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 20:58:25 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/20 23:07:58 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/23 17:33:12 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,48 @@ static int	key_hooks(int keycode, t_cub *cub)
 	return (0);
 }
 
+int	mouse_move(int x, int y, t_cub *cub)
+{
+	if (cub->camera.pressed_mb)
+	{
+		if (x <= WIN_WIDTH && x >= 0 && y <= WIN_HEIGHT && y >= 0)
+		{
+			if (x < WIN_WIDTH / 2)
+				turn_left(cub);
+			else
+				turn_right(cub);
+		}
+		cub3d(cub);
+	}
+	return (0);
+}
+
+int	register_mouseclick(int button, int x, int y, t_cub *cub)
+{
+	(void)x;
+	(void)y;
+	if (button == 1)
+		cub->camera.pressed_mb = 1;
+	return (0);
+}
+
+int unregister_mouseclick(int button, int x, int y, t_cub *cub)
+{
+	(void)x;
+	(void)y;
+	(void)cub;
+	if (button == 1)
+		cub->camera.pressed_mb = 0;
+	return (0);
+}
+
 int	mlx_hooks(t_cub *cub)
 {
 	mlx_hook(cub->win.mlx_win, 17, 0, close_win, cub);
-	mlx_hook(cub->win.mlx_win, ON_KEYDOWN, 1L<<0, key_hooks, cub);
+	mlx_hook(cub->win.mlx_win, ON_KEYDOWN, 0, key_hooks, cub);
+	mlx_hook(cub->win.mlx_win, 4, 0, register_mouseclick, cub);
+	mlx_hook(cub->win.mlx_win, 5, 0, unregister_mouseclick, cub);
+	mlx_hook(cub->win.mlx_win, 6, 0, mouse_move, cub);
 	return (0);
 }
 
