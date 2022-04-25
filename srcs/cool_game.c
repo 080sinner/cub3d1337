@@ -6,18 +6,18 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/22 00:15:25 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/25 17:38:14 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	set_camera_vector(t_cub *cub)
-{
-	cub->camera.plane.x = cub->player.dir.y;
-	cub->camera.plane.y = cub->player.dir.x;
-	cub->camera.plane.y *= -1;
-}
+// void	set_camera_vector(t_cub *cub)
+// {
+// 	cub->camera.plane.x = cub->player.dir.y;
+// 	cub->camera.plane.y = cub->player.dir.x;
+// 	cub->camera.plane.y *= -1;
+// }
 
 void 	set_ray_dir_vector(t_cub *cub, t_ray *ray, int x)
 {
@@ -199,11 +199,15 @@ void	turn_left(t_cub *cub)
 
 	oldDirX = cub->player.dir.x;
 	oldPlaneX = cub->camera.plane.x;
-	cub->player.dir.x = cub->player.dir.x * cos(-ROTSPEED)
-		- cub->player.dir.y * sin(-ROTSPEED);
-	cub->player.dir.y = oldDirX * sin(-ROTSPEED) 
-		+ cub->player.dir.y *cos(-ROTSPEED);
-	set_camera_vector(cub);
+	cub->player.dir.x = cub->player.dir.x * cos(ROTSPEED)
+		- cub->player.dir.y * sin(ROTSPEED);
+	cub->player.dir.y = oldDirX * sin(ROTSPEED) 
+		+ cub->player.dir.y *cos(ROTSPEED);
+	cub->camera.plane.x = cub->camera.plane.x * cos(ROTSPEED) 
+		- cub->camera.plane.y * sin(ROTSPEED);
+	cub->camera.plane.y = oldPlaneX * sin(ROTSPEED) 
+		+ cub->camera.plane.y * cos(ROTSPEED);
+	//set_camera_vector(cub);
 }
 
 void	turn_right(t_cub *cub)
@@ -213,11 +217,15 @@ void	turn_right(t_cub *cub)
 
 	oldDirX = cub->player.dir.x;
 	oldPlaneX = cub->camera.plane.x;
-	cub->player.dir.x = cub->player.dir.x * cos(ROTSPEED)
-		- cub->player.dir.y * sin(ROTSPEED);
-	cub->player.dir.y = oldDirX * sin(ROTSPEED) 
-		+ cub->player.dir.y *cos(ROTSPEED);
-	set_camera_vector(cub);
+	cub->player.dir.x = cub->player.dir.x * cos(-ROTSPEED)
+		- cub->player.dir.y * sin(-ROTSPEED);
+	cub->player.dir.y = oldDirX * sin(-ROTSPEED) 
+		+ cub->player.dir.y *cos(-ROTSPEED);
+	cub->camera.plane.x = cub->camera.plane.x * cos(-ROTSPEED) 
+		- cub->camera.plane.y * sin(-ROTSPEED);
+	cub->camera.plane.y = oldPlaneX * sin(-ROTSPEED)
+		+ cub->camera.plane.y * cos(-ROTSPEED);
+	//set_camera_vector(cub);
 }
 
 void	move_forward(t_cub *cub)
@@ -291,6 +299,11 @@ void	cast_floor_ceiling(t_cub *cub)
 }
 
 
+// draw_minimap()
+// {
+	
+// }
+
 
 void	cub3d(t_cub *cub)
 {
@@ -299,6 +312,6 @@ void	cub3d(t_cub *cub)
 	cast_floor_ceiling(cub);
 	cast_walls(cub, &ray);
 	cast_sprites(cub, &ray);
-	//printf("posX:%f dirX:%f posY:%f dirY:%f planeX:%f planeY:%f\n", cub->player.pos.x, cub->player.dir.x, cub->player.pos.y, cub->player.dir.y, cub->camera.plane.x, cub->camera.plane.y);
+	//draw_minimap();
 	mlx_put_image_to_window(cub->win.mlx, cub->win.mlx_win, cub->img.img, 0, 0);
 }
