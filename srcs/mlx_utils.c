@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 20:58:25 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/23 17:33:12 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/25 17:51:54 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,18 +57,24 @@ static int	key_hooks(int keycode, t_cub *cub)
 	return (0);
 }
 
+
 int	mouse_move(int x, int y, t_cub *cub)
 {
+	static int old_x;
+
+	if (old_x == 0)
+		old_x = WIN_WIDTH/ 2;
 	if (cub->camera.pressed_mb)
 	{
 		if (x <= WIN_WIDTH && x >= 0 && y <= WIN_HEIGHT && y >= 0)
 		{
-			if (x < WIN_WIDTH / 2)
+			if (x < old_x)
 				turn_left(cub);
 			else
 				turn_right(cub);
 		}
-		cub3d(cub);
+		old_x = x;
+		cub3d(cub); // kann man das nicht anders aufrufen?
 	}
 	return (0);
 }
