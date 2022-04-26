@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/25 17:42:28 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/26 18:47:05 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,10 +297,32 @@ void	cast_floor_ceiling(t_cub *cub)
 }
 
 
-// draw_minimap()
-// {
+void	draw_minimap(t_cub *cub)
+{
+	int	mm_height;
+	int	mm_width;
+	int	tile_width;
+	int	tile_height;
+
+	mm_height = WIN_HEIGHT * 0.2;
+	mm_width = WIN_WIDTH * 0.2;
+	tile_width = mm_width / cub->map.map_length;
+	tile_height = mm_width / cub->map.map_height;
 	
-// }
+	for (int y = 0; y < mm_height; y++)
+	{
+		for (int x = 0; x < mm_width; x++)
+		{
+			if (cub->map.map[y / tile_height][x / tile_width] == '1')
+				ft_mlx_pixel_put(&cub->img, x, y, 0);
+			else if (is_player(cub->map.map[y / tile_height][x / tile_width]))
+				ft_mlx_pixel_put(&cub->img, x, y, 25600);
+			else	
+				ft_mlx_pixel_put(&cub->img, x, y, 16777215);
+
+		}
+	}
+}
 
 
 void	cub3d(t_cub *cub)
@@ -310,6 +332,6 @@ void	cub3d(t_cub *cub)
 	cast_floor_ceiling(cub);
 	cast_walls(cub, &ray);
 	cast_sprites(cub, &ray);
-	//draw_minimap();
+	draw_minimap(cub);
 	mlx_put_image_to_window(cub->win.mlx, cub->win.mlx_win, cub->img.img, 0, 0);
 }
