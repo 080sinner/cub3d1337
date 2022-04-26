@@ -224,8 +224,8 @@ int	player_values(t_map *map, t_player *player, int x, int y)
 
 	if (x == 0 || y == 0)
 		return (playercount);
-	player->pos.x = x;
-	player->pos.y = y;
+	player->pos.x = x + 0.5;
+	player->pos.y = y + 0.5;
 	if (map->map[y][x] == 'N')
 		map->p_dir = NORTH;
 	else if (map->map[y][x] == 'E')

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/26 23:12:36 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/26 23:33:14 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@
 # define FRAMETIME 0.016
 # define MOVESPEED 0.2
 # define ROTSPEED 0.06
-# define MAPZOOM 5
-# define MAPSIZE 0.3
+# define MMAPZOOM 5
+# define MMAPSIZE 0.3
 
 typedef enum e_dir
 {
@@ -111,6 +111,14 @@ typedef struct s_spr
 	int		end_y;
 }			t_spr;
 
+typedef struct	s_minimap
+{
+	int		height;
+	int		width;
+	double	tile_width;
+	double	tile_height;
+}				t_mm;
+
 typedef struct s_map
 {
 	int		fd;
@@ -121,6 +129,7 @@ typedef struct s_map
 	t_img	sprites[3];
 	t_spr	map_spr[10];
 	t_point	doors[3];
+	t_mm	mmap;
 	int		f_color;
 	int		c_color;
 	t_dir	p_dir;

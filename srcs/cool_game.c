@@ -3,21 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cool_game.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/26 22:52:58 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/26 23:34:22 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-// void	set_camera_vector(t_cub *cub)
-// {
-// 	cub->camera.plane.x = cub->player.dir.y;
-// 	cub->camera.plane.y = cub->player.dir.x;
-// 	cub->camera.plane.y *= -1;
-// }
 
 void	set_ray_dir_vector(t_cub *cub, t_ray *ray, int x)
 {
@@ -304,37 +297,38 @@ void	cast_floor_ceiling(t_cub *cub)
 	}
 }
 
-// void	draw_minimap(t_cub *cub)
-// {
-// 	int	mm_height;
-// 	int	mm_width;
-// 	int	map_y;
-// 	int	map_x;
-// 	double	tile_w;
-// 	double	tile_h;
 
-// 	mm_height = WIN_HEIGHT * MAPSIZE;
-// 	mm_width = WIN_WIDTH * MAPSIZE;
-// 	tile_w = mm_width / (2 * MAPZOOM + 1);
-// 	tile_h = mm_width / (2 * MAPZOOM + 1);
-// 	for (int y = 0; y < mm_height; y++)
-// 	{
-// 		for (int x = 0; x < mm_width; x++)
-// 		{
-// 			map_y = (int)((y / tile_h) + cub->player.pos.y - MAPZOOM);
-// 			map_x = (int)((x / tile_w) + cub->player.pos.x - MAPZOOM);
-// 			if (map_x >= 0 && map_x <= cub->map.map_length - 1 &&
-// 			map_y >= 0 && map_y <= cub->map.map_height - 1 &&
-// 			cub->map.map[map_y][map_x] == '1')
-// 				ft_mlx_pixel_put(&cub->img, x, y, 0);
-// 			else if (map_x == (int)cub->player.pos.x && map_y == (int)cub->player.pos.y)
-// 				ft_mlx_pixel_put(&cub->img, x, y, 25600);
-// 			else
-// 				ft_mlx_pixel_put(&cub->img, x, y, 16777215);
-// 		}
-// 	}
-	
-// }
+void	draw_minimap(t_cub *cub)
+{
+	int map_y;
+	int map_x;
+	int x;
+	int y;
+
+	cub->map.mmap.tile_width = cub->map.mmap.width / (2 * MMAPZOOM + 1);
+	cub->map.mmap.tile_height = cub->map.mmap.height / (2 * MMAPZOOM + 1);
+	y = 0;
+	while(y < cub->map.mmap.height)
+	{
+		x = 0;
+		while(x < cub->map.mmap.width)
+		{
+			map_y = (int)((y / cub->map.mmap.tile_height) + 
+				cub->player.pos.y - MMAPZOOM);
+			map_x = (int)((x / cub->map.mmap.tile_width) + 
+				cub->player.pos.x - MMAPZOOM);
+			if (map_x >= 0 && map_x <= cub->map.map_length - 1 &&
+			map_y >= 0 && map_y <= cub->map.map_height - 1 &&
+			cub->map.map[map_y][map_x] == '1')
+				ft_mlx_pixel_put(&cub->img, x, y, 0);
+			else if (map_x == (int)cub->player.pos.x && 
+				map_y == (int)cub->player.pos.y)
+				ft_mlx_pixel_put(&cub->img, x, y, 25600);
+			x++;
+		}
+		y++;
+	}
+}
 
 void	cub3d(t_cub *cub)
 {
@@ -343,6 +337,6 @@ void	cub3d(t_cub *cub)
 	cast_floor_ceiling(cub);
 	cast_walls(cub, &ray);
 	cast_sprites(cub, &ray);
-	//draw_minimap(cub);
+	draw_minimap(cub);
 	mlx_put_image_to_window(cub->win.mlx, cub->win.mlx_win, cub->img.img, 0, 0);
 }

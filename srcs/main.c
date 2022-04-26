@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:58 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/26 22:54:47 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/26 23:32:33 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,12 @@ void	print_cub_file(t_cub *cub)
 	printf("dir_y: %f\n", cub->player.dir.y);
 }
 
+void	set_minimap(t_cub *cub)
+{
+	cub->map.mmap.height = WIN_HEIGHT * MMAPSIZE;
+	cub->map.mmap.width = WIN_WIDTH * MMAPSIZE;
+}
+
 int	main(int argc, char *argv[])
 {
 	t_cub	cub;
@@ -64,6 +70,7 @@ int	main(int argc, char *argv[])
 	parse_cub_file(&cub, argv);
 	print_cub_file(&cub);
 	set_starting_vectors(&cub);
+	set_minimap(&cub);
 	cub3d(&cub);
 	mlx_hooks(&cub);
 	mlx_loop(cub.win.mlx);
