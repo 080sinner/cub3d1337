@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:41:17 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/18 23:20:39 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/26 23:06:48 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,17 @@ int	skip_whitespaces(char *str)
 	return (i);
 }
 
-void    free_map(t_cub *cub)
+void	free_map(t_cub *cub)
 {
-	int i;
+	int	i;
+
 	if (cub->map.fd)
 		close(cub->map.fd);
 	i = 0;
 	while (i < 4)
 		free(cub->map.paths[i++]);
 	i = 0;
-	while(i < 4 && cub->map.texture[i].img)
+	while (i < 4 && cub->map.texture[i].img)
 		mlx_destroy_image(cub->win.mlx, cub->map.texture[i++].img);
 	i = 0;
 	while (cub->map.map && cub->map.map[i])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:48:51 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/18 23:18:55 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/26 23:06:30 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,19 @@ static void	check_identifier(t_cub *cub, char *str)
 
 void	open_texture_files(t_cub *cub)
 {
-	int	i;
-	t_img *tex;
+	int		i;
+	t_img	*tex;
 
 	i = 0;
 	while (i < 4)
 	{
 		tex = &cub->map.texture[i];
 		tex->img = mlx_xpm_file_to_image(
-			cub->win.mlx, cub->map.paths[i], &tex->width, &tex->height);
+				cub->win.mlx, cub->map.paths[i], &tex->width, &tex->height);
 		if (!tex->img)
 			map_error(cub, NULL, "invalid texture path");
-		tex->addr = mlx_get_data_addr(
-			tex->img, &tex->bits_per_pixel, &tex->line_length, &tex->endian);
+		tex->addr = mlx_get_data_addr(tex->img, &tex->bits_per_pixel,
+				&tex->line_length, &tex->endian);
 		i++;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/26 22:39:51 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/26 23:12:36 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ typedef enum e_dir
 
 typedef enum e_side
 {
-	xSide,
-	ySide,
+	x_side,
+	y_side,
 }			t_side;
 
 typedef struct s_point
@@ -62,14 +62,14 @@ typedef struct s_point
 typedef struct s_ray
 {
 	t_point		dir;
-	t_point		sideDist;
-	t_point		deltaDist;
+	t_point		side_dist;
+	t_point		delta_dist;
 	t_side		hit;
-	int			mapX;
-	int			mapY;
-	int			stepX;
-	int			stepY;
-	double		perpWallDist[WIN_WIDTH];
+	int			map_x;
+	int			map_y;
+	int			step_x;
+	int			step_y;
+	double		perp_wall_dist[WIN_WIDTH];
 }				t_ray;
 
 typedef struct s_camera
@@ -98,17 +98,17 @@ typedef struct s_img
 typedef struct s_spr
 {
 	t_point	coord;
-	t_point transf;
+	t_point	transf;
 	int		type;
 	double	distance;
-	int		scrX;
-	int		scrY;
+	int		scr_x;
+	int		scr_y;
 	int		height;
 	int		width;
-	int		startX;
-	int		endX;
-	int		startY;
-	int		endY;
+	int		start_x;
+	int		end_x;
+	int		start_y;
+	int		end_y;
 }			t_spr;
 
 typedef struct s_map
@@ -142,14 +142,14 @@ typedef struct s_cub
 	t_win		win;
 }				t_cub;
 
-typedef struct	s_dline
+typedef struct s_dline
 {
 	int			height;
 	int			start;
 	int			end;
 }				t_dline;
 
-typedef struct	s_text
+typedef struct s_text
 {
 	t_dir		dir;
 	int			x;
@@ -158,32 +158,32 @@ typedef struct	s_text
 	double		step;
 }				t_text;
 
-int		ft_is_empty_line(char *s);
-void	map_error(t_cub *cub, char *str, char *error_msg);
-int		skip_whitespaces(char *str);
-void    free_map(t_cub *cub);
-void	parse_cub_file(t_cub *cub, char **argv);
-int		read_colour(t_cub *cub, char *str, int i);
-int		read_textures(t_cub *cub);
-int		init_win_img(t_cub *cub);
-int		mlx_hooks(t_cub *cub);
-void	read_map(t_cub *cub);
-int		ft_is_whitespace(char c);
-void	check_map_validity(t_cub *cub, t_player *player);
-void	ft_mlx_pixel_put(t_img *data, int x, int y, int color);
-int		create_trgb(int r, int g, int b);
-void	calculate_frame(t_cub *cub);
-void	move_forward(t_cub *cub);
-void	move_backward(t_cub *cub);
-void	turn_right(t_cub *cub);
-void	turn_left(t_cub *cub);
-void	cub3d(t_cub *cub);
-unsigned int mlx_pixel_read(t_img *data, int x, int y);
-void	open_texture_files(t_cub *cub);
-void	set_camera_vector(t_cub *cub);
-int		is_player(char tile);
-void	move_right(t_cub *cub);
-void	move_left(t_cub *cub);
-void	cast_sprites(t_cub *cub, t_ray *ray);
+int				ft_is_empty_line(char *s);
+void			map_error(t_cub *cub, char *str, char *error_msg);
+int				skip_whitespaces(char *str);
+void			free_map(t_cub *cub);
+void			parse_cub_file(t_cub *cub, char **argv);
+int				read_colour(t_cub *cub, char *str, int i);
+int				read_textures(t_cub *cub);
+int				init_win_img(t_cub *cub);
+int				mlx_hooks(t_cub *cub);
+void			read_map(t_cub *cub);
+int				ft_is_whitespace(char c);
+void			check_map_validity(t_cub *cub, t_player *player);
+void			ft_mlx_pixel_put(t_img *data, int x, int y, int color);
+int				create_trgb(int r, int g, int b);
+void			calculate_frame(t_cub *cub);
+void			move_forward(t_cub *cub);
+void			move_backward(t_cub *cub);
+void			turn_right(t_cub *cub);
+void			turn_left(t_cub *cub);
+void			cub3d(t_cub *cub);
+unsigned int	mlx_pixel_read(t_img *data, int x, int y);
+void			open_texture_files(t_cub *cub);
+void			set_camera_vector(t_cub *cub);
+int				is_player(char tile);
+void			move_right(t_cub *cub);
+void			move_left(t_cub *cub);
+void			cast_sprites(t_cub *cub, t_ray *ray);
 
 #endif

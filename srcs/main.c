@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:58 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/26 22:29:33 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/26 22:54:47 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	main(int argc, char *argv[])
 	(void)argv;
 	if (argc != 2)
 		return (printf("Error \nInvalid amount of arguments\n"));
-	ft_memset((void*)&cub, 0, sizeof(t_cub));
+	ft_memset((void *)&cub, 0, sizeof(t_cub));
 	init_win_img(&cub);
 	parse_cub_file(&cub, argv);
 	print_cub_file(&cub);

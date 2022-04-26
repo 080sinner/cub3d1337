@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cool_game.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/26 22:43:02 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/26 22:52:58 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,99 +19,99 @@
 // 	cub->camera.plane.y *= -1;
 // }
 
-void 	set_ray_dir_vector(t_cub *cub, t_ray *ray, int x)
+void	set_ray_dir_vector(t_cub *cub, t_ray *ray, int x)
 {
-	double cameraX;
+	double	camera_x;
 
-	cameraX = 2 * x / (double)WIN_WIDTH - 1;
-	ray->dir.x = cub->player.dir.x + cub->camera.plane.x * cameraX;
-	ray->dir.y = cub->player.dir.y + cub->camera.plane.y * cameraX;
+	camera_x = 2 * x / (double)WIN_WIDTH - 1;
+	ray->dir.x = cub->player.dir.x + cub->camera.plane.x * camera_x;
+	ray->dir.y = cub->player.dir.y + cub->camera.plane.y * camera_x;
 }
 
-void	set_deltaDist(t_ray *ray)
+void	set_delta_dist(t_ray *ray)
 {
 	if (ray->dir.x == 0)
-		ray->deltaDist.x = INFINITY;
+		ray->delta_dist.x = INFINITY;
 	else
-		ray->deltaDist.x = fabs(1 / ray->dir.x);
+		ray->delta_dist.x = fabs(1 / ray->dir.x);
 	if (ray->dir.y == 0)
-		ray->deltaDist.y = INFINITY;
+		ray->delta_dist.y = INFINITY;
 	else
-		ray->deltaDist.y = fabs(1 / ray->dir.y);
+		ray->delta_dist.y = fabs(1 / ray->dir.y);
 }
 
-void	set_sideDist(t_ray *ray, t_player *player)
+void	set_side_dist(t_ray *ray, t_player *player)
 {
 	if (ray->dir.x < 0)
 	{
-		ray->sideDist.x = (player->pos.x - ray->mapX) * ray->deltaDist.x;
-		ray->stepX = -1;
+		ray->side_dist.x = (player->pos.x - ray->map_x) * ray->delta_dist.x;
+		ray->step_x = -1;
 	}
 	else
 	{
-		ray->sideDist.x = (ray->mapX + 1 - player->pos.x) * ray->deltaDist.x;
-		ray->stepX = 1;
+		ray->side_dist.x = (ray->map_x + 1 - player->pos.x) * ray->delta_dist.x;
+		ray->step_x = 1;
 	}
 	if (ray->dir.y < 0)
 	{
-		ray->sideDist.y = (player->pos.y - ray->mapY) * ray->deltaDist.y;
-		ray->stepY = -1;
+		ray->side_dist.y = (player->pos.y - ray->map_y) * ray->delta_dist.y;
+		ray->step_y = -1;
 	}
 	else
 	{
-		ray->sideDist.y = (ray->mapY + 1 - player->pos.y) * ray->deltaDist.y;
-		ray->stepY = 1;
+		ray->side_dist.y = (ray->map_y + 1 - player->pos.y) * ray->delta_dist.y;
+		ray->step_y = 1;
 	}
 }
 
-void	perform_DDA(t_ray *ray, t_cub *cub, int x)
+void	perform_dda(t_ray *ray, t_cub *cub, int x)
 {
-	int hit;
+	int	hit;
 
 	hit = 0;
 	while (hit == 0)
 	{
-		if (ray->sideDist.x < ray->sideDist.y)
+		if (ray->side_dist.x < ray->side_dist.y)
 		{
-			ray->sideDist.x += ray->deltaDist.x;
-			ray->mapX += ray->stepX;
-			ray->hit = xSide;
+			ray->side_dist.x += ray->delta_dist.x;
+			ray->map_x += ray->step_x;
+			ray->hit = x_side;
 		}
 		else
 		{
-			ray->sideDist.y += ray->deltaDist.y;
-			ray->mapY += ray->stepY;
-			ray->hit = ySide;
+			ray->side_dist.y += ray->delta_dist.y;
+			ray->map_y += ray->step_y;
+			ray->hit = y_side;
 		}
-		if (cub->map.map[ray->mapY][ray->mapX] > '0' && 
-			!is_player(cub->map.map[ray->mapY][ray->mapX]))
+		if (cub->map.map[ray->map_y][ray->map_x] > '0' &&
+			!is_player(cub->map.map[ray->map_y][ray->map_x]))
 			hit = 1;
 	}
-	if (ray->hit == xSide)
-		ray->perpWallDist[x] =  ray->sideDist.x - ray->deltaDist.x;
+	if (ray->hit == x_side)
+		ray->perp_wall_dist[x] = ray->side_dist.x - ray->delta_dist.x;
 	else
-		ray->perpWallDist[x] = ray->sideDist.y - ray->deltaDist.y;
+		ray->perp_wall_dist[x] = ray->side_dist.y - ray->delta_dist.y;
 }
 
 void	get_texture_x(t_cub *cub, t_ray *ray, t_text *text, int x)
 {
-	double	wallX;
+	double	wall_x;
 
-	if (ray->hit == xSide)
-		wallX = cub->player.pos.y + ray->perpWallDist[x] * ray->dir.y;
+	if (ray->hit == x_side)
+		wall_x = cub->player.pos.y + ray->perp_wall_dist[x] * ray->dir.y;
 	else
-		wallX = cub->player.pos.x + ray->perpWallDist[x] * ray->dir.x;
-	wallX -= floor(wallX);
-	text->x = (int)(wallX * (double)cub->map.texture[text->dir].width);
-	if (ray->hit ==  xSide && ray->dir.x > 0)
+		wall_x = cub->player.pos.x + ray->perp_wall_dist[x] * ray->dir.x;
+	wall_x -= floor(wall_x);
+	text->x = (int)(wall_x * (double)cub->map.texture[text->dir].width);
+	if (ray->hit == x_side && ray->dir.x > 0)
 		text->x = cub->map.texture[text->dir].width - text->x - 1;
-	if (ray->hit ==  ySide && ray->dir.y < 0)
+	if (ray->hit == y_side && ray->dir.y < 0)
 		text->x = cub->map.texture[text->dir].width - text->x - 1;
 }
 
 void	get_line_values(t_dline *line, t_ray *ray, int x)
 {
-	line->height = (int)(WIN_HEIGHT / ray->perpWallDist[x]);
+	line->height = (int)(WIN_HEIGHT / ray->perp_wall_dist[x]);
 	line->start = -line->height / 2 + WIN_HEIGHT / 2;
 	if (line->start < 0)
 		line->start = 0;
@@ -126,17 +126,16 @@ void	get_text_values(t_cub *cub, t_dline *line, t_text *text)
 	text->pos = (line->start - WIN_HEIGHT / 2 + line->height / 2) * text->step;
 }
 
-
 void	get_text_type(t_ray *ray, t_text *text)
 {
-	if (ray->hit == ySide)
+	if (ray->hit == y_side)
 	{
 		if (ray->dir.y >= 0)
 			text->dir = NORTH;
 		else
 			text->dir = SOUTH;
 	}
-	if (ray->hit == xSide)
+	if (ray->hit == x_side)
 	{
 		if (ray->dir.x >= 0)
 			text->dir = EAST;
@@ -150,35 +149,38 @@ void	draw_line(t_ray *ray, t_cub *cub, int x)
 	t_dline			line;
 	t_text			text;	
 	unsigned int	color;
+	int				y;
 
 	get_line_values(&line, ray, x);
 	get_text_type(ray, &text);
 	get_text_values(cub, &line, &text);
 	get_texture_x(cub, ray, &text, x);
-	for (int y = line.start; y < line.end; y++)
+	y = line.start;
+	while (y < line.end)
 	{
 		text.y = (int)text.pos & (cub->map.texture[text.dir].height - 1);
 		text.pos += text.step;
 		color = mlx_pixel_read(&cub->map.texture[text.dir], text.x, text.y);
-		if (ray->hit == ySide)
+		if (ray->hit == y_side)
 			color = (color >> 1) & 8355711;
 		ft_mlx_pixel_put(&cub->img, x, y, color);
+		y++;
 	}
 }
 
-void 	cast_walls(t_cub *cub, t_ray *ray)
+void	cast_walls(t_cub *cub, t_ray *ray)
 {
 	int		x;
 
 	x = 0;
-	while(x < WIN_WIDTH)
+	while (x < WIN_WIDTH)
 	{
 		set_ray_dir_vector(cub, ray, x);
-		ray->mapX = (int)cub->player.pos.x;
-		ray->mapY = (int)cub->player.pos.y;
-		set_deltaDist(ray);
-		set_sideDist(ray, &cub->player);
-		perform_DDA(ray, cub, x);
+		ray->map_x = (int)cub->player.pos.x;
+		ray->map_y = (int)cub->player.pos.y;
+		set_delta_dist(ray);
+		set_side_dist(ray, &cub->player);
+		perform_dda(ray, cub, x);
 		draw_line(ray, cub, x);
 		x++;
 	}
@@ -189,144 +191,150 @@ int	is_walkable(char tile)
 	if (tile == '0' || is_player(tile))
 		return (true);
 	else
-		return(false);
+		return (false);
 }
 
 void	turn_left(t_cub *cub)
 {
-	double	oldDirX;
-	double	oldPlaneX;
+	double	old_dir_x;
+	double	old_plane_x;
 
-	oldDirX = cub->player.dir.x;
-	oldPlaneX = cub->camera.plane.x;
+	old_dir_x = cub->player.dir.x;
+	old_plane_x = cub->camera.plane.x;
 	cub->player.dir.x = cub->player.dir.x * cos(ROTSPEED)
 		- cub->player.dir.y * sin(ROTSPEED);
-	cub->player.dir.y = oldDirX * sin(ROTSPEED) 
+	cub->player.dir.y = old_dir_x * sin(ROTSPEED)
 		+ cub->player.dir.y *cos(ROTSPEED);
-	cub->camera.plane.x = cub->camera.plane.x * cos(ROTSPEED) 
+	cub->camera.plane.x = cub->camera.plane.x * cos(ROTSPEED)
 		- cub->camera.plane.y * sin(ROTSPEED);
-	cub->camera.plane.y = oldPlaneX * sin(ROTSPEED) 
+	cub->camera.plane.y = old_plane_x * sin(ROTSPEED)
 		+ cub->camera.plane.y * cos(ROTSPEED);
 }
 
 void	turn_right(t_cub *cub)
 {
-	double	oldDirX;
-	double	oldPlaneX;
+	double	old_dir_x;
+	double	old_plane_x;
 
-	oldDirX = cub->player.dir.x;
-	oldPlaneX = cub->camera.plane.x;
+	old_dir_x = cub->player.dir.x;
+	old_plane_x = cub->camera.plane.x;
 	cub->player.dir.x = cub->player.dir.x * cos(-ROTSPEED)
 		- cub->player.dir.y * sin(-ROTSPEED);
-	cub->player.dir.y = oldDirX * sin(-ROTSPEED) 
+	cub->player.dir.y = old_dir_x * sin(-ROTSPEED)
 		+ cub->player.dir.y *cos(-ROTSPEED);
-	cub->camera.plane.x = cub->camera.plane.x * cos(-ROTSPEED) 
+	cub->camera.plane.x = cub->camera.plane.x * cos(-ROTSPEED)
 		- cub->camera.plane.y * sin(-ROTSPEED);
-	cub->camera.plane.y = oldPlaneX * sin(-ROTSPEED) 
+	cub->camera.plane.y = old_plane_x * sin(-ROTSPEED)
 		+ cub->camera.plane.y * cos(-ROTSPEED);
 }
 
 void	move_forward(t_cub *cub)
 {
-	int	newPosX;
-	int newPosY;
+	int	newpos_x;
+	int	newpos_y;
 
-	newPosX = (int)(cub->player.pos.x + cub->player.dir.x * MOVESPEED);
-	newPosY = (int)(cub->player.pos.y + cub->player.dir.y * MOVESPEED);
-	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newPosX]))
+	newpos_x = (int)(cub->player.pos.x + cub->player.dir.x * MOVESPEED);
+	newpos_y = (int)(cub->player.pos.y + cub->player.dir.y * MOVESPEED);
+	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newpos_x]))
 		cub->player.pos.x += cub->player.dir.x * MOVESPEED;
-	if (is_walkable(cub->map.map[newPosY][(int)cub->player.pos.x]))
+	if (is_walkable(cub->map.map[newpos_y][(int)cub->player.pos.x]))
 		cub->player.pos.y += cub->player.dir.y * MOVESPEED;
 }
 
 void	move_right(t_cub *cub)
 {
-	int	newPosX;
-	int newPosY;
+	int	newpos_x;
+	int	newpos_y;
 
-	newPosX = (int)(cub->player.pos.x + cub->camera.plane.x * MOVESPEED);
-	newPosY = (int)(cub->player.pos.y + cub->camera.plane.y * MOVESPEED);
-	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newPosX]))
+	newpos_x = (int)(cub->player.pos.x + cub->camera.plane.x * MOVESPEED);
+	newpos_y = (int)(cub->player.pos.y + cub->camera.plane.y * MOVESPEED);
+	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newpos_x]))
 		cub->player.pos.x += cub->camera.plane.x * MOVESPEED;
-	if (is_walkable(cub->map.map[newPosY][(int)cub->player.pos.x]))
+	if (is_walkable(cub->map.map[newpos_y][(int)cub->player.pos.x]))
 		cub->player.pos.y += cub->camera.plane.y * MOVESPEED;
 }
 
 void	move_left(t_cub *cub)
 {
-	int	newPosX;
-	int newPosY;
+	int	newpos_x;
+	int	newpos_y;
 
-	newPosX = (int)(cub->player.pos.x - cub->camera.plane.x * MOVESPEED);
-	newPosY = (int)(cub->player.pos.y - cub->camera.plane.y * MOVESPEED);
-	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newPosX]))
+	newpos_x = (int)(cub->player.pos.x - cub->camera.plane.x * MOVESPEED);
+	newpos_y = (int)(cub->player.pos.y - cub->camera.plane.y * MOVESPEED);
+	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newpos_x]))
 		cub->player.pos.x -= cub->camera.plane.x * MOVESPEED;
-	if (is_walkable(cub->map.map[newPosY][(int)cub->player.pos.x]))
+	if (is_walkable(cub->map.map[newpos_y][(int)cub->player.pos.x]))
 		cub->player.pos.y -= cub->camera.plane.y * MOVESPEED;
 }
 
 void move_backward(t_cub *cub)
 {
-	int	newPosX;
-	int newPosY;
+	int	newpos_x;
+	int	newpos_y;
 
-	newPosX = (int)(cub->player.pos.x - cub->player.dir.x * MOVESPEED);
-	newPosY = (int)(cub->player.pos.y - cub->player.dir.y * MOVESPEED);
-	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newPosX]))
+	newpos_x = (int)(cub->player.pos.x - cub->player.dir.x * MOVESPEED);
+	newpos_y = (int)(cub->player.pos.y - cub->player.dir.y * MOVESPEED);
+	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newpos_x]))
 		cub->player.pos.x -= cub->player.dir.x * MOVESPEED;
-	if (is_walkable(cub->map.map[newPosY][(int)cub->player.pos.x]))
+	if (is_walkable(cub->map.map[newpos_y][(int)cub->player.pos.x]))
 		cub->player.pos.y -= cub->player.dir.y * MOVESPEED;
 }
 
 void	cast_floor_ceiling(t_cub *cub)
 {
 	unsigned int	color;
+	int				y;
+	int				x;
 
-	for(int y = 0; y < WIN_HEIGHT; y++)
-	{		
-		for (int x = 0; x < WIN_WIDTH; x++)
+	y = 0;
+	while (y < WIN_HEIGHT)
+	{
+		x = 0;
+		while (x < WIN_WIDTH)
 		{
 			color = cub->map.f_color;
 			color = (color >> 1) & 8355711;
-			ft_mlx_pixel_put(&cub->img, x, y, color);	
+			ft_mlx_pixel_put(&cub->img, x, y, color);
 			color = cub->map.c_color;
 			color = (color >> 1) & 8355711;
-			ft_mlx_pixel_put(&cub->img, x, WIN_HEIGHT - y - 1, color);	
+			ft_mlx_pixel_put(&cub->img, x, WIN_HEIGHT - y - 1, color);
+			x++;
 		}
+		y++;
 	}
 }
 
-void	draw_minimap(t_cub *cub)
-{
-	int	mm_height;
-	int	mm_width;
-	int map_y;
-	int map_x;
-	double	tile_w;
-	double	tile_h;
+// void	draw_minimap(t_cub *cub)
+// {
+// 	int	mm_height;
+// 	int	mm_width;
+// 	int	map_y;
+// 	int	map_x;
+// 	double	tile_w;
+// 	double	tile_h;
 
-	mm_height = WIN_HEIGHT * MAPSIZE;
-	mm_width = WIN_WIDTH * MAPSIZE;
-	tile_w = mm_width / (2 * MAPZOOM + 1);
-	tile_h = mm_width / (2 * MAPZOOM + 1);
-	for (int y = 0; y < mm_height; y++)
-	{
-		for (int x = 0; x < mm_width; x++)
-		{
-			map_y = (int)((y / tile_h) + cub->player.pos.y - MAPZOOM);
-			map_x = (int)((x / tile_w) + cub->player.pos.x - MAPZOOM);
-			if (map_x >= 0 && map_x <= cub->map.map_length - 1 &&
-			map_y >= 0 && map_y <= cub->map.map_height - 1 &&
-			cub->map.map[map_y][map_x] == '1')
-				ft_mlx_pixel_put(&cub->img, x, y, 0);
-			else if (map_x == (int)cub->player.pos.x && map_y == (int)cub->player.pos.y)
-				ft_mlx_pixel_put(&cub->img, x, y, 25600);
-			else
-				ft_mlx_pixel_put(&cub->img, x, y, 16777215);
-		}
-	}
+// 	mm_height = WIN_HEIGHT * MAPSIZE;
+// 	mm_width = WIN_WIDTH * MAPSIZE;
+// 	tile_w = mm_width / (2 * MAPZOOM + 1);
+// 	tile_h = mm_width / (2 * MAPZOOM + 1);
+// 	for (int y = 0; y < mm_height; y++)
+// 	{
+// 		for (int x = 0; x < mm_width; x++)
+// 		{
+// 			map_y = (int)((y / tile_h) + cub->player.pos.y - MAPZOOM);
+// 			map_x = (int)((x / tile_w) + cub->player.pos.x - MAPZOOM);
+// 			if (map_x >= 0 && map_x <= cub->map.map_length - 1 &&
+// 			map_y >= 0 && map_y <= cub->map.map_height - 1 &&
+// 			cub->map.map[map_y][map_x] == '1')
+// 				ft_mlx_pixel_put(&cub->img, x, y, 0);
+// 			else if (map_x == (int)cub->player.pos.x && map_y == (int)cub->player.pos.y)
+// 				ft_mlx_pixel_put(&cub->img, x, y, 25600);
+// 			else
+// 				ft_mlx_pixel_put(&cub->img, x, y, 16777215);
+// 		}
+// 	}
 	
-}
+// }
 
 void	cub3d(t_cub *cub)
 {
@@ -335,6 +343,6 @@ void	cub3d(t_cub *cub)
 	cast_floor_ceiling(cub);
 	cast_walls(cub, &ray);
 	cast_sprites(cub, &ray);
-	draw_minimap(cub);
+	//draw_minimap(cub);
 	mlx_put_image_to_window(cub->win.mlx, cub->win.mlx_win, cub->img.img, 0, 0);
 }

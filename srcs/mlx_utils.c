@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 20:58:25 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/25 17:51:54 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/26 23:12:29 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ft_mlx_pixel_put(t_img *data, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-unsigned int mlx_pixel_read(t_img *data, int x, int y)
+unsigned int	mlx_pixel_read(t_img *data, int x, int y)
 {
 	char	*dst;
 
@@ -32,7 +32,7 @@ int	close_win(t_cub *cub)
 {
 	mlx_destroy_image(cub->win.mlx, cub->img.img);
 	mlx_destroy_window(cub->win.mlx, cub->win.mlx_win);
-	//free
+	free_map(cub);
 	exit(EXIT_SUCCESS);
 	return (0);
 }
@@ -57,13 +57,12 @@ static int	key_hooks(int keycode, t_cub *cub)
 	return (0);
 }
 
-
 int	mouse_move(int x, int y, t_cub *cub)
 {
-	static int old_x;
+	static int	old_x;
 
 	if (old_x == 0)
-		old_x = WIN_WIDTH/ 2;
+		old_x = WIN_WIDTH / 2;
 	if (cub->camera.pressed_mb)
 	{
 		if (x <= WIN_WIDTH && x >= 0 && y <= WIN_HEIGHT && y >= 0)
@@ -111,7 +110,8 @@ int	mlx_hooks(t_cub *cub)
 int	init_win_img(t_cub *cub)
 {
 	cub->win.mlx = mlx_init();
-	cub->win.mlx_win = mlx_new_window(cub->win.mlx, WIN_WIDTH, WIN_HEIGHT, "cub3d1337");
+	cub->win.mlx_win = mlx_new_window(cub->win.mlx, WIN_WIDTH, WIN_HEIGHT,
+			"cub3d1337");
 	cub->img.img = mlx_new_image(cub->win.mlx, WIN_WIDTH, WIN_HEIGHT);
 	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel,
 			&cub->img.line_length, &cub->img.endian);

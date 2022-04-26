@@ -13,9 +13,10 @@
 #include "cub3d.h"
 
 void	get_map_size(char *map_line, int *longest_line, int *line_count)
-{   
-	int i;
-	int current_line;
+{
+	int	i;
+	int	current_line;
+
 	current_line = 0;
 	*longest_line = 0;
 	*line_count = 0;
@@ -36,9 +37,10 @@ void	get_map_size(char *map_line, int *longest_line, int *line_count)
 		*line_count += 1;
 }
 
-int get_line_length(char *line)
-{   
+int	get_line_length(char *line)
+{
 	int i;
+
 	i = 0;
 	while (line[i])
 	{
@@ -51,8 +53,9 @@ int get_line_length(char *line)
 
 void	create_map_array(t_cub *cub, char *map_line)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
+
 	get_map_size(map_line, &cub->map.map_length, &cub->map.map_height);
 	cub->map.map = ft_calloc(cub->map.map_height + 1, cub->map.map_length);
 	if (!cub->map.map)
@@ -61,7 +64,8 @@ void	create_map_array(t_cub *cub, char *map_line)
 	j = 0;
 	while (map_line[i])
 	{
-		cub->map.map[j] = ft_substr(map_line, i, get_line_length(&map_line[i]) + 1);
+		cub->map.map[j] = ft_substr(map_line, i,
+				get_line_length(&map_line[i]) + 1);
 		if (cub->map.map[j][ft_strlen(cub->map.map[j]) - 1] == '\n')
 			cub->map.map[j][ft_strlen(cub->map.map[j]) - 1] = '\0';
 		i += get_line_length(&map_line[i]) + 1;
@@ -77,6 +81,7 @@ void	create_map_array(t_cub *cub, char *map_line)
 char	*get_next_written_line(int fd)
 {
 	char	*line;
+
 	while (1)
 	{
 		line = get_next_line(fd);
@@ -85,12 +90,13 @@ char	*get_next_written_line(int fd)
 		if (!ft_is_empty_line(line))
 			return (line);
 		free(line);
-	}   
+	}
 }
 
-int is_eof(int fd)
+int	is_eof(int fd)
 {
 	char	*line;
+
 	line = get_next_written_line(fd);
 	if (line)
 	{
@@ -103,6 +109,7 @@ int is_eof(int fd)
 char	*append_mapline(t_cub *cub, char *map_line, char *line)
 {
 	char	*tmp;
+
 	tmp = map_line;
 	map_line = ft_strjoin(map_line, line);
 	free(tmp);
@@ -115,6 +122,7 @@ void	read_map(t_cub *cub)
 {
 	char	*line;
 	char	*map_line;
+
 	map_line = get_next_written_line(cub->map.fd);
 	if (!map_line)
 		map_error(cub, NULL, "No map specified");
@@ -132,7 +140,7 @@ void	read_map(t_cub *cub)
 		}
 		map_line = append_mapline(cub, map_line, line);
 		free(line);
-	}   
+	}
 	create_map_array(cub, map_line);
 }
 
@@ -145,8 +153,9 @@ int is_empty_tile(char tile)
 
 void	check_valid_zero(t_cub *cub, int x, int y)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
+
 	i = -1;
 	while (i < 2)
 	{
@@ -162,7 +171,7 @@ void	check_valid_zero(t_cub *cub, int x, int y)
 }
 
 int is_player(char tile)
-{   
+{
 	if (tile == 'N')
 		return (1);
 	if (tile == 'E')
@@ -192,7 +201,8 @@ int check_x_border(char *s, int i)
 
 int check_border(t_cub *cub)
 {
-	int y;
+	int	y;
+
 	if (!check_x_border(cub->map.map[0], skip_whitespaces(cub->map.map[0])))
 		map_error(cub, NULL, "Invalid vertical border");
 	if (!check_x_border(cub->map.map[cub->map.map_height - 1],
@@ -210,8 +220,8 @@ int check_border(t_cub *cub)
 
 int	player_values(t_map *map, t_player *player, int x, int y)
 {
-	static int playercount;
-	
+	static int	playercount;
+
 	if (x == 0 || y == 0)
 		return (playercount);
 	player->pos.x = x;
@@ -225,7 +235,7 @@ int	player_values(t_map *map, t_player *player, int x, int y)
 	else if (map->map[y][x] == 'W')
 		map->p_dir = WEST;
 	playercount++;
-	return(playercount);
+	return (playercount);
 }
 
 int	is_sprite(char c)
@@ -237,8 +247,8 @@ int	is_sprite(char c)
 
 void	parse_sprite(char c, t_cub *cub, int x, int y)
 {
-	static int door_count;
-	static int spr_count;
+	static int	door_count;
+	static int	spr_count;
 
 	if (c == 'D')
 	{
@@ -261,8 +271,9 @@ void	parse_sprite(char c, t_cub *cub, int x, int y)
 
 void	check_map_validity(t_cub *cub, t_player *player)
 {
-	int y;
-	int x;
+	int	y;
+	int	x;
+
 	check_border(cub);
 	y = 1;
 	while (y < cub->map.map_height - 1)
@@ -276,12 +287,12 @@ void	check_map_validity(t_cub *cub, t_player *player)
 				player_values(&cub->map, player, x, y);
 			else if (is_sprite(cub->map.map[y][x]))
 				parse_sprite(cub->map.map[y][x], cub, x, y);
-			else if (cub->map.map[y][x] != '1' 
+			else if (cub->map.map[y][x] != '1'
 				&& !ft_is_whitespace(cub->map.map[y][x]))
 				map_error(cub, NULL, "invalid map character");
 			x++;
 		}
-	y++;
+		y++;
 	}
 	if (player_values(&cub->map, player, 0, 0) != 1)
 		map_error(cub, NULL, "Invalid amount of players");
