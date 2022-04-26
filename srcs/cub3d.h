@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/26 23:33:14 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/27 00:20:27 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,17 @@
 # define S_KEY 1
 # define D_KEY 2
 # define FRAMETIME 0.016
-# define MOVESPEED 0.2
-# define ROTSPEED 0.06
+# define MOVESPEED 0.08
+# define ROTSPEED 0.048
 # define MMAPZOOM 5
 # define MMAPSIZE 0.3
+
+typedef enum e_spirte_type
+{
+	BARREL,
+	PILLAR,
+	LAMP,
+}			t_stype;
 
 typedef enum e_dir
 {
@@ -76,6 +83,7 @@ typedef struct s_camera
 {
 	t_point	plane;
 	int		pressed_mb;
+	int		pressed_keys[6];
 }				t_camera;
 
 typedef struct s_player
@@ -99,7 +107,7 @@ typedef struct s_spr
 {
 	t_point	coord;
 	t_point	transf;
-	int		type;
+	t_stype	type;
 	double	distance;
 	int		scr_x;
 	int		scr_y;
@@ -186,7 +194,7 @@ void			move_forward(t_cub *cub);
 void			move_backward(t_cub *cub);
 void			turn_right(t_cub *cub);
 void			turn_left(t_cub *cub);
-void			cub3d(t_cub *cub);
+int				cub3d(t_cub *cub);
 unsigned int	mlx_pixel_read(t_img *data, int x, int y);
 void			open_texture_files(t_cub *cub);
 void			set_camera_vector(t_cub *cub);
@@ -194,5 +202,6 @@ int				is_player(char tile);
 void			move_right(t_cub *cub);
 void			move_left(t_cub *cub);
 void			cast_sprites(t_cub *cub, t_ray *ray);
+int				key_hooks(t_cub *cub);
 
 #endif

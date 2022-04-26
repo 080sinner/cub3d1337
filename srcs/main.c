@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:58 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/26 23:32:33 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/26 23:47:32 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ int	main(int argc, char *argv[])
 	print_cub_file(&cub);
 	set_starting_vectors(&cub);
 	set_minimap(&cub);
-	cub3d(&cub);
 	mlx_hooks(&cub);
+	mlx_loop_hook(cub.win.mlx, cub3d, &cub);
+	cub3d(&cub);
 	mlx_loop(cub.win.mlx);
 }

@@ -262,7 +262,12 @@ void	parse_sprite(char c, t_cub *cub, int x, int y)
 	{
 		if (spr_count > 10)
 			map_error(cub, NULL, "More than 10 doors");
-		cub->map.map_spr[spr_count].type = c;
+		if (c == 'L')
+			cub->map.map_spr[spr_count].type = LAMP;
+		else if (c == 'B')
+			cub->map.map_spr[spr_count].type = BARREL;
+		else if (c == 'P')
+			cub->map.map_spr[spr_count].type = PILLAR;
 		cub->map.map_spr[spr_count].coord.x = x;
 		cub->map.map_spr[spr_count].coord.y = y;
 		spr_count++;

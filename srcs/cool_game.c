@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/26 23:34:22 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/27 00:15:14 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,7 @@ void	perform_dda(t_ray *ray, t_cub *cub, int x)
 			ray->map_y += ray->step_y;
 			ray->hit = y_side;
 		}
-		if (cub->map.map[ray->map_y][ray->map_x] > '0' &&
-			!is_player(cub->map.map[ray->map_y][ray->map_x]))
+		if (cub->map.map[ray->map_y][ray->map_x] == '1')
 			hit = 1;
 	}
 	if (ray->hit == x_side)
@@ -297,11 +296,27 @@ void	cast_floor_ceiling(t_cub *cub)
 	}
 }
 
-
-void	draw_minimap(t_cub *cub)
+void	colour_pixel(t_cub *cub, int x, int y)
 {
 	int map_y;
 	int map_x;
+	
+	map_y = (int)((y / cub->map.mmap.tile_height) + 
+		cub->player.pos.y - MMAPZOOM);
+	map_x = (int)((x / cub->map.mmap.tile_width) + 
+		cub->player.pos.x - MMAPZOOM);
+	if (map_x >= 0 && map_x <= cub->map.map_length - 1 &&
+	map_y >= 0 && map_y <= cub->map.map_height - 1 &&
+	cub->map.map[map_y][map_x] == '1')
+		ft_mlx_pixel_put(&cub->img, x, y, 0);
+	else if (map_x == (int)cub->player.pos.x && 
+		map_y == (int)cub->player.pos.y)
+		ft_mlx_pixel_put(&cub->img, x, y, 25600);
+}
+
+
+void	draw_minimap(t_cub *cub)
+{
 	int x;
 	int y;
 
@@ -313,30 +328,22 @@ void	draw_minimap(t_cub *cub)
 		x = 0;
 		while(x < cub->map.mmap.width)
 		{
-			map_y = (int)((y / cub->map.mmap.tile_height) + 
-				cub->player.pos.y - MMAPZOOM);
-			map_x = (int)((x / cub->map.mmap.tile_width) + 
-				cub->player.pos.x - MMAPZOOM);
-			if (map_x >= 0 && map_x <= cub->map.map_length - 1 &&
-			map_y >= 0 && map_y <= cub->map.map_height - 1 &&
-			cub->map.map[map_y][map_x] == '1')
-				ft_mlx_pixel_put(&cub->img, x, y, 0);
-			else if (map_x == (int)cub->player.pos.x && 
-				map_y == (int)cub->player.pos.y)
-				ft_mlx_pixel_put(&cub->img, x, y, 25600);
+			colour_pixel(cub, x, y);
 			x++;
 		}
 		y++;
 	}
 }
 
-void	cub3d(t_cub *cub)
+int	cub3d(t_cub *cub)
 {
 	t_ray	ray;
 
+	key_hooks(cub);
 	cast_floor_ceiling(cub);
 	cast_walls(cub, &ray);
 	cast_sprites(cub, &ray);
 	draw_minimap(cub);
 	mlx_put_image_to_window(cub->win.mlx, cub->win.mlx_win, cub->img.img, 0, 0);
+	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 20:58:25 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/26 23:12:29 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/27 00:02:34 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,39 @@ int	close_win(t_cub *cub)
 	return (0);
 }
 
-static int	key_hooks(int keycode, t_cub *cub)
+int	key_hooks(t_cub *cub)
+{
+	if (cub->camera.pressed_keys[0])
+		move_forward(cub);
+	if (cub->camera.pressed_keys[1])
+		move_backward(cub);
+	if (cub->camera.pressed_keys[2])
+		move_right(cub);
+	if (cub->camera.pressed_keys[3])
+		move_left(cub);
+	if (cub->camera.pressed_keys[4])
+		turn_left(cub);
+	if (cub->camera.pressed_keys[5])
+		turn_right(cub);
+	return (0);
+}
+
+int	press_keys(int keycode, t_cub *cub)
 {
 	if (keycode == ESC_KEY)
 		close_win(cub);
 	if (keycode == W_KEY)
-		move_forward(cub);
+		cub->camera.pressed_keys[0] = 1;
 	else if (keycode == S_KEY)
-		move_backward(cub);
+		cub->camera.pressed_keys[1] = 1;
 	else if (keycode == D_KEY)
-		move_right(cub);
+		cub->camera.pressed_keys[2] = 1;
 	else if (keycode == A_KEY)
-		move_left(cub);
+		cub->camera.pressed_keys[3] = 1;
 	else if (keycode == LEFT_KEY)
-		turn_left(cub);
+		cub->camera.pressed_keys[4] = 1;
 	else if (keycode == RIGHT_KEY)
-		turn_right(cub);
-	cub3d(cub);
+		cub->camera.pressed_keys[5] = 1;
 	return (0);
 }
 
@@ -61,20 +77,17 @@ int	mouse_move(int x, int y, t_cub *cub)
 {
 	static int	old_x;
 
-	if (old_x == 0)
-		old_x = WIN_WIDTH / 2;
 	if (cub->camera.pressed_mb)
 	{
 		if (x <= WIN_WIDTH && x >= 0 && y <= WIN_HEIGHT && y >= 0)
 		{
 			if (x < old_x)
 				turn_left(cub);
-			else
+			else if (x > old_x)
 				turn_right(cub);
 		}
-		old_x = x;
-		cub3d(cub); // kann man das nicht anders aufrufen?
 	}
+	old_x = x;
 	return (0);
 }
 
@@ -97,10 +110,28 @@ int unregister_mouseclick(int button, int x, int y, t_cub *cub)
 	return (0);
 }
 
+int	release_keys(int keycode, t_cub *cub)
+{
+	if (keycode == W_KEY)
+		cub->camera.pressed_keys[0] = 0;
+	else if (keycode == S_KEY)
+		cub->camera.pressed_keys[1] = 0;
+	else if (keycode == D_KEY)
+		cub->camera.pressed_keys[2] = 0;
+	else if (keycode == A_KEY)
+		cub->camera.pressed_keys[3] = 0;
+	else if (keycode == LEFT_KEY)
+		cub->camera.pressed_keys[4] = 0;
+	else if (keycode == RIGHT_KEY)
+		cub->camera.pressed_keys[5] = 0;
+	return (0);
+}
+
 int	mlx_hooks(t_cub *cub)
 {
 	mlx_hook(cub->win.mlx_win, 17, 0, close_win, cub);
-	mlx_hook(cub->win.mlx_win, ON_KEYDOWN, 0, key_hooks, cub);
+	mlx_hook(cub->win.mlx_win, ON_KEYDOWN, 0, press_keys, cub);
+	mlx_hook(cub->win.mlx_win, 3, 0, release_keys, cub);
 	mlx_hook(cub->win.mlx_win, 4, 0, register_mouseclick, cub);
 	mlx_hook(cub->win.mlx_win, 5, 0, unregister_mouseclick, cub);
 	mlx_hook(cub->win.mlx_win, 6, 0, mouse_move, cub);

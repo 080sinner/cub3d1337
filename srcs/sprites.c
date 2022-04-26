@@ -3,29 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   sprites.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:35:51 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/26 23:06:03 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/27 00:16:06 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 int numberSprites = 3;
-
-void	example_sprites(t_cub *cub)
-{
-	cub->map.map_spr[0].coord.x = 20;
-	cub->map.map_spr[0].coord.y = 5;
-	cub->map.map_spr[0].type = 0;
-	cub->map.map_spr[2].coord.x = 22;
-	cub->map.map_spr[2].coord.y = 7;
-	cub->map.map_spr[2].type = 2;
-	cub->map.map_spr[1].coord.x = 24;
-	cub->map.map_spr[1].coord.y = 8;
-	cub->map.map_spr[1].type = 1;
-}
 
 void	sort_sprites(t_cub *cub)
 {
@@ -143,7 +130,6 @@ void	cast_sprites(t_cub *cub, t_ray *ray)
 	int		i;
 	t_spr	sprite;
 
-	example_sprites(cub);
 	get_distance_sprites(cub);
 	sort_sprites(cub);
 	i = 0;
