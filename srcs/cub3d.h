@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/23 17:32:36 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/26 22:39:51 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@
 # define FRAMETIME 0.016
 # define MOVESPEED 0.2
 # define ROTSPEED 0.06
+# define MAPZOOM 5
+# define MAPSIZE 0.3
 
 typedef enum e_dir
 {

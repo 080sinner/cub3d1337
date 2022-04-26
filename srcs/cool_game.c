@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/26 21:23:22 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/26 22:43:02 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,71 +300,33 @@ void	draw_minimap(t_cub *cub)
 {
 	int	mm_height;
 	int	mm_width;
-	int	left_border;
-	int	right_border;
-	int upper_border;
-	int lower_border;
+	int map_y;
+	int map_x;
 	double	tile_w;
 	double	tile_h;
 
-	mm_height = WIN_HEIGHT * 0.25;
-	mm_width = WIN_WIDTH * 0.25;
-	tile_w = mm_width / 9;
-	tile_h = mm_width / 9;
-
-	left_border = cub->player.pos.x - 4;
-	if (left_border < 0)
-		left_border = 0;
-
-	right_border = cub->player.pos.x + 4;
-	if (right_border > cub->map.map_length - 1)
-		left_border = cub->map.map_length - 1;
-
-	upper_border = cub->player.pos.y - 4;
-	if (upper_border < 0)
-		upper_border = 0;
-
-	lower_border = cub->player.pos.y + 4;
-	if (lower_border > cub->map.map_height - 1)
-		lower_border = cub->map.map_height - 1;
-	
+	mm_height = WIN_HEIGHT * MAPSIZE;
+	mm_width = WIN_WIDTH * MAPSIZE;
+	tile_w = mm_width / (2 * MAPZOOM + 1);
+	tile_h = mm_width / (2 * MAPZOOM + 1);
 	for (int y = 0; y < mm_height; y++)
 	{
 		for (int x = 0; x < mm_width; x++)
 		{
-			if (cub->map.map[((int)y / tile_w) - left_border]
+			map_y = (int)((y / tile_h) + cub->player.pos.y - MAPZOOM);
+			map_x = (int)((x / tile_w) + cub->player.pos.x - MAPZOOM);
+			if (map_x >= 0 && map_x <= cub->map.map_length - 1 &&
+			map_y >= 0 && map_y <= cub->map.map_height - 1 &&
+			cub->map.map[map_y][map_x] == '1')
+				ft_mlx_pixel_put(&cub->img, x, y, 0);
+			else if (map_x == (int)cub->player.pos.x && map_y == (int)cub->player.pos.y)
+				ft_mlx_pixel_put(&cub->img, x, y, 25600);
+			else
+				ft_mlx_pixel_put(&cub->img, x, y, 16777215);
 		}
 	}
 	
 }
-
-
-// void	draw_minimap(t_cub *cub)
-// {
-// 	int	mm_height;
-// 	int	mm_width;
-// 	int	tile_width;
-// 	int	tile_height;
-
-// 	mm_height = WIN_HEIGHT * 0.25;
-// 	mm_width = WIN_WIDTH * 0.25;
-// 	tile_width = mm_width / cub->map.map_length;
-// 	tile_height = mm_width / cub->map.map_height;
-// 	for (int y = 0; y < mm_height; y++)
-// 	{
-// 		for (int x = 0; x < mm_width; x++)
-// 		{
-// 			if (cub->map.map[y / tile_height][x / tile_width] == '1')
-// 				ft_mlx_pixel_put(&cub->img, x, y, 0);
-// 			else if (is_player(cub->map.map[y / tile_height][x / tile_width]))
-// 				ft_mlx_pixel_put(&cub->img, x, y, 25600);
-// 			else	
-// 				ft_mlx_pixel_put(&cub->img, x, y, 16777215);
-
-// 		}
-// 	}
-// }
-
 
 void	cub3d(t_cub *cub)
 {

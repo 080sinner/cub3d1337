@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:58 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/20 21:22:45 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/26 22:29:33 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	set_starting_vectors(t_cub *cub)
 	cub->player.dir.y = 0;
 	if (cub->map.p_dir == NORTH)
 	{
-		cub->player.dir.y = 1;
-		cub->camera.plane.x = 0.66;
+		cub->player.dir.y = -1;
+		cub->camera.plane.x = -0.66;
 	}
 	else if (cub->map.p_dir == EAST)
 	{
@@ -28,8 +28,8 @@ void	set_starting_vectors(t_cub *cub)
 	}
 	else if (cub->map.p_dir == SOUTH)
 	{
-		cub->player.dir.y = -1;
-		cub->camera.plane.x = -0.66;
+		cub->player.dir.y = 1;
+		cub->camera.plane.x = 0.66;
 	}
 	else if (cub->map.p_dir == WEST)
 	{
