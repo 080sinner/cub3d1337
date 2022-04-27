@@ -247,30 +247,27 @@ int	is_sprite(char c)
 
 void	parse_sprite(char c, t_cub *cub, int x, int y)
 {
-	static int	door_count;
-	static int	spr_count;
-
 	if (c == 'D')
 	{
-		if (door_count > 3)
+		if (cub->map.door_count > 3)
 			map_error(cub, NULL, "More than 3 doors");
-		cub->map.map_doors[door_count].x = x;
-		cub->map.map_doors[door_count].y = y;
-		door_count++;
+		cub->map.map_doors[cub->map.door_count].x = x;
+		cub->map.map_doors[cub->map.door_count].y = y;
+		cub->map.door_count += 1;
 	}
 	else if (c == 'L' || c == 'B' || c == 'P')
 	{
-		if (spr_count > 10)
+		if (cub->map.spr_count > 10)
 			map_error(cub, NULL, "More than 10 doors");
 		if (c == 'L')
-			cub->map.map_spr[spr_count].type = LAMP;
+			cub->map.map_spr[cub->map.spr_count].type = LAMP;
 		else if (c == 'B')
-			cub->map.map_spr[spr_count].type = BARREL;
+			cub->map.map_spr[cub->map.spr_count].type = BARREL;
 		else if (c == 'P')
-			cub->map.map_spr[spr_count].type = PILLAR;
-		cub->map.map_spr[spr_count].coord.x = x;
-		cub->map.map_spr[spr_count].coord.y = y;
-		spr_count++;
+			cub->map.map_spr[cub->map.spr_count].type = PILLAR;
+		cub->map.map_spr[cub->map.spr_count].coord.x = x;
+		cub->map.map_spr[cub->map.spr_count].coord.y = y;
+		cub->map.spr_count += 1;
 	}
 }
 

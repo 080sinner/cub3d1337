@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/27 17:14:27 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/27 19:15:24 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,8 @@ typedef struct s_map
 	t_spr	map_spr[10];
 	t_point	map_doors[3];
 	t_mm	mmap;
+	int		spr_count;
+	int		door_count;
 	int		f_color;
 	int		c_color;
 	t_dir	p_dir;

@@ -6,13 +6,11 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:35:51 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/27 00:16:06 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/27 19:17:42 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-int numberSprites = 3;
 
 void	sort_sprites(t_cub *cub)
 {
@@ -21,10 +19,10 @@ void	sort_sprites(t_cub *cub)
 	t_spr	temp;
 
 	x = 0;
-	while (x < numberSprites - 1)
+	while (x < cub->map.spr_count - 1)
 	{
 		y = 0;
-		while (y < numberSprites - x - 1)
+		while (y < cub->map.spr_count - x - 1)
 		{
 			if (cub->map.map_spr[y].distance < cub->map.map_spr[y + 1].distance)
 			{
@@ -43,7 +41,7 @@ void	get_distance_sprites(t_cub *cub)
 	int	i;
 
 	i = 0;
-	while (i < numberSprites)
+	while (i < cub->map.spr_count)
 	{
 		cub->map.map_spr[i].distance
 			= (cub->player.pos.x - cub->map.map_spr[i].coord.x)
@@ -133,7 +131,7 @@ void	cast_sprites(t_cub *cub, t_ray *ray)
 	get_distance_sprites(cub);
 	sort_sprites(cub);
 	i = 0;
-	while (i < numberSprites)
+	while (i < cub->map.spr_count)
 	{
 		get_sprite_pos(cub, &sprite, i);
 		get_sprite_measures(&sprite);
