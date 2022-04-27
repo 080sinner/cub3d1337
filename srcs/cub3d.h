@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/27 19:15:24 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/27 20:35:54 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ typedef struct s_map
 	char	*paths[4];
 	t_img	texture[5];
 	t_img	sprites[3];
+	t_img	enemy[5];
 	t_img	doors[1];
 	t_spr	map_spr[10];
 	t_point	map_doors[3];
@@ -209,6 +210,7 @@ void			move_left(t_cub *cub);
 void			cast_sprites(t_cub *cub, t_ray *ray);
 int				key_hooks(t_cub *cub);
 void			door(t_cub *cub);
+void			open_xpm_file(int ident, char *path, t_img *img, t_cub *cub);
 
 
 #endif
