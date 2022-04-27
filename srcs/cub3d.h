@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/27 20:35:54 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/27 22:04:06 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ typedef struct s_spr
 	int		end_y;
 }			t_spr;
 
-typedef struct	s_minimap
+typedef struct s_minimap
 {
 	int		height;
 	int		width;
@@ -211,6 +211,37 @@ void			cast_sprites(t_cub *cub, t_ray *ray);
 int				key_hooks(t_cub *cub);
 void			door(t_cub *cub);
 void			open_xpm_file(int ident, char *path, t_img *img, t_cub *cub);
-
+void			set_ray_dir_vector(t_cub *cub, t_ray *ray, int x);
+void			set_delta_dist(t_ray *ray);
+void			set_side_dist(t_ray *ray, t_player *player);
+void			move_forward(t_cub *cub);
+void			move_backward(t_cub *cub);
+int				is_obstacle(char c);
+int				mouse_move(int x, int y, t_cub *cub);
+int				press_keys(int keycode, t_cub *cub);
+int				key_hooks(t_cub *cub);
+int				release_keys(int keycode, t_cub *cub);
+int				unregister_mouseclick(int button, int x, int y, t_cub *cub);
+int				register_mouseclick(int button, int x, int y, t_cub *cub);
+void			get_text_type(t_cub *cub, t_ray *ray, t_text *text);
+void			get_text_values(t_cub *cub, t_dline *line, t_text *text);
+void			get_texture_x(t_cub *cub, t_ray *ray, t_text *text, int x);
+void			get_line_values(t_dline *line, t_ray *ray, int x);
+void			draw_minimap(t_cub *cub);
+void			door(t_cub *cub);
+void			colour_pixel(t_cub *cub, int x, int y);
+void			get_map_size(char *map_line, int *longest_line,
+					int *line_count);
+int				get_line_length(char *line);
+void			create_map_array(t_cub *cub, char *map_line);
+char			*get_next_written_line(int fd);
+int				is_eof(int fd);
+int				is_empty_tile(char tile);
+void			check_valid_zero(t_cub *cub, int x, int y);
+int				is_player(char tile);
+int				check_x_border(char *s, int i);
+int				is_sprite(char c);
+char			*append_mapline(t_cub *cub, char *map_line, char *line);
+int				close_win(t_cub *cub);
 
 #endif
