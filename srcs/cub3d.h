@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/27 00:20:27 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/27 17:14:27 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # define A_KEY 0
 # define S_KEY 1
 # define D_KEY 2
+# define ENTER_KEY 36
 # define FRAMETIME 0.016
 # define MOVESPEED 0.08
 # define ROTSPEED 0.048
@@ -52,6 +53,7 @@ typedef enum e_dir
 	EAST,
 	SOUTH,
 	WEST,
+	DOOR,
 }			t_dir;
 
 typedef enum e_side
@@ -133,10 +135,11 @@ typedef struct s_map
 	int		map_height;
 	int		map_length;
 	char	*paths[4];
-	t_img	texture[4];
+	t_img	texture[5];
 	t_img	sprites[3];
+	t_img	doors[1];
 	t_spr	map_spr[10];
-	t_point	doors[3];
+	t_point	map_doors[3];
 	t_mm	mmap;
 	int		f_color;
 	int		c_color;
@@ -203,5 +206,7 @@ void			move_right(t_cub *cub);
 void			move_left(t_cub *cub);
 void			cast_sprites(t_cub *cub, t_ray *ray);
 int				key_hooks(t_cub *cub);
+void			door(t_cub *cub);
+
 
 #endif

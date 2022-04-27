@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/27 00:15:14 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/27 17:20:57 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,13 @@ void	set_side_dist(t_ray *ray, t_player *player)
 	}
 }
 
+int	is_obstacle(char c)
+{
+	if (c == '1' || c == 'D')
+		return (1);
+	return (0);
+}
+
 void	perform_dda(t_ray *ray, t_cub *cub, int x)
 {
 	int	hit;
@@ -76,7 +83,7 @@ void	perform_dda(t_ray *ray, t_cub *cub, int x)
 			ray->map_y += ray->step_y;
 			ray->hit = y_side;
 		}
-		if (cub->map.map[ray->map_y][ray->map_x] == '1')
+		if (is_obstacle(cub->map.map[ray->map_y][ray->map_x]))
 			hit = 1;
 	}
 	if (ray->hit == x_side)
@@ -118,16 +125,18 @@ void	get_text_values(t_cub *cub, t_dline *line, t_text *text)
 	text->pos = (line->start - WIN_HEIGHT / 2 + line->height / 2) * text->step;
 }
 
-void	get_text_type(t_ray *ray, t_text *text)
+void	get_text_type(t_cub *cub, t_ray *ray, t_text *text)
 {
-	if (ray->hit == y_side)
+	if (cub->map.map[ray->map_y][ray->map_x] == 'D')
+		text->dir = DOOR;
+	else if (ray->hit == y_side)
 	{
 		if (ray->dir.y >= 0)
 			text->dir = NORTH;
 		else
 			text->dir = SOUTH;
 	}
-	if (ray->hit == x_side)
+	else if (ray->hit == x_side)
 	{
 		if (ray->dir.x >= 0)
 			text->dir = EAST;
@@ -144,7 +153,7 @@ void	draw_line(t_ray *ray, t_cub *cub, int x)
 	int				y;
 
 	get_line_values(&line, ray, x);
-	get_text_type(ray, &text);
+	get_text_type(cub, ray, &text);
 	get_text_values(cub, &line, &text);
 	get_texture_x(cub, ray, &text, x);
 	y = line.start;
@@ -176,14 +185,6 @@ void	cast_walls(t_cub *cub, t_ray *ray)
 		draw_line(ray, cub, x);
 		x++;
 	}
-}
-
-int	is_walkable(char tile)
-{
-	if (tile == '0' || is_player(tile))
-		return (true);
-	else
-		return (false);
 }
 
 void	turn_left(t_cub *cub)
@@ -227,9 +228,9 @@ void	move_forward(t_cub *cub)
 
 	newpos_x = (int)(cub->player.pos.x + cub->player.dir.x * MOVESPEED);
 	newpos_y = (int)(cub->player.pos.y + cub->player.dir.y * MOVESPEED);
-	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newpos_x]))
+	if (!is_obstacle(cub->map.map[(int)cub->player.pos.y][newpos_x]))
 		cub->player.pos.x += cub->player.dir.x * MOVESPEED;
-	if (is_walkable(cub->map.map[newpos_y][(int)cub->player.pos.x]))
+	if (!is_obstacle(cub->map.map[newpos_y][(int)cub->player.pos.x]))
 		cub->player.pos.y += cub->player.dir.y * MOVESPEED;
 }
 
@@ -240,9 +241,9 @@ void	move_right(t_cub *cub)
 
 	newpos_x = (int)(cub->player.pos.x + cub->camera.plane.x * MOVESPEED);
 	newpos_y = (int)(cub->player.pos.y + cub->camera.plane.y * MOVESPEED);
-	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newpos_x]))
+	if (!is_obstacle(cub->map.map[(int)cub->player.pos.y][newpos_x]))
 		cub->player.pos.x += cub->camera.plane.x * MOVESPEED;
-	if (is_walkable(cub->map.map[newpos_y][(int)cub->player.pos.x]))
+	if (!is_obstacle(cub->map.map[newpos_y][(int)cub->player.pos.x]))
 		cub->player.pos.y += cub->camera.plane.y * MOVESPEED;
 }
 
@@ -253,9 +254,9 @@ void	move_left(t_cub *cub)
 
 	newpos_x = (int)(cub->player.pos.x - cub->camera.plane.x * MOVESPEED);
 	newpos_y = (int)(cub->player.pos.y - cub->camera.plane.y * MOVESPEED);
-	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newpos_x]))
+	if (!is_obstacle(cub->map.map[(int)cub->player.pos.y][newpos_x]))
 		cub->player.pos.x -= cub->camera.plane.x * MOVESPEED;
-	if (is_walkable(cub->map.map[newpos_y][(int)cub->player.pos.x]))
+	if (!is_obstacle(cub->map.map[newpos_y][(int)cub->player.pos.x]))
 		cub->player.pos.y -= cub->camera.plane.y * MOVESPEED;
 }
 
@@ -266,9 +267,9 @@ void move_backward(t_cub *cub)
 
 	newpos_x = (int)(cub->player.pos.x - cub->player.dir.x * MOVESPEED);
 	newpos_y = (int)(cub->player.pos.y - cub->player.dir.y * MOVESPEED);
-	if (is_walkable(cub->map.map[(int)cub->player.pos.y][newpos_x]))
+	if (!is_obstacle(cub->map.map[(int)cub->player.pos.y][newpos_x]))
 		cub->player.pos.x -= cub->player.dir.x * MOVESPEED;
-	if (is_walkable(cub->map.map[newpos_y][(int)cub->player.pos.x]))
+	if (!is_obstacle(cub->map.map[newpos_y][(int)cub->player.pos.x]))
 		cub->player.pos.y -= cub->player.dir.y * MOVESPEED;
 }
 
@@ -332,6 +333,22 @@ void	draw_minimap(t_cub *cub)
 			x++;
 		}
 		y++;
+	}
+}
+
+void	door(t_cub *cub)
+{
+	int x;
+	int y;
+	x = (int)cub->player.pos.x + cub->player.dir.x;
+	y = (int)cub->player.pos.y + cub->player.dir.y;
+
+	if (x !=  cub->player.pos.x && y != cub->player.pos.y)
+	{
+		if (cub->map.map[y][x] == 'D')
+			cub->map.map[y][x] = 'O';
+		else if (cub->map.map[y][x] == 'O')
+			cub->map.map[y][x] = 'D';
 	}
 }
 

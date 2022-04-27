@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 20:58:25 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/27 00:02:34 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/27 17:08:58 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ int	press_keys(int keycode, t_cub *cub)
 {
 	if (keycode == ESC_KEY)
 		close_win(cub);
+	if (keycode == ENTER_KEY)
+		door(cub);
 	if (keycode == W_KEY)
 		cub->camera.pressed_keys[0] = 1;
 	else if (keycode == S_KEY)

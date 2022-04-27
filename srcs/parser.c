@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:47:18 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/26 22:59:50 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/27 16:41:16 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,37 @@
 void	open_texture_sprites(t_cub *cub)
 {
 	t_img	*sprite;
-
+	// hier fehlt noch error management;
 	sprite = cub->map.sprites;
-	sprite[0].img = mlx_xpm_file_to_image(cub->win.mlx, "textures/barrel.xpm",
-			&sprite[0].width, &sprite[0].height);
-	if (!sprite[0].img)
+	sprite[BARREL].img = mlx_xpm_file_to_image(cub->win.mlx, "textures/barrel.xpm",
+			&sprite[BARREL].width, &sprite[BARREL].height);
+	if (!sprite[BARREL].img)
 		map_error(cub, NULL, "invalid texture path");
-	sprite[0].addr = mlx_get_data_addr(sprite[0].img, &sprite[0].bits_per_pixel,
-			&sprite[0].line_length, &sprite[0].endian);
-	sprite[1].img = mlx_xpm_file_to_image(cub->win.mlx, "textures/pillar.xpm",
-			&sprite[1].width, &sprite[1].height);
-	sprite[1].addr = mlx_get_data_addr(sprite[1].img, &sprite[1].bits_per_pixel,
-			&sprite[1].line_length, &sprite[1].endian);
-	sprite[2].img = mlx_xpm_file_to_image(cub->win.mlx,
-			"textures/greenlight.xpm", &sprite[2].width, &sprite[2].height);
-	sprite[2].addr = mlx_get_data_addr(sprite[2].img, &sprite[2].bits_per_pixel,
-			&sprite[2].line_length, &sprite[2].endian);
+	sprite[BARREL].addr = mlx_get_data_addr(sprite[BARREL].img, &sprite[BARREL].bits_per_pixel,
+			&sprite[BARREL].line_length, &sprite[BARREL].endian);
+	sprite[PILLAR].img = mlx_xpm_file_to_image(cub->win.mlx, "textures/pillar.xpm",
+			&sprite[PILLAR].width, &sprite[1].height);
+	sprite[PILLAR].addr = mlx_get_data_addr(sprite[PILLAR].img, &sprite[PILLAR].bits_per_pixel,
+			&sprite[PILLAR].line_length, &sprite[PILLAR].endian);
+	sprite[LAMP].img = mlx_xpm_file_to_image(cub->win.mlx,
+			"textures/greenlight.xpm", &sprite[LAMP].width, &sprite[LAMP].height);
+	sprite[LAMP].addr = mlx_get_data_addr(sprite[LAMP].img, &sprite[LAMP].bits_per_pixel,
+			&sprite[LAMP].line_length, &sprite[LAMP].endian);
 }
+
+void	open_texture_door(t_cub *cub)
+{
+	t_img	*tex;
+
+	tex = &cub->map.texture[DOOR];
+	tex->img = mlx_xpm_file_to_image(
+			cub->win.mlx, "textures/door.xpm", &tex->width, &tex->height);
+	if (!tex->img)
+		map_error(cub, NULL, "invalid texture path");
+	tex->addr = mlx_get_data_addr(tex->img, &tex->bits_per_pixel,
+			&tex->line_length, &tex->endian);
+}
+
 
 void	parse_cub_file(t_cub *cub, char **argv)
 {	
@@ -40,6 +54,7 @@ void	parse_cub_file(t_cub *cub, char **argv)
 		map_error(cub, NULL, "Bad .cub file");
 	read_textures(cub);
 	open_texture_files(cub);
+	open_texture_door(cub);
 	open_texture_sprites(cub);
 	read_map(cub);
 	check_map_validity(cub, &cub->player);

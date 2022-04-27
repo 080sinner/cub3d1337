@@ -254,8 +254,8 @@ void	parse_sprite(char c, t_cub *cub, int x, int y)
 	{
 		if (door_count > 3)
 			map_error(cub, NULL, "More than 3 doors");
-		cub->map.doors[door_count].x = x;
-		cub->map.doors[door_count].y = y;
+		cub->map.map_doors[door_count].x = x;
+		cub->map.map_doors[door_count].y = y;
 		door_count++;
 	}
 	else if (c == 'L' || c == 'B' || c == 'P')
