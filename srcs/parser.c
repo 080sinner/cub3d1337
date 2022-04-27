@@ -3,34 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:47:18 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/27 16:41:16 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/27 19:57:22 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	open_texture_sprites(t_cub *cub)
+void	open_xpm_file(int ident, char *path, t_cub *cub)
 {
 	t_img	*sprite;
-	// hier fehlt noch error management;
+
 	sprite = cub->map.sprites;
-	sprite[BARREL].img = mlx_xpm_file_to_image(cub->win.mlx, "textures/barrel.xpm",
-			&sprite[BARREL].width, &sprite[BARREL].height);
-	if (!sprite[BARREL].img)
+	sprite[ident].img = mlx_xpm_file_to_image(cub->win.mlx, path,
+			&sprite[ident].width, &sprite[ident].height);
+	if (!sprite[ident].img)
 		map_error(cub, NULL, "invalid texture path");
-	sprite[BARREL].addr = mlx_get_data_addr(sprite[BARREL].img, &sprite[BARREL].bits_per_pixel,
-			&sprite[BARREL].line_length, &sprite[BARREL].endian);
-	sprite[PILLAR].img = mlx_xpm_file_to_image(cub->win.mlx, "textures/pillar.xpm",
-			&sprite[PILLAR].width, &sprite[1].height);
-	sprite[PILLAR].addr = mlx_get_data_addr(sprite[PILLAR].img, &sprite[PILLAR].bits_per_pixel,
-			&sprite[PILLAR].line_length, &sprite[PILLAR].endian);
-	sprite[LAMP].img = mlx_xpm_file_to_image(cub->win.mlx,
-			"textures/greenlight.xpm", &sprite[LAMP].width, &sprite[LAMP].height);
-	sprite[LAMP].addr = mlx_get_data_addr(sprite[LAMP].img, &sprite[LAMP].bits_per_pixel,
-			&sprite[LAMP].line_length, &sprite[LAMP].endian);
+	sprite[ident].addr = mlx_get_data_addr(sprite[ident].img,
+			&sprite[ident].bits_per_pixel, &sprite[ident].line_length,
+			&sprite[ident].endian);
+	if (!sprite[ident].addr)
+		map_error(cub, NULL, "invalid texture address");
+}
+
+void	open_texture_sprites(t_cub *cub)
+{
+	open_xpm_file(BARREL, "textures/barrel.xpm", cub);
+	open_xpm_file(PILLAR, "textures/pillar.xpm", cub);
+	open_xpm_file(LAMP, "textures/greenlight.xpm", cub);
 }
 
 void	open_texture_door(t_cub *cub)
