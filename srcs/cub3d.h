@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/27 22:04:06 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/27 23:39:39 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,14 @@
 # define MMAPZOOM 5
 # define MMAPSIZE 0.3
 
-typedef enum e_spirte_type
+
+typedef struct s_coord
+{
+	int	x;
+	int	y;
+}				t_coord;
+
+typedef enum e_sprite_type
 {
 	BARREL,
 	PILLAR,

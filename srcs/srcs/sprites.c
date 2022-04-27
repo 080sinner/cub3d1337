@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sprites.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:35:51 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/27 22:03:16 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/27 23:53:21 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,39 +87,55 @@ void	get_sprite_measures(t_spr *sprite)
 		sprite->end_x = WIN_WIDTH - 1;
 }
 
+t_img *select_sprite_text(t_cub *cub, int i)
+{
+	static unsigned int	j;
+	t_img	*spr_img;
+
+	if (cub->map.map_spr[i].type == BARREL)
+	{
+		spr_img = &(cub->map.enemy[j / 10]);
+		j++;
+		if (j == 50)
+			j = 0;
+	}
+	else
+		spr_img = &(cub->map.sprites[cub->map.map_spr[i].type]);
+	return (spr_img);
+}
+
+
 void	draw_sprite(t_cub *cub, t_spr *sprite, t_ray *ray, int i)
 {
-	int				stripe;
-	int				y;
-	int				tex_x;
-	int				tex_y;
 	int				d;
 	unsigned int	color;
+	t_img			*spr_img;
+	t_coord			tex;
+	t_coord			pixel;
 
-	stripe = sprite->start_x;
-	while (stripe < sprite->end_x)
+	pixel.x = sprite->start_x;
+	spr_img = select_sprite_text(cub, i);
+	while (pixel.x < sprite->end_x)
 	{	
-		tex_x = (int)(256 * (stripe - (-sprite->width / 2 + sprite->scr_x))
-				* cub->map.sprites[cub->map.map_spr[i].type].width
-				/ sprite->width) / 256;
-		if (sprite->transf.y > 0 && stripe > 0
-			&& stripe < WIN_WIDTH && sprite->transf.y
-			< ray->perp_wall_dist[stripe])
+		tex.x = (int)(256 * (pixel.x - (-sprite->width / 2 + sprite->scr_x))
+			* (*spr_img).width	/ sprite->width) / 256;
+		if (sprite->transf.y > 0 && pixel.x > 0 && pixel.x < WIN_WIDTH 
+			&& sprite->transf.y	< ray->perp_wall_dist[pixel.x])
 		{
-			y = sprite->start_y;
-			while (y < sprite->end_y)
+			pixel.y = sprite->start_y;
+			while (pixel.y < sprite->end_y)
 			{
-				d = y * 256 - WIN_HEIGHT * 128 + sprite->height * 128;
-				tex_y = ((d * cub->map.sprites[cub->map.map_spr[i].type].height)
-						/ sprite->height) / 256;
-				color = mlx_pixel_read(&cub->map.sprites
-					[cub->map.map_spr[i].type], tex_x, tex_y);
-				if ((color & 0x00FFFFFF) != 0)
-					ft_mlx_pixel_put(&cub->img, stripe, y, color);
-				y++;
+				d = pixel.y * 256 - WIN_HEIGHT * 128 + sprite->height * 128;
+				tex.y = ((d * (*spr_img).height) / sprite->height) / 256;
+				color = mlx_pixel_read(&(*spr_img), tex.x, tex.y);
+				// printf("color = %u\n", mlx_pixel_read(&(*spr_img), 0, 0));
+				// exit(EXIT_FAILURE);
+				if (color != 9961608)
+					ft_mlx_pixel_put(&cub->img, pixel.x, pixel.y, color);
+				pixel.y++;
 			}
 		}
-		stripe++;
+		pixel.x++;
 	}
 }
 
