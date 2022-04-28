@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/27 23:39:39 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/28 17:31:10 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ typedef struct s_spr
 	t_point	coord;
 	t_point	transf;
 	t_stype	type;
+	t_img	*texture;
 	double	distance;
 	int		scr_x;
 	int		scr_y;

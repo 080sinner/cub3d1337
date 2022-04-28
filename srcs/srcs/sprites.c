@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:35:51 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/27 23:53:21 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/28 17:46:15 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,56 +87,60 @@ void	get_sprite_measures(t_spr *sprite)
 		sprite->end_x = WIN_WIDTH - 1;
 }
 
-t_img *select_sprite_text(t_cub *cub, int i)
+void	draw_stripe(t_cub *cub, t_spr *sprite, t_ray *ray, int stripe)
 {
-	static unsigned int	j;
-	t_img	*spr_img;
+	t_coord			tex;
+	int				d;
+	int				y;
+	unsigned int	color;
 
-	if (cub->map.map_spr[i].type == BARREL)
+	tex.x = (int)(256 * (stripe - (-sprite->width / 2 + sprite->scr_x))
+		* sprite->texture->width / sprite->width) / 256;
+	if (sprite->transf.y > 0 && stripe > 0 && stripe < WIN_WIDTH 
+		&& sprite->transf.y	< ray->perp_wall_dist[stripe])
 	{
-		spr_img = &(cub->map.enemy[j / 10]);
-		j++;
-		if (j == 50)
-			j = 0;
+		y = sprite->start_y;
+		while (y < sprite->end_y)
+		{
+			d = y * 256 - WIN_HEIGHT * 128 + sprite->height * 128;
+			tex.y = ((d * sprite->texture->height) / sprite->height) / 256;
+			color = mlx_pixel_read(sprite->texture, tex.x, tex.y);
+			if ((sprite->type == BARREL && color != 9961608) || 
+				(sprite->type != BARREL && color != 0))
+				ft_mlx_pixel_put(&cub->img, stripe, y, color);
+			y++;
+		}
 	}
-	else
-		spr_img = &(cub->map.sprites[cub->map.map_spr[i].type]);
-	return (spr_img);
+}
+
+void	draw_sprite(t_cub *cub, t_spr *sprite, t_ray *ray)
+{
+	int					stripe;
+
+	stripe = sprite->start_x;
+	while (stripe < sprite->end_x)
+	{	
+		draw_stripe(cub, sprite, ray, stripe);
+		stripe++;
+	}
 }
 
 
-void	draw_sprite(t_cub *cub, t_spr *sprite, t_ray *ray, int i)
-{
-	int				d;
-	unsigned int	color;
-	t_img			*spr_img;
-	t_coord			tex;
-	t_coord			pixel;
 
-	pixel.x = sprite->start_x;
-	spr_img = select_sprite_text(cub, i);
-	while (pixel.x < sprite->end_x)
-	{	
-		tex.x = (int)(256 * (pixel.x - (-sprite->width / 2 + sprite->scr_x))
-			* (*spr_img).width	/ sprite->width) / 256;
-		if (sprite->transf.y > 0 && pixel.x > 0 && pixel.x < WIN_WIDTH 
-			&& sprite->transf.y	< ray->perp_wall_dist[pixel.x])
-		{
-			pixel.y = sprite->start_y;
-			while (pixel.y < sprite->end_y)
-			{
-				d = pixel.y * 256 - WIN_HEIGHT * 128 + sprite->height * 128;
-				tex.y = ((d * (*spr_img).height) / sprite->height) / 256;
-				color = mlx_pixel_read(&(*spr_img), tex.x, tex.y);
-				// printf("color = %u\n", mlx_pixel_read(&(*spr_img), 0, 0));
-				// exit(EXIT_FAILURE);
-				if (color != 9961608)
-					ft_mlx_pixel_put(&cub->img, pixel.x, pixel.y, color);
-				pixel.y++;
-			}
-		}
-		pixel.x++;
+void	get_sprite_texture(t_cub *cub, t_spr *sprite, int i)
+{
+	static unsigned int enemy_frame;
+	
+	sprite->type = cub->map.map_spr[i].type;
+	if (sprite->type == BARREL)
+	{
+		sprite->texture = &(cub->map.enemy[enemy_frame / 10]);
+		enemy_frame++;
+		if (enemy_frame == 50)
+			enemy_frame = 0;
 	}
+	else
+		sprite->texture = &cub->map.sprites[sprite->type];
 }
 
 void	cast_sprites(t_cub *cub, t_ray *ray)
@@ -151,7 +155,9 @@ void	cast_sprites(t_cub *cub, t_ray *ray)
 	{
 		get_sprite_pos(cub, &sprite, i);
 		get_sprite_measures(&sprite);
-		draw_sprite(cub, &sprite, ray, i);
+		get_sprite_texture(cub, &sprite, i);
+		draw_sprite(cub, &sprite, ray);
 		i++;
 	}
 }
+
