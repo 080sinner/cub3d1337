@@ -6,11 +6,11 @@
 /*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 22:47:18 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/27 22:04:23 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/28 17:52:27 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../includes/cub3d.h"
 
 void	open_xpm_file(int ident, char *path, t_img *img, t_cub *cub)
 {

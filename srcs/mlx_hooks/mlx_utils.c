@@ -6,11 +6,11 @@
 /*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 20:58:25 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/27 21:39:14 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/28 17:52:27 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../includes/cub3d.h"
 
 void	ft_mlx_pixel_put(t_img *data, int x, int y, int color)
 {

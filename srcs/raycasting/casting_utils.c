@@ -6,11 +6,11 @@
 /*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 21:29:21 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/27 21:49:34 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/28 17:52:27 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../includes/cub3d.h"
 
 int	is_obstacle(char c)
 {

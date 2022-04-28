@@ -6,11 +6,11 @@
 /*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 21:48:35 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/27 21:48:48 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/28 17:52:27 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../includes/cub3d.h"
 
 void	draw_minimap(t_cub *cub)
 {

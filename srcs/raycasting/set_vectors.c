@@ -6,11 +6,11 @@
 /*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 21:24:05 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/27 21:32:13 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/28 17:52:27 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../includes/cub3d.h"
 
 void	set_ray_dir_vector(t_cub *cub, t_ray *ray, int x)
 {

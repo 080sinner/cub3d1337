@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   sprites.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:35:51 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/28 17:46:15 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/28 17:52:27 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../includes/cub3d.h"
 
 void	sort_sprites(t_cub *cub)
 {
@@ -95,9 +95,9 @@ void	draw_stripe(t_cub *cub, t_spr *sprite, t_ray *ray, int stripe)
 	unsigned int	color;
 
 	tex.x = (int)(256 * (stripe - (-sprite->width / 2 + sprite->scr_x))
-		* sprite->texture->width / sprite->width) / 256;
-	if (sprite->transf.y > 0 && stripe > 0 && stripe < WIN_WIDTH 
-		&& sprite->transf.y	< ray->perp_wall_dist[stripe])
+			* sprite->texture->width / sprite->width) / 256;
+	if (sprite->transf.y > 0 && stripe > 0 && stripe < WIN_WIDTH
+		&& sprite->transf.y < ray->perp_wall_dist[stripe])
 	{
 		y = sprite->start_y;
 		while (y < sprite->end_y)
@@ -105,8 +105,8 @@ void	draw_stripe(t_cub *cub, t_spr *sprite, t_ray *ray, int stripe)
 			d = y * 256 - WIN_HEIGHT * 128 + sprite->height * 128;
 			tex.y = ((d * sprite->texture->height) / sprite->height) / 256;
 			color = mlx_pixel_read(sprite->texture, tex.x, tex.y);
-			if ((sprite->type == BARREL && color != 9961608) || 
-				(sprite->type != BARREL && color != 0))
+			if ((sprite->type == BARREL && color != 9961608)
+				|| (sprite->type != BARREL && color != 0))
 				ft_mlx_pixel_put(&cub->img, stripe, y, color);
 			y++;
 		}
@@ -125,12 +125,10 @@ void	draw_sprite(t_cub *cub, t_spr *sprite, t_ray *ray)
 	}
 }
 
-
-
 void	get_sprite_texture(t_cub *cub, t_spr *sprite, int i)
 {
-	static unsigned int enemy_frame;
-	
+	static unsigned int	enemy_frame;
+
 	sprite->type = cub->map.map_spr[i].type;
 	if (sprite->type == BARREL)
 	{
@@ -160,4 +158,3 @@ void	cast_sprites(t_cub *cub, t_ray *ray)
 		i++;
 	}
 }
-
