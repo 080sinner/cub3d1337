@@ -3,33 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   key_presses.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 21:34:55 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/28 17:52:27 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/28 19:04:43 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
-
-int	register_mouseclick(int button, int x, int y, t_cub *cub)
-{
-	(void)x;
-	(void)y;
-	if (button == 1)
-		cub->camera.pressed_mb = 1;
-	return (0);
-}
-
-int	unregister_mouseclick(int button, int x, int y, t_cub *cub)
-{
-	(void)x;
-	(void)y;
-	(void)cub;
-	if (button == 1)
-		cub->camera.pressed_mb = 0;
-	return (0);
-}
 
 int	release_keys(int keycode, t_cub *cub)
 {

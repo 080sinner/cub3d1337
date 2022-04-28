@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/28 17:56:32 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/28 19:19:34 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void			move_left(t_cub *cub);
 void			cast_sprites(t_cub *cub, t_ray *ray);
 int				key_hooks(t_cub *cub);
 void			door(t_cub *cub);
-void			open_xpm_file(int ident, char *path, t_img *img, t_cub *cub);
 void			set_ray_dir_vector(t_cub *cub, t_ray *ray, int x);
 void			set_delta_dist(t_ray *ray);
 void			set_side_dist(t_ray *ray, t_player *player);
@@ -84,5 +83,7 @@ int				check_x_border(char *s, int i);
 int				is_sprite(char c);
 char			*append_mapline(t_cub *cub, char *map_line, char *line);
 int				close_win(t_cub *cub);
+void			open_textures(t_cub *cub);
+int				read_textures(t_cub *cub);
 
 #endif

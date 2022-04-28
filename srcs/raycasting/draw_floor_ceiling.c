@@ -1,24 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/15 22:47:18 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/28 19:14:31 by fbindere         ###   ########.fr       */
+/*   Created: 2022/04/06 16:41:45 by fbindere          #+#    #+#             */
+/*   Updated: 2022/04/28 20:29:47 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-void	parse_cub_file(t_cub *cub, char **argv)
-{	
-	cub->map.fd = open(argv[1], O_RDWR);
-	if (cub->map.fd == ERROR)
-		map_error(cub, NULL, "Bad .cub img_arr");
-	read_map(cub);
-	read_textures(cub);
-	check_map_validity(cub, &cub->player);
-	close(cub->map.fd);
+void	cast_floor_ceiling(t_cub *cub)
+{
+	unsigned int	color;
+	int				y;
+	int				x;
+
+	y = 0;
+	while (y < WIN_HEIGHT)
+	{
+		x = 0;
+		while (x < WIN_WIDTH)
+		{
+			color = cub->map.f_color;
+			color = (color >> 1) & 8355711;
+			ft_mlx_pixel_put(&cub->img, x, y, color);
+			color = cub->map.c_color;
+			color = (color >> 1) & 8355711;
+			ft_mlx_pixel_put(&cub->img, x, WIN_HEIGHT - y - 1, color);
+			x++;
+		}
+		y++;
+	}
 }

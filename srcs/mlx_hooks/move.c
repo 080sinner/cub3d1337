@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   move.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 21:27:14 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/28 17:52:27 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/28 20:30:57 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
+
+int	is_obstacle(char c)
+{
+	if (c == '1' || c == 'D')
+		return (1);
+	return (0);
+}
 
 void	move_forward(t_cub *cub)
 {

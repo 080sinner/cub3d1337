@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_structs.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 17:53:29 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/28 17:54:34 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/28 18:51:34 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef enum e_sprite_type
 	BARREL,
 	PILLAR,
 	LAMP,
+	FOE,
 }			t_stype;
 
 typedef enum e_dir
@@ -121,7 +122,7 @@ typedef struct s_map
 	t_img	sprites[3];
 	t_img	enemy[5];
 	t_img	doors[1];
-	t_spr	map_spr[10];
+	t_spr	map_spr[50];
 	t_point	map_doors[3];
 	t_mm	mmap;
 	int		spr_count;
