@@ -3,17 +3,21 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+         #
+#    By: eozben <eozben@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 21:06:22 by eozben            #+#    #+#              #
-#    Updated: 2022/04/28 19:09:30 by fbindere         ###   ########.fr        #
+#    Updated: 2022/04/28 21:03:09 by eozben           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
 FLAGS = -Wall -Wextra -Werror
 INC = -Iincludes
-SRCS = main.c colour.c bonus_textures.c validity_utils.c parser_utils.c textures.c move.c casting_utils.c open_textures.c key_presses.c camera_move.c set_vectors.c map.c parser.c utils.c mlx_utils.c render.c sprites.c mouse.c open_textures.c
+SRCS = open_textures.c texture_utils.c cub3d.c error.c cast_sprites.c \
+		cast_walls.c draw_floor_ceiling.c draw_sprites.c draw_walls.c \
+		check_map.c check_utils.c parser_utils.c parser.c read_map.c \
+		read_textures.c camera_move.c key_presses.c mlx_utils.c mouse.c \
+		move.c minimap.c door.c
 OBJ_PATH = ./objs/
 OBJS = $(patsubst %.c,$(OBJ_PATH)%.o,$(SRCS))
 LIBS = -Llibft -lft -Lmlx -lmlx
