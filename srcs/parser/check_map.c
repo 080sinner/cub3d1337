@@ -6,7 +6,7 @@
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 20:02:44 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/28 20:11:43 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/29 16:39:46 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void	parse_sprite(char c, t_cub *cub, int x, int y)
 			cub->map.map_spr[cub->map.spr_count].type = PILLAR;
 		else if (c == 'F')
 			cub->map.map_spr[cub->map.spr_count].type = FOE;
-		cub->map.map_spr[cub->map.spr_count].coord.x = x;
+		cub->map.map_spr[cub->map.spr_count].coord.x = x + 0.5;
 		cub->map.map_spr[cub->map.spr_count].coord.y = y;
 		cub->map.spr_count += 1;
 	}

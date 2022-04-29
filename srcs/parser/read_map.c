@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 20:03:14 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/28 21:10:29 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/29 16:27:27 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ void	read_map(t_cub *cub)
 			break ;
 		if (ft_is_empty_line(line))
 		{
-			printf("line: %s\n", line);
 			free(line);
 			if (is_eof(cub->map.fd))
 				break ;
