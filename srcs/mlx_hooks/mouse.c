@@ -1,24 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   mouse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/15 22:47:18 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/30 21:34:18 by fbindere         ###   ########.fr       */
+/*   Created: 2022/04/28 19:02:05 by fbindere          #+#    #+#             */
+/*   Updated: 2022/04/28 19:02:48 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../includes/cub3d.h"
 
-void	parse_cub_file(t_cub *cub, char **argv)
-{	
-	cub->map.fd = open(argv[1], O_RDWR);
-	if (cub->map.fd == ERROR)
-		map_error(&cub->map, NULL, "Bad .cub file");
-	read_textures(&cub->map);
-	read_map(&cub->map);
-	check_map_validity(&cub->map, &cub->player);
-	close(cub->map.fd);
+int	register_mouseclick(int button, int x, int y, t_cub *cub)
+{
+	(void)x;
+	(void)y;
+	if (button == 1)
+		cub->camera.pressed_mb = 1;
+	return (0);
+}
+
+int	unregister_mouseclick(int button, int x, int y, t_cub *cub)
+{
+	(void)x;
+	(void)y;
+	(void)cub;
+	if (button == 1)
+		cub->camera.pressed_mb = 0;
+	return (0);
 }

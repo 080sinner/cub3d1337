@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/15 22:41:17 by eozben            #+#    #+#             */
-/*   Updated: 2022/03/30 21:31:54 by fbindere         ###   ########.fr       */
+/*   Created: 2022/04/27 21:53:30 by eozben            #+#    #+#             */
+/*   Updated: 2022/04/28 20:50:46 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../includes/cub3d.h"
 
 int	ft_is_whitespace(char c)
 {
@@ -18,6 +18,16 @@ int	ft_is_whitespace(char c)
 		return (1);
 	else
 		return (0);
+}
+
+int	skip_whitespaces(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (ft_is_whitespace(str[i]))
+		i++;
+	return (i);
 }
 
 int	ft_is_empty_line(char *s)
@@ -32,33 +42,30 @@ int	ft_is_empty_line(char *s)
 	return (0);
 }
 
-int	skip_whitespaces(char *str)
+char	*get_next_written_line(int fd)
 {
-	int	i;
+	char	*line;
 
-	i = 0;
-	while (ft_is_whitespace(str[i]))
-		i++;
-	return (i);
+	while (1)
+	{
+		line = get_next_line(fd);
+		if (!line)
+			return (NULL);
+		if (!ft_is_empty_line(line))
+			return (line);
+		free(line);
+	}
 }
 
-void	free_map(t_map *map)
+int	is_eof(int fd)
 {
-	if (map->fd)
-		close(map->fd);
-	free(map->ea_path);
-	free(map->no_path);
-	free(map->so_path);
-	free(map->we_path);
-	free(map->map);
-}
+	char	*line;
 
-void	map_error(t_map *map, char *str, char *error_msg)
-{
-	if (map)
-		free_map(map);
-	if (str)
-		free(str);
-	printf("Error\n%s\n", error_msg);
-	exit(EXIT_FAILURE);
+	line = get_next_written_line(fd);
+	if (line)
+	{
+		free(line);
+		return (0);
+	}
+	return (1);
 }
