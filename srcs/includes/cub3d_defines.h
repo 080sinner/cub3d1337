@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_defines.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 17:55:10 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/28 17:55:56 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/29 19:19:32 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@
 # define ROTSPEED 0.048
 # define MMAPZOOM 5
 # define MMAPSIZE 0.3
+# define DIFFICULTY 0.025
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 20:02:44 by fbindere          #+#    #+#             */
-/*   Updated: 2022/04/29 18:46:23 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/29 19:24:58 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ static void	parse_sprite(char c, t_cub *cub, int x, int y)
 	}
 	else if (c == 'L' || c == 'B' || c == 'P' || c == 'F')
 	{
-		if (cub->map.spr_count > 100)
-			map_error(cub, NULL, "More than 100 sprites");
+		if (cub->map.spr_count > 150)
+			map_error(cub, NULL, "More than 150 sprites");
 		if (c == 'L')
 			cub->map.map_spr[cub->map.spr_count].type = LAMP;
 		else if (c == 'B')

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: eozben <eozben@student.42.fr>              +#+  +:+       +#+         #
+#    By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 21:06:22 by eozben            #+#    #+#              #
-#    Updated: 2022/04/28 21:03:09 by eozben           ###   ########.fr        #
+#    Updated: 2022/04/29 19:11:27 by fbindere         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ SRCS = open_textures.c texture_utils.c cub3d.c error.c cast_sprites.c \
 		cast_walls.c draw_floor_ceiling.c draw_sprites.c draw_walls.c \
 		check_map.c check_utils.c parser_utils.c parser.c read_map.c \
 		read_textures.c camera_move.c key_presses.c mlx_utils.c mouse.c \
-		move.c minimap.c door.c
+		move.c minimap.c door.c foe.c
 OBJ_PATH = ./objs/
 OBJS = $(patsubst %.c,$(OBJ_PATH)%.o,$(SRCS))
 LIBS = -Llibft -lft -Lmlx -lmlx

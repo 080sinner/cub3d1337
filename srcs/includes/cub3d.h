@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:27 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/29 18:45:29 by eozben           ###   ########.fr       */
+/*   Updated: 2022/04/29 19:12:55 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,9 @@ void			door(t_cub *cub);
 void			cast_floor_ceiling(t_cub *cub);
 void			cast_walls(t_cub *cub, t_ray *ray);
 void			draw_line(t_ray *ray, t_cub *cub, int x);
+
+/* foe */
+void			foe_move(t_cub *cub);
+void			foe_death(t_cub *cub);
 
 #endif

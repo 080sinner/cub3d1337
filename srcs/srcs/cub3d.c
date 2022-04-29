@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:00:58 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/28 20:24:15 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/29 19:16:31 by fbindere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,12 @@ int	cub3d(t_cub *cub)
 	t_ray	ray;
 
 	key_hooks(cub);
+	foe_move(cub);
 	cast_floor_ceiling(cub);
 	cast_walls(cub, &ray);
 	cast_sprites(cub, &ray);
 	draw_minimap(cub);
+	foe_death(cub);
 	mlx_put_image_to_window(cub->win.mlx, cub->win.mlx_win, cub->img.img, 0, 0);
 	return (0);
 }
@@ -71,7 +73,7 @@ int	main(int argc, char *argv[])
 	set_starting_vectors(&cub);
 	set_minimap(&cub);
 	mlx_hooks(&cub);
-	mlx_loop_hook(cub.win.mlx, cub3d, &cub);
 	cub3d(&cub);
+	mlx_loop_hook(cub.win.mlx, cub3d, &cub);
 	mlx_loop(cub.win.mlx);
 }
