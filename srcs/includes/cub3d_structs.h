@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_structs.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbindere <fbindere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eozben <eozben@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 17:53:29 by eozben            #+#    #+#             */
-/*   Updated: 2022/04/28 18:51:34 by fbindere         ###   ########.fr       */
+/*   Updated: 2022/04/29 18:24:41 by eozben           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,8 @@ typedef struct s_map
 	t_img	sprites[3];
 	t_img	enemy[5];
 	t_img	doors[1];
-	t_spr	map_spr[50];
-	t_point	map_doors[3];
+	t_spr	map_spr[100];
+	t_point	map_doors[15];
 	t_mm	mmap;
 	int		spr_count;
 	int		door_count;
