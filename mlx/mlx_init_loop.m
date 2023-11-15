@@ -190,3 +190,4 @@ int mlx_loop_hook(mlx_ptr_t *mlx_ptr, void (*fct)(void *), void *param)
 
   return (0);
 }
+
